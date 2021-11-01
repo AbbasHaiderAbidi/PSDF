@@ -1,0 +1,219 @@
+{% extends 'psdf_main/includes/layout.html'%} {% load static %} {% block body %}
+
+
+
+
+<div class="row">
+    <div class="col-md-4 d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">TESG Chain of Project : {{proj.name}} ({{proj.newid}})</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h5 class="m-0 font-weight-bold text-primary">TESG details
+
+        </h5>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                width: 100%;">
+                <thead class="font-weight-bold">
+                    <tr>
+                        <th>TESG number</th>
+                        <th>TESG Date</th>
+                        <th>Outcomes</th>
+                        <th>Response</th>
+                        <th>Status</th>
+
+                    </tr>
+                </thead>
+                <tfoot class="font-weight-bold">
+                    <tr>
+                        <th>TESG number</th>
+                        <th>TESG Date</th>
+                        <th>Outcomes</th>
+                        <th>Response</th>
+                        <th>Status</th>
+
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% if not proj_tesg %}
+                    <tr>
+                        <td>Not available</td>
+                        <td>Not available</td>
+                        <td>Not available</td>
+                        <td>Not available</td>
+                        <td>Not available</td>
+
+                    </tr>
+                    {% else %} {% for tesg in proj_tesg %}
+                    <tr>
+
+                        <td>{{tesg.tesgnum.TESG_no}}</td>
+                        <td>{{tesg.tesgnum.TESG_date}}</td>
+                        <td><button type="button" class="btn btn-outline-warning btn-responsive" data-toggle="modal" data-target="#modaltesg{{tesg.tesgnum.TESG_no}}">
+                            <i class="fa fa-eye"></i> &nbsp; View TESG outcomes
+                        </button></td>
+
+
+                        <div class="modal fade" id="modaltesg{{tesg.tesgnum.TESG_no}}" tabindex="-1" role="dialog" aria-labelledby="modaltesg{{tesg.tesgnum.TESG_no}}" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title text-black-50" id=""> <strong>TESG num - {{tesg.tesgnum.TESG_no}} outcomes for project ID - {{tesg.project.newid}}</strong></h3>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Download supporting files:
+                                        <a href="/download_tesg_user_outcome/{{tesg.id}}" class="btn btn-outline-info">Download</a>
+                                        <br>
+                                        <hr>
+                                        <h2>TESG outcomes by PSDF Sectt. : </h2><br> {{tesg.admin_outcome}}<br><br>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp;
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if tesg.accepted or tesg.rejected %}
+                        <td><button type="button" class="btn btn-outline-secondary btn-responsive" data-toggle="modal" data-target="#utesg{{tesg.tesgnum.TESG_no}}">
+                            <i class="fa fa-eye"></i> &nbsp; TESG response
+                        </button></td>
+                        <div class="modal fade" id="utesg{{tesg.tesgnum.TESG_no}}" tabindex="-1" role="dialog" aria-labelledby="utesg{{tesg.tesgnum.TESG_no}}" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title text-black-50" id=""> <strong>TESG num - {{tesg.tesgnum.TESG_no}} outcomes for project ID - {{tesg.project.newid}}</strong></h3>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <h2>Entity response: </h2><br> {{tesg.user_response}}
+                                        </p>
+                                        <hr> Download supporting files:
+                                        <a href="/download_tesg_user_response/{{tesg.id}}" class="btn btn-outline-info">Download</a>
+                                        <br>
+                                        <br>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp;
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %} {% if current_tesg.user_response %}
+                        <td><button type="button" class="btn btn-outline-danger btn-responsive" data-toggle="modal" data-target="#modalutesg{{tesg.tesgnum.TESG_no}}">
+    <i class="fa fa-eye"></i> &nbsp; Update TESG response
+</button></td>
+                        {% else %}
+                        <td><button type="button" class="btn btn-outline-primary btn-responsive" data-toggle="modal" data-target="#modalutesg{{tesg.tesgnum.TESG_no}}">
+    <i class="fa fa-eye"></i> &nbsp; New TESG response
+</button></td>
+                        {% endif %}
+
+                        <div class="modal fade" id="modalutesg{{tesg.tesgnum.TESG_no}}" tabindex="-1" role="dialog" aria-labelledby="modalutesg{{tesg.tesgnum.TESG_no}}" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title text-black-50" id=""> <strong>Response for TESG {{tesg.tesgnum.TESG_no}} for project id {{proj.newid}}</strong></h3>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+
+                                    <div class="modal-body">
+                                        <h4 class="text-black-80">Instructions</h4>
+                                        <p> Kindly upload a single zip file if you wish to upload multiple files.</p>
+                                        <form action="{% url 'user_tesg_response' %}" method="POST" enctype="multipart/form-data" name="usertesgchain" id="usertesgchain">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="{{proj.id}}" id="projid" name="projid">
+                                            <input type="hidden" value="{{tesg.tesgnum.TESG_no}}" id="tesg_no" name="tesg_no">
+
+                                            <div class="row">
+                                                <p class="text-primary col-md-4 font-weight-bold">Enter TESG Response: </p>
+                                                <textarea id="tesg_response" name="tesg_response" rows="4" cols="4" class="form-control col-md-8 border-bottom-danger" placeholder="Enter TESG outcomes...">{{current_tesg.user_response}}</textarea>
+                                            </div><br>
+
+                                            <div class="row">
+                                                <p class="text-primary col-md-4 font-weight-bold">Upload supporting docs (optional):</p>
+                                                <input type="file" class="form-control-file btn btn-outline-success col-md-4" name="responses" id="responses">
+                                                <div class="col-md-2">{% if current_tesg.user_response %}
+                                                    <a class="alert alert-success btn " href="/download_tesg_user_response/{{tesg.id}}">Download</a> {% endif %}
+                                                </div>
+                                            </div><br>
+
+                                            <hr><br>
+                                            <div class="row">
+                                                <p class="text-primary col-md-4 font-weight-bold">User Password:</p>
+                                                <input type="password" class="form-control bg-gray-200 border-left-warning col-md-6" name="userpass" id="userpass" required placeholder="Enter user password to proceed">
+                                                <div class="col-md-2"></div>
+                                            </div><br>
+
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp; {% if current_tesg.user_response %}
+                                                <input type="submit" class="btn btn-outline-warning btn-lg" value="Update TESG outcome"> {% else %}
+                                                <input type="submit" class="btn btn-outline-success btn-lg" value="Submit TESG outcome"> {% endif %}
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %} {% if tesg.rejected and not tesg.accepted%}
+                        <td class="text-center">
+                            <div class="alert-danger">REJECTED</div>
+                        </td>{% endif %} {% if not tesg.rejected and tesg.accepted%}
+                        <td class="text-center">
+                            <div class="alert-success">ACCEPTED</div>
+                        </td>{% endif %} {% if not tesg.rejected and not tesg.accepted%}
+                        <td class="text-center">
+                            <div class="alert-warning">ACTIVE</div>
+                        </td>{% endif %}
+
+                    </tr>
+                    {% endfor %} {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<h2><a href='/user_back/user_tesg'>Back</a></h2>
+
+
+
+
+{% endblock %}

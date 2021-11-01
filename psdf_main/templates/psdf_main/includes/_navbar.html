@@ -1,0 +1,169 @@
+{% load static %}
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <hr class="sidebar-divider my-2"><br>
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url ''%}">
+        <div class="">
+            <!-- <i class="fa fa-user-circle-o"></i> -->
+            <img src="{% static 'images/posocologo.png' %}" style="max-width:50%; max-height:50%;">
+        </div>
+
+
+    </a>
+    <br>
+    <!-- Divider -->
+    <hr class="sidebar-divider my-2">
+    <div class="sidebar-heading">
+        Last Login:
+    </div>
+    <li class="nav-item active">
+        <a class="nav-link" href="/">
+            <i class="fa fa-clock-o"></i>
+            <span>{{user.lastlogin}}</span></a>
+    </li>
+    <hr class="sidebar-divider my-0">
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url '' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <hr class="sidebar-divider my-0">
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'newdpr' %}">
+            <i class="fa fa-plus-square"></i>
+            <span>Apply new DPR</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Approval Phase
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Pending Projects</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Projects:</h6>
+
+                <a class="collapse-item" href="{% url 'under_examination' %}">Project submitted
+                {% if noprojobj > 0 %}<span class="badge badge-danger badge-counter">{{noprojobj}}</span> {% endif %}
+            </a>
+                <a class="collapse-item" href="{% url 'user_tesg' %}">Under TESG &nbsp; &nbsp; &nbsp;
+                    {% if noTESG > 0 %}<span class="badge badge-danger badge-counter">{{noTESG}}</span> {% endif %}
+                </a>
+                <a class="collapse-item" href="{% url 'user_appraisal_projects' %}">Under Appraisal
+                    &nbsp; &nbsp; &nbsp;
+                    {% if noappr > 0 %}<span class="badge badge-danger badge-counter">{{noappr}}</span> {% endif %}
+                </a>
+                <a class="collapse-item" href="{% url 'user_monitoring_projects' %}">Under Monitoring
+                    &nbsp; &nbsp; &nbsp;
+                    {% if nomon > 0 %}<span class="badge badge-danger badge-counter">{{nomon}}</span> {% endif %}
+                </a>
+                <hr class="sidebar-divider">
+                <a class="collapse-item" href="{% url 'user_in_doc_sign' %}"><strong>Document Signing</strong>
+                </a>
+                <hr class="sidebar-divider">
+                <h6><a class="collapse-item" href="{% url 'user_view_all_projs' %}"><strong>View All</strong></a></h6>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+            <i class="fas fa-fw fa-bank"></i>
+            <span>Payment Phase</span>
+        </a>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Payment</h6>
+
+                <a class="collapse-item" href="{% url 'new_loa' %}">Submit New LOA
+                
+            </a>
+                <a class="collapse-item" href="{% url 'user_tesg' %}">Under TESG &nbsp; &nbsp; &nbsp;
+                    {% if noTESG > 0 %}<span class="badge badge-danger badge-counter">{{noTESG}}</span> {% endif %}
+                </a>
+                <a class="collapse-item" href="{% url 'user_appraisal_projects' %}">Under Appraisal
+                    &nbsp; &nbsp; &nbsp;
+                    {% if noappr > 0 %}<span class="badge badge-danger badge-counter">{{noappr}}</span> {% endif %}
+                </a>
+                <a class="collapse-item" href="{% url 'user_monitoring_projects' %}">Under Monitoring
+                    &nbsp; &nbsp; &nbsp;
+                    {% if nomon > 0 %}<span class="badge badge-danger badge-counter">{{nomon}}</span> {% endif %}
+                </a>
+
+
+                <h6><a class="collapse-item" href="{% url 'user_view_all_projs' %}">View All</a></h6>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Projects</span>
+        </a>
+        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">File new request:</h6>
+                <a class="collapse-item" href="cards.html">Ongoing projects</a>
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header">View</h6>
+
+
+                <a class="collapse-item" href="cards.html">Completed projects</a>
+                <a class="collapse-item" href="cards.html">Rejected projects</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Addons
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Account</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">view</h6>
+                <a class="collapse-item" href="login.html">Personal details</a>
+                <h6 class="collapse-header">Change</h6>
+                <a class="collapse-item" href="forgot-password.html">Change Password</a>
+                <div class="collapse-divider"></div>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Charts -->
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <a class="btn btn-lg btn-outline-light btn-wrap-text" href="{% url 'logout' %}"> Logout</a>
+    </div>
+
+    <!-- Sidebar Message -->
+
+
+</ul>

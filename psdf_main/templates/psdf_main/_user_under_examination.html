@@ -1,0 +1,276 @@
+{% extends 'psdf_main/includes/layout.html'%} {% load static %} {% block body %}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h1 class="h3 mb-2 text-gray-800">Projects Under Examination</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<hr>
+<br>
+
+
+<div class="col-lg-12">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h5 class="m-0 font-weight-bold text-dark">Projects whose DPR is under Examination
+                <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects" title="Search" style="margin:auto; width: 30%;">
+            </h5>
+        </div>
+        <div class="card-body">
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
+                {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}<br>
+            <div class="table-responsive">
+                <table class="table table-bordered table-responsive-lg table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                    width: 100%;">
+                    <thead class=" bg-primary text-white">
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Amount</th>
+                            <th>Schedule</th>
+                            <th>DPR Submission Date</th>
+                            <th>View BoQ</th>
+                            <th>Download Documents</th>
+                            <th>Update Documents</th>
+
+
+
+                        </tr>
+                    </thead>
+                    <tfoot class=" bg-primary text-white">
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Amount</th>
+                            <th>Schedule</th>
+                            <th>DPR Submission Date</th>
+                            <th>View BoQ</th>
+                            <th>Download Documents</th>
+                            <th>Update Documents</th>
+
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if not projectobj %}
+                        <tr>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+
+
+
+
+
+                        </tr>
+
+                        {% else %} {% for proj in projectobj %}
+                        <tr>
+                            <td><a href="#" class="nav-link font-weight-bolder text-danger ">{{proj.proname}}</a></td>
+                            <td>{{proj.amountasked}}</td>
+                            <td>{{proj.schedule}}</td>
+                            <td>{{proj.dprsubdate}}</td>
+                            <td class="text-center">
+                                <a class="btn btn-outline-warning btn-responsive" href="/user_boq_view/{{proj.id}}_underexamination">
+                                    <i class="fas fa-eye"></i> View BoQ
+                                </a>
+                            </td>
+
+                            <td class="text-center"><button type="button" class="btn btn-outline-info btn-responsive" data-toggle="modal" data-target="#modalforDown{{proj.id}}">
+                                            <i class="fas fa-download"></i> Download
+                                        </button></td>
+
+
+
+                            <td class="text-center"><button type="button" class="btn btn-outline-danger btn-responsive" data-toggle="modal" data-target="#modalforUp{{proj.id}}">
+                                            <i class="fas fa-upload"></i> Update
+                                        </button></td>
+
+
+
+
+                        </tr>
+
+
+                        <div class="modal fade" id="modalforUp{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforUp{{proj.id}}" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title" id=""> <strong>{{proj.name}}</strong></h3>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-3 font-weight-bold">Update DPR :</div>
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-3 font-weight-bold">Update Forms by user :</div>
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-3 font-weight-bold">Update Supporting Docs:</div>
+                                        </div>
+
+                                        <form action="{% url 'upload_dpr_docs' %}" method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <input type="hidden" value="{{proj.id}}" name="projid" id="projid">
+                                                <div class="col-md-3 font-weight-bold">
+                                                    <label class=" btn btn-outline-primary" for="dpr" id="dpr-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">DPR</span></label>
+                                                    <input type="file" class="custom-file-input " name="dpr" id="dpr">
+                                                </div>
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-3 font-weight-bold">
+                                                    <label class=" btn btn-outline-warning" for="forms" id="forms-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Forms</span></label>
+                                                    <input type="file" class="custom-file-input " name="forms" id="forms">
+                                                </div>
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-3 font-weight-bold"><label class=" btn btn-outline-success" for="supportdoc" id="supportdoc-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Supporting Docs</span></label>
+                                                    <input type="file" class="custom-file-input " name="supportdoc" id="supportdoc">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row container-fluid">
+
+                                                <input type="submit" class="btn btn-responsive btn-dark pull-right btn-block" value="Update">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+            </div>
+
+
+            <div class="modal fade" id="modalforDown{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforDown{{proj.id}}" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id=""> <strong>{{proj.name}}</strong></h3>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3 font-weight-bold">Download DPR :</div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3 font-weight-bold">Download Forms by user :</div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3 font-weight-bold">Download Supporting Docs:</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3">
+                                    <a class="btn btn-outline-info" href="/download_temp_project/DPR_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3 font-weight-bold">
+                                    <a class="btn btn-outline-danger" href="/download_temp_project/forms_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3">
+                                    <a class="btn btn-outline-warning" href="/download_temp_project/otherdocs_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary " data-dismiss="modal">Close</button>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %} {% endif %}
+
+            </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    function changeColor(thisbtn, openclose) {
+
+        var golbtn = document.getElementById(thisbtn);
+        var openclose = document.getElementById(openclose)
+        if (golbtn.classList.contains('btn-outline-primary')) {
+            openclose.innerText = "Close"
+            golbtn.classList.remove('btn-outline-primary');
+            golbtn.classList.add('btn-outline-danger');
+
+        } else {
+            openclose.innerText = "Open"
+            golbtn.classList.remove('btn-outline-danger');
+            golbtn.classList.add('btn-outline-primary');
+
+        }
+    }
+
+
+    function dototal(yehaiclass) {
+        var sum = 0;
+        console.log(yehaiclass);
+        $('.' + yehaiclass).each(function() {
+            sum += parseFloat($(this).text());
+        });
+        console.log(sum);
+        var totalfield = document.getElementById(yehaiclass + '1');
+        totalfield.innerHTML = '₹ ' + sum;
+        document.getElementById(yehaiclass + 'btn').style.display = 'none';
+    }
+
+    function get_temp_proj(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

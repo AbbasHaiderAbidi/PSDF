@@ -1,0 +1,220 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load custom_tags %}{% load static %} {% block body %}
+<h4 class="container-fluid">
+    <a href='/{{backpage}}'>Back</a>
+</h4>
+
+<div class="row">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+<div class="col-lg-12">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h5 class="m-0 font-weight-bold text-dark">BoQ details of Project #{{proj.newid}} {{proj.name}}
+            </h5>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow mb-4">
+
+                        <a href="#subboq" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                            <h6 class="m-0 font-weight-bold text-primary">BoQ Submitted by {{proj.userid.username}} of {{proj.userid.utilname}}</h6>
+                        </a>
+
+                        <div class="collapse" id="subboq">
+                            <div class="card-body">
+                                <div class="table-responsive">
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Item No. </th>
+                                                <th>Item Name</th>
+                                                <th>Item Description</th>
+                                                <th>Quantity</th>
+                                                <th>Unit Price</th>
+                                                <th>Total Cost</th>
+                                            </tr>
+                                        </thead>
+
+
+                                        <tbody>
+                                            {% for boq in sub_boq %}
+                                            <tr>
+                                                <td>{{boq.itemno}}</td>
+                                                <td>{{boq.itemname}}</td>
+                                                <td>{{boq.itemdesc}}</td>
+                                                <td>{{boq.itemqty}}</td>
+                                                <td>₹ {{boq.unitcost}}</td>
+                                                <td>₹ {% multiply boq.itemqty boq.unitcost %}</td>
+                                            </tr>
+                                            {% endfor %}
+
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="font-weight-bold">Grand Total</td>
+                                                <td>
+                                                    <h6 class="font-weight-bold text-danger">₹ {{sub_boq_total}} </h6>
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow mb-4">
+
+                        <a href="#aprboq" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                            <h6 class="m-0 font-weight-bold text-success">BoQ Approved by TESG committee</h6>
+                        </a>
+
+                        <div class="collapse" id="aprboq">
+                            <div class="card-body">
+                                <div class="table-responsive">
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Item No. </th>
+                                                <th>Item Name</th>
+                                                <th>Item Description</th>
+                                                <th>Quantity</th>
+                                                <th>Unit Price</th>
+                                                <th>Total Cost</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if not approved_boq %}
+                                            <tr>
+                                                <td>Not Available</td>
+                                                <td>Not Available</td>
+                                                <td>Not Available</td>
+                                                <td>Not Available</td>
+                                                <td>Not Available</td>
+                                                <td>Not Available</td>
+                                            </tr>
+                                            {% else %} {% for boq in approved_boq %}
+                                            <tr>
+                                                <td>{{boq.itemno}}</td>
+                                                <td>{{boq.itemname}}</td>
+                                                <td>{{boq.itemdesc}}</td>
+                                                <td>{{boq.itemqty}}</td>
+                                                <td>₹ {{boq.unitcost}}</td>
+                                                <td>₹ {% multiply boq.itemqty boq.unitcost %}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="font-weight-bold">Grand Total</td>
+                                                <td>
+                                                    <h6 class="font-weight-bold text-danger">₹ {{approved_boq_total}} </h6>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function changeColor(thisbtn, openclose) {
+
+        var golbtn = document.getElementById(thisbtn);
+        var openclose = document.getElementById(openclose)
+        if (golbtn.classList.contains('btn-outline-primary')) {
+            openclose.innerText = "Close"
+            golbtn.classList.remove('btn-outline-primary');
+            golbtn.classList.add('btn-outline-danger');
+
+        } else {
+            openclose.innerText = "Open"
+            golbtn.classList.remove('btn-outline-danger');
+            golbtn.classList.add('btn-outline-primary');
+
+        }
+    }
+
+
+    function dototal(yehaiclass) {
+        var sum = 0;
+        console.log(yehaiclass);
+        $('.' + yehaiclass).each(function() {
+            sum += parseFloat($(this).text());
+        });
+        console.log(sum);
+        var totalfield = document.getElementById(yehaiclass + '1');
+        totalfield.innerHTML = '₹ ' + sum;
+        document.getElementById(yehaiclass + 'btn').style.display = 'none';
+    }
+
+    function get_temp_proj(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

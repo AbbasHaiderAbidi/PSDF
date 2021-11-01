@@ -1,0 +1,184 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+
+                {% if already_updated == '0' %}
+
+                <h5 class="m-0 font-weight-bold text-primary">Submitted BoQ by {{proj.userid.username}} for #{{proj.newid}} <a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></h5>
+
+
+                {% elif already_updated == '1' %}
+
+
+                <h5 class="m-0 font-weight-bold text-primary">Updated BoQ of #{{proj.newid}} <a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></h5>
+
+
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}<br>
+
+                <div class="alert alert-danger alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
+
+                    {% if already_updated == '0' %}
+                    <strong>This is submitted BoQ</strong> {% elif already_updated == '1' %}
+                    <strong>This BoQ has already been updated during TESG</strong> {% endif %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                </div>
+
+
+                <a class="btn btn-outline-success pull-right btn-responsive" onclick="showrow()"><i class="fa fa-plus"></i>&nbsp;Add new row</a>
+
+                <div class="table-responsive">
+                    <br>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                    width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Item No.</th>
+                                <th>Item Name</th>
+
+                                <th>Item Description</th>
+                                <th>Quantity</th>
+                                <th>Unit Cost</th>
+
+                            </tr>
+                        </thead>
+                        <tfoot>
+
+                            <tr>
+                                <th>Item No.</th>
+                                <th>Item Name</th>
+
+
+
+
+                                <th>Item Description</th>
+
+                                <th>Quantity</th>
+
+                                <th>Unit Cost</th>
+
+                            </tr>
+
+                        </tfoot>
+
+                        <tbody>
+
+                            {% if not sub_boq %}
+
+                            <tr>
+
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
+
+                            </tr>
+
+                            {% else %}
+                            <input type="hidden" value="row{{sub_boq|length}}" id="nextrow">
+
+                            <form action="/update_boq/0" method="post">{% csrf_token %}{% for boq in sub_boq %}
+
+                                <tr>
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemno{{forloop.counter}}" id="itemno{{forloop.counter}}" value="{{boq.itemno}}"></td>
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemname{{forloop.counter}}" id="itemname{{forloop.counter}}" value="{{boq.itemname}}"></td>
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemdesc{{forloop.counter}}" id="itemdesc{{forloop.counter}}" value="{{boq.itemdesc}}"></td>
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemqty{{forloop.counter}}" id="itemqty{{forloop.counter}}" value="{{boq.itemqty}}"></td>
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemprice{{forloop.counter}}" id="itemprice{{forloop.counter}}" value="{{boq.unitcost}}"></td>
+                                </tr>
+                                {% endfor %}
+
+                                <input type="hidden" value="{{sub_boq|length}}" name="nitem" id="nitem">
+                                <input type="hidden" value="{{proj.id}}" name="projid" id="projid"> {% endif %} {% for i in range %}
+                                <tr id="row{{i}}" style="display:none" class="alert-warning">
+
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemno{{i}}" id="itemno{{i}}" placeholder="Enter item No."></td>
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemname{{i}}" id="itemname{{i}}" placeholder="Enter item name"></td>
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemdesc{{i}}" id="itemdesc{{i}}" placeholder="Enter Description"></td>
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemqty{{i}}" id="itemqty{{i}}" placeholder="Enter Quantity"></td>
+                                    <td><input type="text" class="form-control bg-gray-100" name="itemprice{{i}}" id="itemprice{{i}}" placeholder="Enter unit price"></td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+
+                    </table><br>
+
+
+                    <button type="button" class="btn btn-outline-primary btn-responsive col-md-2" data-toggle="modal" data-target="#confirm_update">Submit</button>
+                    <a href="/update_boq/{{proj.id}}" class="btn btn-outline-secondary pull-right ">Reset</a>
+
+
+
+                    <div class="modal fade" id="confirm_update" tabindex="-1" role="dialog" aria-labelledby="confirm_update" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title text-black-50" id=""> <strong>Confirm BoQ update</strong></h3>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-4">Enter Administrator password:</div>
+                                        <div class="col-md-2">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="password" class="form-control" name="adminpass" id="adminpass" placeholder="Enter password."></td>
+                                        </div>
+                                    </div><br>
+                                    <div class="modal-footer">
+                                        <div class="col-md-8"></div>
+                                        <input type="submit" class="btn btn-outline-primary col-md-4 col-md-4" value="Update BoQ">
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+    function showrow() {
+        var rownum = document.getElementById('nextrow');
+        thisstr = rownum.value;
+        rownum.value = 'row' + (parseInt(thisstr.substring(3, thisstr.length + 1)) + 1)
+        thisstr = rownum.value;
+        document.getElementById(thisstr).style = '';
+
+    }
+</script>
+{% endblock %}

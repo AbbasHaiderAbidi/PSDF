@@ -1,0 +1,227 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load custom_tags %} {% load static %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4">
+        <h1 class="h3 mb-2 text-gray-800">Apply for new project</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<hr>
+<br>
+
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-info">View Instructions</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse" id="format">
+                <div class="card-body">
+                    <div class="row">
+                        lorem ipsum dolor
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% if not appr_project and not approved_boq_total > 0%}
+<div class="row">
+
+    <div class="col-lg-4 center">
+
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Select from approved projects.</h6>
+            </div>
+            <div class="card-body">
+
+                <div class="input-group" style="height:200px">
+                    {% if appr_project %}
+
+                    <p class="text-dark font-weight-bold">Project Selected:&nbsp;&nbsp;&nbsp; </p>
+
+
+                    <h5 class="m-0 font-weight-bold text-danger">{{appr_project.newid}} -- {{appr_project.name}}</h5>
+
+                    {% else %}
+                    <form action="{% url 'new_loa' %}" method="POST" class="row" name='projform' id='projform'>
+                        {% csrf_token %}
+                        <div class="input-group container" style="margin-top:20%">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="projectid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-6">
+                                    <select name="projectid" id="projectid" class="form-control" onchange="autosubmit()">
+                            <option value="0"  class="form-control">-- Select Project from list --</option>
+                            {% for proj in projectlist %}
+                            <option value="{{proj.id}}"  class="form-control">{{proj.newid}} -- {{proj.name}}</option>
+                            {% endfor %}
+                        </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    {% endif %}
+                </div>
+                <br>
+
+            </div><br>
+
+        </div>
+    </div>
+
+</div>
+{% endif %} {% if loa_project and approved_boq_total > 0%}
+
+<div class="row">
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-success">BoQ items remaining</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse show" id="collapseCardExample">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="table-responsive" style="height:200px; overflow:auto;">
+
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Item No. </th>
+                                        <th>Item Name</th>
+                                        <th>Item Description</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+
+                                        <th class="alert-danger">Claim</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if not aboq %}
+                                    <tr>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                    </tr>
+                                    {% else %} {% for boq in aboq %}
+                                    <tr>
+                                        <td>{{boq.itemno}}</td>
+                                        <td>{{boq.itemname}}</td>
+                                        <td>{{boq.itemdesc}}</td>
+                                        <td>{{boq.itemqty}}</td>
+                                        <td>₹ {{boq.unitcost}}</td>
+                                        <form action="{% url 'submitloa' %}" method="POST" enctype="multipart/form-data" name="loaform" id="loaform">
+                                            {% csrf_token %}
+                                            <td><input type="number" class="form-control col-md-4 center" name="item_{{boq.itemno}}" id="item_{{boq.itemno}}" value="0" max="{{boq.itemqty}}" required></td>
+                                            <input type="hidden" value="{{loa_project.id}}" id="projid" name="projid">
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                        <td class="font-weight-bold">Grand Total</td>
+                                        <td>
+                                            <h6 class="font-weight-bold text-danger">₹ {{approved_boq_total}} </h6>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><br>
+
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Upload New LOA</h6>
+            </div>
+            <div class="card-body">
+                <input type="file" class="form-control-file btn btn-outline-danger col-md-6 center" name="loa" id="loa" required>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Submission</h6>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                            <label class="form-check-label" for="terms">
+                
+                                <a>I confirm that the above given data is to the best of my knowledge and I shall be responsible for any discrepancy found in the submitted LOA and the claimed items</a>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <hr>
+                <div class="row">
+                    <h5 class="col-md-4">Enter your password: </h5>
+                    <div class="col-md-1"></div><input type="password" class="form-control col-md-6" name="userpass" id="userpass" required>
+                    <div class="col-md-1"></div>
+                </div>
+                <hr>
+                <input type="submit" class="btn btn-block btn-outline-success" value="Submit">
+            </div>
+        </div>
+    </div>
+
+</div>
+</form>
+{% endif %}
+
+
+<script>
+    function autosubmit() {
+        var projectid = document.getElementById('projectid')
+        var projform = document.getElementById('projform')
+        if (projectid.value != '0') {
+            projform.submit();
+        }
+
+    }
+</script>
+
+{% endblock %}

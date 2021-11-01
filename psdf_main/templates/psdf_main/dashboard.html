@@ -1,0 +1,50 @@
+{% extends 'psdf_main/includes/layout.html'%} {% load static %} {% block body %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+
+
+        </div>
+    </div>
+    <div class="col-md-8">
+
+        <div class="d-sm-flex align-items-center justify-content-end mb-4">
+
+            <div class="d-sm-flex align-items-center justify-content-end mb-4">
+                {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %} {% if user.notifications %}
+                <div class="card mb-4 border-left-danger">
+
+                    <a href="#boqsub" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="BoQList">
+                        <h6 class="m-0 font-weight-bold text-danger">View Notifications</h6>
+                    </a>
+                    <!-- Card Content - Collapse -->
+                    <div class="collapse" id="boqsub">
+                        <div class="card-body">
+                            <ul class="list-group">
+
+                                {% for notification in user.notifications %}
+                                <li class="list-group-item"> {{notification}} </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="card-footer text-center bg-primary">
+                            <a href="/notificationread/{{user.id}}" class="btn btn-outline-light text-center ">Mark Read</a></div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

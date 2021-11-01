@@ -1,0 +1,19 @@
+
+USERS:
+Username - Password - Nodal Officer - Entity name - Region - Address - Contact - RequestDate - ApproveDate - LastLogin - isAdmin - active
+
+PROJECTS:
+Name - USERS_FK - FundingCategory - Schedule - DPR Submission Date - DPR approval Date - Amount_asked - Amount_approved - Amount_released - Project_path - Approved(0,1,2) - Remark - status
+
+TESG:
+ID - PROJECTS_FK - TESG_num - TESG_report_date - TESG_path - Reject
+
+APPRAISAL:
+PROJECTS_FK - Appraisal_num - Appraisal_report_date - Appraisal_path - TESG_revert - Reject
+
+MONITORING:
+PROJECTS_FK - Monitoring_num - Monitoring_report_date - Monitoring_path - Reject
+
+
+GLOBAL:
+numOfTranches - DistributionOfTranche

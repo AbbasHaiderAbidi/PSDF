@@ -1,0 +1,562 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+
+
+<div class="container-fluid">
+    <a href="/">
+        <h4>Home</h4>
+    </a>
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                <a href="" class="text-xs font-weight-bold text-info text-uppercase mb-1" data-toggle="modal" data-target="#downloads">Download User uploads</a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                <a href="" class="text-xs font-weight-bold text-warning text-uppercase mb-1" data-toggle="modal" data-target="#tesgdetails">View TESG Details</a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                <a href="/appr_mom_download/{{proj.id}}" class="text-xs font-weight-bold text-primary text-uppercase mb-1">Download Appraisal MoM</a></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                <a href="/moni_mom_download/{{proj.id}}" class="text-xs font-weight-bold text-danger text-uppercase mb-1">Download Monitoring MoM</a></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-6">
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+                {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h5 class="m-0 font-weight-bold text-success">
+                        Project ID: {{proj.newid}}
+
+
+                    </h5>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-danger">Project name</h6>
+
+                    </div>
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="m-0 font-weight-bold text-danger">User</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-3">
+                        <h4 class="m-0">{{proj.name}}</h4>
+                    </div>
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-4">
+                        <a href="/view_user/{{proj.userid.id}}" class="font-weight-bold btn btn-outline-dark">
+                            <h4 class="m-0">{{proj.userid.username}}</h4>
+                        </a>
+                    </div>
+                </div>
+                <hr><br>
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-primary">DPR Submission Date</h6>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Requested Amount</h6>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Schedule</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.dprsubdate}}</h5>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">₹ {{proj.amt_asked}}</h5>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.schedule}} months</h5>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Funding Category</h6>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Quantum of Funding</h6>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-primary">DPR Acceptance Date</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.fundcategory}}</h5>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.quantumOfFunding}}%</h5>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.dpraprdate}}</h5>
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-primary btn-responsive" data-toggle="modal" data-target="#subBoQ">
+                            <h6 class="m-0 font-weight-bold">View Submitted BoQ</h6>
+                        </button>
+
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#aprBoQ">
+                            <h6 class="m-0 font-weight-bold">View Approved BoQ</h6>
+                        </button>
+
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-warning btn-responsive" data-toggle="modal" data-target="#upBoQ">
+                            <h6 class="m-0 font-weight-bold">View Updated BoQ</h6>
+                        </button>
+
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-info">TESG approval Date</h6>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-info">Appraisal approval Date</h6>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-info">Monitoring Approval Date</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.tesgaprdate}}</h5>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.appraprdate}}</h5>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.moniaprdate}}</h5>
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Current Status</h6>
+                        {% if proj.deny %}
+                        <button type="button" class="btn btn-danger btn-responsive" data-toggle="modal" data-target="#reject">
+                            <h6 class="m-0 font-weight-bold">REJECTED</h6>
+                        </button>
+                        <div class="text-xs">Click to view details</div>
+                        {%elif proj.status == '1' %}
+                        <h5 class="m-0 font-weight-bold btn btn-dark">Under TESG</h5>
+
+                        {% elif proj.status == '2' %}
+                        <h5 class="m-0 font-weight-bold btn btn-warning">Under Appraisal</h5>
+
+                        {% elif proj.status == '3' %}
+                        <h5 class="m-0 font-weight-bold btn btn-info">Under Monitoring</h5>
+
+                        {% elif proj.status == '4' %}
+                        <h5 class="m-0 font-weight-bold btn btn-success">Under Final Approval</h5>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-outline-danger btn-responsive" data-toggle="modal" data-target="#workflow">
+                            <h6 class="m-0 font-weight-bold">View Workflow</h6>
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <hr>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="subBoQ" tabindex="-1" role="dialog" aria-labelledby="subBoQ" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-black-50" id="">Submitted BoQ Details</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+
+            </div>
+            <div class="modal-body">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="aprBoQ" tabindex="-1" role="dialog" aria-labelledby="aprBoQ" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-black-50" id="">Approved BoQ Details</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+
+            </div>
+            <div class="modal-body">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="upBoQ" tabindex="-1" role="dialog" aria-labelledby="upBoQ" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-black-50" id="">Updated BoQ Details</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+
+            </div>
+            <div class="modal-body">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="tesgdetails" tabindex="-1" role="dialog" aria-labelledby="tesgdetails" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-black-50" id="">TESG Details</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" width="100%" cellspacing="0" style="table-layout: fixed; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>TESG no.</th>
+                            <th>TESG outcome Description</th>
+                            <th>TESG outcome download</th>
+                            <th>Entity Response Description</th>
+                            <th>Entity Reponse Download</th>
+                            <th>Response Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for tesg in tesgs %}
+                        <tr>
+                            <td>{{tesg.tesgnum.TESG_no}}</td>
+                            <td>{{tesg.admin_outcome}}</td>
+                            <td><a href="/downloadTESGrequest/{{tesg.id}}" class="btn btn-outline-info">Download</a></td>
+                            <td>{{tesg.user_response}}</td>
+                            {% if tesg.user_reponse == '' %}
+                            <td>Awaiting Response</td>
+                            {% else %}
+                            <td><a href="/downloadTESGresponse/{{tesg.id}}" class="btn btn-outline-info">Download</a></td>
+
+                            {% endif %}
+                            <td>{{tesg.user_res_date}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="downloads" tabindex="-1" role="dialog" aria-labelledby="downloads" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-black-50" id="">Project Downloads</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+
+            </div>
+            <div class="modal-body">
+                <br>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 font-weight-bold">Download DPR :</div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 font-weight-bold">Download Forms by user :</div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 font-weight-bold">Download Supporting Docs:</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3">
+                        <a class="btn btn-outline-info" href="/download_project/DPR_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 font-weight-bold">
+                        <a class="btn btn-outline-danger" href="/download_project/forms_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3">
+                        <a class="btn btn-outline-warning" href="/download_project/otherdocs_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reject" tabindex="-1" role="dialog" aria-labelledby="reject" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-black-50" id="">Project Rejected</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+
+            </div>
+            <div class="modal-body">
+                <br>
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-danger">Rejection Date:</h6>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-danger">Remark</h6>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="m-0 font-weight-bold text-danger">Rejected During</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.denydate}}</h5>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="m-0">{{proj.remark}}</h5>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3">
+                        {%if proj.status == '1' %}
+                        <h5 class="m-0 font-weight-bold btn btn-dark">Under TESG</h5>
+
+                        {% elif proj.status == '2' %}
+                        <h5 class="m-0 font-weight-bold btn btn-warning">Under Appraisal</h5>
+
+                        {% elif proj.status == '3' %}
+                        <h5 class="m-0 font-weight-bold btn btn-info">Under Monitoring</h5>
+
+                        {% elif proj.status == '4' %}
+                        <h5 class="m-0 font-weight-bold btn btn-success">Under Final Approval</h5>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="workflow" tabindex="-1" role="dialog" aria-labelledby="workflow" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-black-50" id="">Workflow</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+
+            </div>
+            <div class="modal-body">
+                <div class="list-group">
+                    {% for work in proj.workflow %}
+                    <button type="button" class="list-group-item list-group-item-action">{{work}}</button> {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    function get_temp_proj(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

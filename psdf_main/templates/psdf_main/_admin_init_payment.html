@@ -1,0 +1,196 @@
+{% extends 'psdf_main/includes/layout.html'%} {% load custom_tags %} {% load static %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4">
+        <h1 class="h3 mb-2 text-gray-800">Initial Payment Release</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<hr>
+<br>
+
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-info">View Instructions</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse" id="format">
+                <div class="card-body">
+                    <div class="row">
+                        lorem ipsum dolor
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% if apr_projects and not thisproject%}
+<div class="row">
+
+    <div class="col-lg-4 center">
+
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Select from approved projects </h6>
+            </div>
+            <div class="card-body">
+
+                <div class="input-group" style="height:200px">
+
+                    <form action="{% url 'init_release' %}" method="POST" class="row" name='projform' id='projform'>
+                        {% csrf_token %}
+                        <div class="input-group container" style="margin-top:20%">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="projectid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-6">
+                                    <select name="projectid" id="projectid" class="form-control" onchange="autosubmit()">
+                            <option value="0"  class="form-control">-- Select Project from list --</option>
+                            {% for proj in apr_projects %}
+                            <option value="{{proj.id}}"  class="form-control">{{proj.newid}} -- {{proj.name}}</option>
+                            {% endfor %}
+                        </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+                <br>
+
+            </div><br>
+
+        </div>
+    </div>
+
+</div>
+{% endif %} {% if apr_projects and thisproject %}
+<div class="row">
+
+    <div class="col-lg-4">
+
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Select from approved projects</h6>
+            </div>
+            <div class="card-body">
+
+                <div class="input-group">
+
+                    <form action="{% url 'init_release' %}" method="POST" class="row" name='projform' id='projform'>
+                        {% csrf_token %}
+                        <div class="input-group container" style="margin-top:0%">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="projectid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-6">
+                                    <select name="projectid" id="projectid" class="form-control" onchange="autosubmit()">
+                            <option value="0"  class="form-control">-- Select Project from list --</option>
+                            {% for proj in apr_projects %}
+                            <option value="{{proj.id}}"  class="form-control">{{proj.newid}} -- {{proj.name}}</option>
+                            {% endfor %}
+                        </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <hr>
+
+                <p class="text-dark font-weight-bold">Project Selected:&nbsp;&nbsp;&nbsp; </p>
+
+
+                <h5>ID :</h5>
+                <h5 class="m-0 font-weight-bold text-dark"> {{thisproject.newid}}</h5><br>
+                <h5>Project name :</h5>
+                <h5 class="m-0 font-weight-bold text-danger"> <a href="/view_project/{{proj.id}}" class="font-weight-bold text-danger">{{thisproject.name}}</a></h5>
+
+
+                <br>
+
+            </div><br>
+
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-danger">Enter Payment Details</h6>
+            </div>
+            <div class="card-body">
+
+
+                <form action="{% url 'init_record' %}" method="POST" class="row" name='initform' id='initform' enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{thisproject.id}}" name="projid" id="projid" required>
+
+                    <div class="input-group container">
+                        Enter payment Reference number: &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="text" class="form-control input-group-append bg-gray-200 border-0 small" placeholder="Unique transaction ID or reference number" name="refno" id="refno" required>
+                    </div>
+                    <div class="input-group container">
+                        Enter amount (in ₹ ): &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="number" class="form-control input-group-append bg-gray-200 border-0 small" placeholder="Enter transaction amount (in ₹ )" name="amt" id="amt" required>
+                    </div>
+                    <div class="input-group container">
+                        Upload supporting file: &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="file" class="form-control-file btn btn-outline-info border-bottom-info col-md-6" name="reciept" id="reciept">
+                    </div>
+
+                    <hr>
+                    <div class="input-group container">
+                        Enter Administrator password: &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="password" class="form-control input-group-append small" placeholder="Enter administrator password to proceed" name="adminpass" id="adminpass" required>
+                    </div>
+                    <hr>
+                    <div class="input-group container">
+                        <input type="submit" class="btn btn-outline-success btn-lg" value="Inform {{thisproject.userid.utilname}}">
+                    </div>
+                </form>
+
+                <hr>
+
+            </div><br>
+
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+<script>
+    function autosubmit() {
+        var projectid = document.getElementById('projectid')
+        var projform = document.getElementById('projform')
+        if (projectid.value != '0') {
+            projform.submit();
+        }
+
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Select project to update BoQ</h1>
+</div>
+
+
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-warning">NOTE</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="" id="format">
+                <div class="card-body">
+
+                    <h5 class="text-black-100 container-fluid">Updating BoQ is allowed for only the projects in TESG phase. Kindly follow the following instructions before updating the BoQ of any project.</h5><br>
+                    <ul>
+                        <li>Spares as specified under the Tariff Regulations for 2014-19 notified by CERC</li>
+                        <li>Non consideration of state taxes, entry tax, etc in the project cost</li>
+                        <li>Placement of the Letter of Award (LOA) only after approval of the scheme.</li>
+                        <li>Supply and erection shall commensurate with each other.</li>
+                        <li>Opening of a separate bank account for each scheme for linking of the same with Public Finance Management System (PFMS) of Ministry of Finance</li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h5 class="m-0 font-weight-bold text-success">Update BoQ of selected project
+                    <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-danger" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects by ID" title="Search" style="margin:auto; width: 30%;">
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}<br>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                    width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>Project Name</th>
+                                <th>User</th>
+                                <th>Entity</th>
+                                <th>Update BOQ</th>
+
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>Project Name</th>
+                                <th>User</th>
+                                <th>Entity</th>
+
+                                <th>Update BOQ</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% if not project_list %}
+                            <tr>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+
+                            </tr>
+                            {% else %} {% for proj in project_list %}
+                            <tr>
+                                <td class="font-weight-bolder">{{proj.newid}}</td>
+                                <td><a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
+                                <td>{{proj.userid.username}}</td>
+                                <td>{{proj.userid.region}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-primary btn-responsive" href="/update_boq/{{proj.id}}">
+                                        <i class="fa fa-pencil"></i> Update BoQ
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %} {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function get_temp_proj(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,368 @@
+{% extends 'psdf_main/includes/layout.html'%} {% load static %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4">
+        <h1 class="h3 mb-2 text-gray-800">Apply for new project</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<hr>
+<br>
+
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-info">View Format</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse" id="format">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">Download forms and formats for filing of a new DPR: </div>
+
+                        <div class="col-md-2">
+                            <a href="/downloadformat/format" class="btn btn-danger btn-icon-split">
+                                <span class="icon text-white-50">
+                                    <i class="fa fa-download"></i>
+                            </span>
+                                <span class="text">Form A1 to A6</span>
+                            </a>
+
+                        </div>
+                        <div class="col-md-2">
+                            <a href="/downloadformat/boqformat" class="btn btn-primary btn-icon-split">
+                                <span class="icon text-white-50">
+                                    <i class="fa fa-download"></i>
+                            </span>
+                                <span class="text">BOQ Format</span>
+                            </a>
+
+                        </div>
+
+                        <div class="col-md-2">
+                            <a href="/downloadformat/support" class="btn btn-danger btn-icon-split">
+                                <span class="icon text-white-50">
+                                    <i class="fa fa-download"></i>
+                            </span>
+                                <span class="text">Other Supporting Docs</span>
+                            </a>
+
+                        </div>
+
+                    </div>
+                    <br> The Appraisal Committee, in its seventh meeting had suggested to bring uniformity, that a model DPR along with suggested guidelines with regard to spares, taxes etc may be made available to the entities through NLDC website. The
+                    matter was deliberated by the Appraisal Committee in the meeting held on 8.9.2015. The committee had recommended the following guidelines:
+                    <ul>
+                        <li>Spares as specified under the Tariff Regulations for 2014-19 notified by CERC</li>
+                        <li>Non consideration of state taxes, entry tax, etc in the project cost</li>
+                        <li>Placement of the Letter of Award (LOA) only after approval of the scheme.</li>
+                        <li>Supply and erection shall commensurate with each other.</li>
+                        <li>Opening of a separate bank account for each scheme for linking of the same with Public Finance Management System (PFMS) of Ministry of Finance</li>
+                    </ul>
+                    <div class="row">
+                        <div class="col-md-4">Download sample DPRs: </div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <a href="/downloadformat/sample1" class="btn btn-warning btn-icon-split">
+                                        <span class="icon text-white-50">
+                                    <i class="fa fa-download"></i>
+                            </span>
+                                        <span class="text">Sample 1</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="/downloadformat/sample2" class="btn btn-success btn-icon-split">
+                                        <span class="icon text-white-50">
+                                    <i class="fa fa-download"></i>
+                            </span>
+                                        <span class="text">Sample 2</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="/downloadformat/sample3" class="btn btn-info btn-icon-split">
+                                        <span class="icon text-white-50">
+                                    <i class="fa fa-download"></i>
+                            </span>
+                                        <span class="text">Sample 3</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+
+    <div class="col-lg-6">
+        <form action="{% url 'newdpr' %}" method="POST" enctype="multipart/form-data" name="dprform" id="dprform">
+            {% csrf_token %}
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-danger">Enter following details</h6>
+                </div>
+                <div class="card-body">
+
+                    <div class="input-group">
+
+                        Enter project name: &nbsp;&nbsp;<input type="text" class="form-control bg-gray-200 border-0 small" placeholder="Project name" aria-label="Project name" aria-describedby="basic-addon2" name="proname" id="proname" required value='{{user.temp_boq.proname}}'>
+
+                    </div><br>
+                    <div class="input-group">
+                        Enter requested amount (in Rupees): &nbsp;&nbsp;<input type="text" class="form-control bg-gray-200 border-0 small" placeholder="Amount (in Rupees)" aria-label="Requested amount" aria-describedby="basic-addon2" name="amount" id="amount"
+                            required value='{{user.temp_boq.amountasked}}'>
+                    </div><br>
+                    <div class="input-group">
+                        Enter schedule (in months): &nbsp;&nbsp; <input type="text" class="form-control bg-gray-200 border-0 small" placeholder="Schedule (in months)" aria-label="Schedule " aria-describedby="basic-addon2" name="schedule" id="schedule"
+                            required value='{{user.temp_boq.schedule}}'>
+                    </div>
+                </div><br>
+
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Uploads</h6>
+                </div>
+                <div class="card-body"><br>
+
+                    <div class="row">
+                        <div class="col-md-6">Upload the zip file containing all A1 to A6 forms duly filled.</div>
+                        <div class="col-md-6">
+                            <label class=" btn btn-primary" for="a1" id="a1-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Upload form A1 to A6 in zip format</span></label>
+                            <input type="file" class="custom-file-input " name="a1" id="a1">
+
+
+                            </span>
+
+                            </a>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-6">Upload DPR</div>
+                        <div class="col-md-6">
+                            <label class=" btn btn-primary" for="dpr" id="dpr-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Upload DPR</span></label>
+                            <input type="file" class="custom-file-input " name="dpr" id="dpr">
+
+
+                            </span>
+
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">Upload any other supporting documents</div>
+                        <div class="col-md-6">
+                            <label class=" btn btn-primary" for="otherdoc" id="otherdoc-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Upload other supporting documents</span></label>
+                            <input type="file" class="custom-file-input " name="otherdoc" id="otherdoc">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+
+            <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-warning">Upload BOQ</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse show" id="collapseCardExample">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">Upload BOQ (only excel files allowed)</div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-6">
+
+
+                            <input type="file" class="form-control-file btn btn-outline-warning" name="boq" id="boq" accept=".xls, .xlsx">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#collapseConfirm" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-success">Confirm Submission</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse" id="collapseConfirm">
+                <div class="card-body">
+                    <div class="row">
+
+                        <label for="confirmbox">&nbsp;&nbsp;
+                            <input id="field_terms" type="checkbox" required name="terms" id="terms">
+                            &nbsp; &nbsp; I confirm that the details given by me are of best of my knowledge.
+                        </label>
+                    </div><br>
+                    <hr>
+                    <br>
+                    <input type="hidden" name="subtype" id="subtype">
+                    <div class="row">
+                        <div class="col-lg-8" style="margin: auto;">
+                            <div class="row">
+                                <div class="col-md-5">
+
+                                    <button type="button" class="btn btn-outline-danger btn-wrap-text" data-toggle="modal" data-target="#exampleModal">
+  Clear Data
+</button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Please confirm to clear the data filled in the Boq and DPR Fields.
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button class="btn btn-outline-danger btn-wrap-text" onclick="check_n_submit('clear')">Clear Data</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2"></div>
+                                <!-- <div class="col-md-4">
+                                    <button class="btn btn-outline-info btn-wrap-text" onclick="check_n_submit('save')">Save as draft</button></div> -->
+                                <div class="col-md-0"></div>
+                                <div class="col-md-5">
+                                    <button type="button" class="btn btn-lg btn-outline-success btn-wrap-text" data-toggle="modal" data-target="#confirmsub">
+                                        <strong>Submit</strong>
+                                </button>
+                                </div>
+
+                                <div class="modal fade" id="confirmsub" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Please confirm to submit the DPR filled.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button class="btn btn-user btn-success btn-wrap-text " onclick="check_n_submit('submit')">Submit DPR</button></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </form>
+
+</div>
+<script>
+    function showrow() {
+        var rownum = document.getElementById('nextrow');
+        thisstr = rownum.value;
+        console.log(thisstr)
+        document.getElementById(thisstr).style.display = 'block';
+        rownum.value = 'row' + (parseInt(thisstr.substring(3, thisstr.length + 1)) + 1)
+    }
+
+    function calc_cost(i) {
+        var qty = parseInt(document.getElementById('itemqty' + i).value);
+        var price = parseFloat(document.getElementById('itemprice' + i).value);
+        var cost = document.getElementById('itemcost' + i);
+        console.log(qty)
+        console.log(price)
+        cost.value = qty * price;
+        cost.style.display = "block";
+
+
+
+    }
+
+    function getGrand() {
+        Gsum = 0;
+        var qty;
+        var price;
+        for (i = 1; i < 1000; i++) {
+            qty = document.getElementById('itemqty' + i).value
+            price = document.getElementById('itemprice' + i).value
+            if (qty == '') {
+                qty = 0;
+            }
+            if (price == '') {
+                price = 0;
+            }
+            Gsum = Gsum + parseInt(qty) * parseFloat(price);
+
+
+
+        }
+        document.getElementById('grandTotal').innerText = '₹ ' + Gsum
+    }
+
+    function check_n_submit(subtype) {
+        var subtypef = document.getElementById('subtype')
+
+        subtypef.value = subtype
+        if (document.getElementById('terms').checked) {
+
+            document.getElementById('dprform').submit()
+        }
+
+    }
+
+    function dototal(yehaiclass) {
+        var sum = 0;
+        console.log(yehaiclass);
+        $('.' + yehaiclass).each(function() {
+            sum += parseFloat($(this).text());
+        });
+        console.log(sum);
+        var totalfield = document.getElementById(yehaiclass + '1');
+        totalfield.innerHTML = '₹ ' + sum;
+        document.getElementById(yehaiclass + 'btn').style.display = 'none';
+    }
+</script>
+
+{% endblock %}

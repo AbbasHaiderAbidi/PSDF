@@ -1,0 +1,144 @@
+{% extends 'psdf_main/includes/layout.html'%} {% load static %} {% block body %}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Projects under Appraisal committee</h1>
+</div>
+
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h5 class="m-0 font-weight-bold text-primary">Under Appraisal
+                    <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects" title="Search" style="margin:auto; width: 30%;">
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}<br>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                    width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>Project Name</th>
+                                <th>Amount</th>
+                                <th>Category of Funding</th>
+                                <th>View BoQ</th>
+                                <th>Project acceptance date</th>
+                                <th>TESG approval date</th>
+                                <th>Project trail</th>
+
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>Project Name</th>
+                                <th>Amount</th>
+                                <th>Category of Funding</th>
+                                <th>View BoQ</th>
+                                <th>Project acceptance date</th>
+                                <th>TESG approval date</th>
+                                <th>Project trail</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% if not appraisal_projects %}
+                            <tr>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+
+                            </tr>
+                            {% else %} {% for proj in appraisal_projects %}
+                            <tr>
+                                <td class="font-weight-bolder">{{proj.newid}}</td>
+                                <td><a href="/view_project/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
+                                <td>{{proj.amt_asked}}</td>
+
+                                <td>{{proj.fundcategory}}</td>
+                                <td>
+                                    <a class="btn btn-outline-warning btn-responsive" href="/user_boq_view/{{proj.id}}_userappraisalprojects">
+                                        <i class="fas fa-eye"></i> View BoQ
+                                    </a>
+                                </td>
+                                <td>{{proj.dpraprdate}}</td>
+                                <td>{{proj.tesgaprdate}}</td>
+                                <td><button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#appr_{{proj.id}}">
+                                    <i class="fa fa-eye"></i> &nbsp; View Trail
+                                </button></td>
+                            </tr>
+
+
+                            {% endfor %} {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                {% for work in workflow_list %}
+                <div class="modal fade" id="appr_{{work.id}}" tabindex="-1" role="dialog" aria-labelledby="appr_{{work.id}}" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title text-black-50" id=""> <strong>Trail for Project ID: {{work.id}}</strong></h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action list-group-item-warning">The project has been through following phases since accepted.</a>
+                                    <br> {% for event in work.events %}
+                                    <a href="#" class="list-group-item list-group-item-action">{{event}}</a> {% endfor %}
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function get_temp_proj(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+{% endblock %}

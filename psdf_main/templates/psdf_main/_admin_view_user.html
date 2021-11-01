@@ -1,0 +1,213 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="h3 mb-2 text-gray-800">{{THIS_USER.id}} - {{THIS_USER.username}}</h1>
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-6">
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+                {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+
+    <div class="row">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Total Projects pending for examination</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if numpending %} {{numpending}} {% else %} None {% endif %}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total accepted projects</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if numaccept %} {{numaccept}} {% else %} None {% endif %}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total approved projects</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if numapprove %} {{numapprove}} {% else %} None {% endif %}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Total rejected projects</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if numreject %} {{numreject}} {% else %} None {% endif %}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <!-- Earnings (Annual) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Amount requested</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if totalreq %} ₹ {{totalreq}} {% else %} ₹ 0 {% endif %}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-university fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Total Amount dispersed</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if totalrel %} ₹ {{totalrel}} {% else %} ₹ 0 {% endif %}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-university fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+
+
+                <!-- Card Header - Accordion -->
+                <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+                    <h6 class="m-0 font-weight-bold text-primary text-center">User Details</h6>
+                </a>
+                <!-- Card Content - Collapse -->
+
+                <div class="collapse" id="collapseCardExample">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6"><strong>Username :  </strong>
+                                <h6 class="m-0 font-weight-bold text-danger">{{THIS_USER.username}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                {% if THIS_USER.active %}
+                                <a class="btn btn-success"> Active
+                                <i class="fas fa-check"></i>
+                            </a> {% else %}
+                                <a class="btn btn-danger"> Inactive
+                                <i class="fas fa-ban"></i>
+                            </a> {% endif %}
+
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-md-6">Entity Name :
+                                <h6 class="m-0 font-weight-bold ">{{THIS_USER.utilname}}</h6>
+                            </div>
+
+                            <div class="col-md-6">Region :
+                                <h6 class="m-0 font-weight-bold">{{THIS_USER.region}}</h6>
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">Nodal Officer :
+                                <h6 class="m-0 font-weight-bold ">{{THIS_USER.nodal}}</h6>
+                            </div>
+
+                            <div class="col-md-6">Contact :
+                                <h6 class="m-0 font-weight-bold">{{THIS_USER.contact}}</h6>
+                            </div>
+
+                        </div><br>
+                        <div class="row">
+                            <div class="col-md-6">Address :
+                                <h6 class="m-0 font-weight-bold">{{THIS_USER.address}}</h6>
+                            </div>
+                            <div class="col-md-6">E-mail:
+                                <h6 class="m-0 font-weight-bold">{{THIS_USER.email}}</h6>
+                            </div>
+
+
+                        </div><br>
+                        <div class="row">
+                            <div class="col-md-6">Account Creation date :
+                                <h6 class="m-0 font-weight-bold">{{THIS_USER.reqdate}}</h6>
+                            </div>
+                            <div class="col-md-6">Account acceptance date:
+                                <h6 class="m-0 font-weight-bold">{{THIS_USER.aprdate}}</h6>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endblock %}

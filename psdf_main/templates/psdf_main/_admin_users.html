@@ -1,0 +1,145 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="h3 mb-2 text-gray-800">View All available users</h1>
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-6">
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+                {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h5 class="m-0 font-weight-bold text-primary">All Users
+                <input type="text" id="user_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_user('user_search','dataTable')" placeholder="Search Users" title="Search" style="margin:auto; width: 30%;">
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                    width: 100%;">
+                    <thead class="text-white bg-primary">
+                        <tr>
+                            <th>Username</th>
+                            <th>Region</th>
+                            <th>Utility</th>
+                            <th>Nodal Officer</th>
+                            <th>Contact</th>
+                            <th>Creation Date</th>
+                            <th>Activation Date</th>
+                            <th>Last login</th>
+                            <th>Active</th>
+                        </tr>
+                    </thead>
+                    <tfoot class="text-white bg-primary">
+                        <tr>
+                            <th>Username</th>
+                            <th>Region</th>
+                            <th>Utility</th>
+                            <th>Nodal Officer</th>
+                            <th>Contact</th>
+                            <th>Creation Date</th>
+                            <th>Activation Date</th>
+                            <th>Last login</th>
+                            <th>Active</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if not allusers %}
+                        <tr>
+                            <td>Not available</td>
+                            <td>Not available</td>
+                            <td>Not available</td>
+                            <td>Not available</td>
+                            <td>Not available</td>
+                            <td>Not available</td>
+                            <td>Not available</td>
+                            <td>Not available</td>
+                            <td>Not available</td>
+                        </tr>
+                        {% else %} {% for user in allusers %} {% if user.active %}
+                        <tr>
+                            <td><a href="/view_user/{{user.id}}" class="text-danger font-weight-bolder">{{user.username}}</a></td>
+                            <td>{{user.region}}</td>
+                            <td>{{user.utilname}}</td>
+                            <td>{{user.nodal}}</td>
+                            <td>{{user.contact}}</td>
+                            <td>{{user.reqdate}}</td>
+                            <td>{{user.aprdate}}</td>
+                            <td>{{user.lastlogin}}</td>
+
+                            <td class="text-center">
+                                <a class="btn btn-danger btn-circle" href="/ban_user/{{user.id}}">
+                                    <i class="fas fa-ban"></i>
+                                </a>
+                            </td>
+                            {% else %}
+                            <tr class="alert-danger">
+                                <td><a href="/view_user/{{user.id}}" class="text-danger font-weight-bolder">{{user.username}}</a></td>
+                                <td>{{user.region}}</td>
+                                <td>{{user.utilname}}</td>
+                                <td>{{user.nodal}}</td>
+                                <td>{{user.contact}}</td>
+                                <td>{{user.reqdate}}</td>
+                                <td>{{user.aprdate}}</td>
+                                <td>{{user.lastlogin}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-success btn-circle" href="/allow_user/{{user.id}}">
+                                        <i class="fas fa-check"></i>
+                                    </a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %} {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+
+
+</div>
+<script>
+    function get_user(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+
+{% endblock %}

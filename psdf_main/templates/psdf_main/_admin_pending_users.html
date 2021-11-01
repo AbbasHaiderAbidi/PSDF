@@ -1,0 +1,181 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">New Users pending for verfication</h1>
+</div>
+<div class="row">
+
+    <div class="col-lg-6">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Pending Users</h6>
+            </div>
+            <div class="card-body">
+                {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}<br>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="display: block; max-height: 80%;">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Region</th>
+                                <th>Entity</th>
+                                <th>Date of creation</th>
+                                <th>Contact</th>
+                                <th>View</th>
+                                <th>Reject</th>
+                                <th>Approve</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Username</th>
+                                <th>Region</th>
+                                <th>Entity</th>
+                                <th>Date of creation</th>
+                                <th>Contact</th>
+                                <th>View</th>
+                                <th>Reject</th>
+                                <th>Approve</th>
+
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% if not userobj %}
+                            <tr>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+
+
+
+                            </tr>
+
+                            {% else %} {% for p_user in userobj %}
+                            <tr>
+                                <td>{{p_user.username}}</td>
+                                <td>{{p_user.region}}</td>
+                                <td>{{p_user.utilname}}</td>
+                                <td>{{p_user.reqdate}}</td>
+                                <td>{{p_user.contact}}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary btn-circle" data-toggle="collapse" href="#collapseExample{{p_user.id}}" role="button" aria-expanded="false" aria-controls="collapseExample{{p_user.id}}" id="togglebtn{{p_user.id}}" onClick="changeColor('togglebtn{{p_user.id}}')">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-danger btn-circle" href="/reject_user/{{p_user.id}}">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/approve_user/{{p_user.id}}" class="btn btn-success btn-circle">
+                                        <i class="fa fa-check"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %} {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+
+
+            <!-- Card Header - Accordion -->
+            <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-primary">User Details</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            {% if userobj %} {% for p_user in userobj %}
+            <div class="collapse" id="collapseExample{{p_user.id}}">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6"><strong>Username :  </strong>
+                            <h6 class="m-0 font-weight-bold text-danger">{{p_user.username}}</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="/approve_user/{{p_user.id}}" class="btn btn-success btn-circle btn-lg">
+                                <i class="fa fa-check"></i>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-danger btn-circle btn-lg" href="/reject_user/{{p_user.id}}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col-md-6">Entity Name :
+                            <h6 class="m-0 font-weight-bold ">{{p_user.utilname}}</h6>
+                        </div>
+
+                        <div class="col-md-6">Region :
+                            <h6 class="m-0 font-weight-bold">{{p_user.region}}</h6>
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">Nodal Officer :
+                            <h6 class="m-0 font-weight-bold ">{{p_user.nodal}}</h6>
+                        </div>
+
+                        <div class="col-md-6">Contact :
+                            <h6 class="m-0 font-weight-bold">{{p_user.contact}}</h6>
+                        </div>
+
+                    </div><br>
+                    <div class="row">
+                        <div class="col-md-6">Address :
+                            <h6 class="m-0 font-weight-bold">{{p_user.address}}</h6>
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+
+
+                    </div>
+                </div>
+                <hr>
+            </div>
+            {% endfor %}{% endif%}
+        </div>
+    </div>
+</div>
+<script>
+    function changeColor(thisbtn) {
+
+        var golbtn = document.getElementById(thisbtn);
+
+        if (golbtn.classList.contains('btn-primary')) {
+
+            golbtn.classList.remove('btn-primary');
+            golbtn.classList.add('btn-warning');
+
+        } else {
+
+            golbtn.classList.remove('btn-warning');
+            golbtn.classList.add('btn-primary');
+
+        }
+    }
+</script>
+{% endblock %}

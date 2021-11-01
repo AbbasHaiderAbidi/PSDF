@@ -1,0 +1,437 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">New projects pending for verification</h1>
+</div>
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Pending Projects
+                    <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects" title="Search" style="margin:auto; width: 30%;">
+                </h6>
+            </div>
+            <div class="card-body">
+                {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}<br>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                    width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Amount</th>
+                                <th>Schedule</th>
+                                <th>User</th>
+                                <th>Region</th>
+                                <th>Entity</th>
+                                <th>Download Documents</th>
+                                <th>View</th>
+
+
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Amount</th>
+                                <th>Schedule</th>
+                                <th>User</th>
+                                <th>Region</th>
+                                <th>Entity</th>
+                                <th>Download Documents</th>
+                                <th>View</th>
+
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% if not projectobj %}
+                            <tr>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+
+
+
+
+                            </tr>
+
+                            {% else %} {% for proj in projectobj %}
+                            <tr>
+                                <td>{{proj.proname}}</td>
+                                <td>{{proj.amountasked}}</td>
+                                <td>{{proj.schedule}}</td>
+                                <td><a href="/view_user/{{proj.userid.id}}" class="text-danger">{{proj.userid.username}}</a></td>
+                                <td>{{proj.userid.region}}</td>
+
+
+
+                                <td>
+                                    {{proj.userid.utilname}}
+                                </td>
+
+                                <!-- <a class="btn btn-outline-info" href="/download_temp_project/{{proj.id}}">
+                                        <i class="fas fa-download"></i> Download -->
+                                <td class="text-center"><button type="button" class="btn btn-outline-danger btn-responsive" data-toggle="modal" data-target="#modalforDown{{proj.id}}">
+                                            <i class="fas fa-download"></i> Download
+                                        </button></td>
+
+
+
+                                <td class="text-center"><button type="button" class="btn btn-outline-primary btn-responsive" data-toggle="modal" data-target="#modalforT{{proj.id}}">
+                                        <i class="fa fa-eye"></i> View
+                                    </button></td>
+
+                            </tr>
+                            {% endfor %} {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% for proj in projectobj %}
+
+
+    <div class="modal fade" id="modalforT{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforT{{proj.id}}" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id=""> <strong>{{proj.proname}}</strong></h3>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-4 border-left-danger">
+                                <!-- Card Header - Accordion -->
+                                <a href="#detailproj" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="detailproj">
+                                    <h6 class="m-0 font-weight-bold text-danger">Project Details</h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse" id="detailproj">
+                                    <div class="card-body">
+                                        <div class="row">
+
+                                            <div class="col-md-6 text-primary"><strong>Username :</strong>
+                                                <h6 class="m-0 font-weight-bold  text-dark">{{proj.userid.username}}</h6>
+                                            </div>
+
+                                            <div class="col-md-6 text-primary"><strong>DPR Submission Date :</strong>
+                                                <h6 class="m-0 font-weight-bold text-dark">{{proj.dprsubdate}}</h6>
+                                            </div>
+
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-6 text-primary"><strong>Amount requested :</strong>
+                                                <h6 class="m-0 font-weight-bold text-dark">₹ {{proj.amountasked}}</h6>
+                                            </div>
+
+                                            <div class="col-md-6 text-primary"><strong>Region :</strong>
+                                                <h6 class="m-0 font-weight-bold text-dark">{{proj.user.region}}</h6>
+                                            </div>
+
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-6 text-primary"><strong>Nodal Officer :</strong>
+                                                <h6 class="m-0 font-weight-bold text-dark ">{{proj.userid.nodal}}</h6>
+                                            </div>
+
+                                            <div class="col-md-6 text-primary"><strong>Contact :</strong>
+                                                <h6 class="m-0 font-weight-bold text-dark">{{proj.userid.contact}}</h6>
+                                            </div>
+
+                                        </div><br>
+                                        <div class="row">
+                                            <div class="col-md-6 text-primary"><strong>Address :</strong>
+                                                <h6 class="m-0 font-weight-bold text-dark">{{proj.userid.address}}</h6>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <a class="btn btn-outline-success" href="/download_temp_project/DPR_{{proj.id}}"><i class="fas fa-download"></i> DPR</a>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <a class="btn btn-outline-danger" href="/download_temp_project/forms_{{proj.id}}"><i class="fas fa-download"></i> Forms</a>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <a class="btn btn-outline-info" href="/download_temp_project/otherdocs_{{proj.id}}"><i class="fas fa-download"></i> Other Docs</a>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-4 border-left-info">
+
+                                <a href="#boqsub" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="BoQList">
+                                    <h6 class="m-0 font-weight-bold text-info">View Submitted BOQ</h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse" id="boqsub">
+                                    <div class="card-body">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed; width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Item Name</th>
+                                                    <th>Item No in the BOQ</th>
+                                                    <th>Item Description</th>
+                                                    <th>Quantity</th>
+                                                    <th>Unit Price</th>
+                                                    <th>Total Cost</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                {% for submitted_boq in proj.submitted_boq %}
+                                                <tr>
+                                                    <td>{{submitted_boq.itemname}}</td>
+                                                    <td>{{submitted_boq.itemno}}</td>
+                                                    <td>{{submitted_boq.itemdesc}}</td>
+                                                    <td>{{submitted_boq.itemqty}}</td>
+                                                    <td>{{submitted_boq.itemprice}}</td>
+                                                    <td>₹ {{submitted_boq.itemcost}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        {% for item in proj.submitted_boq_Gtotal %}
+
+                                        <div class="{{proj.id}}totalcost" style="display:none">{{item.grandtotal}}</div>
+
+
+                                        {% endfor %}
+
+                                        <div class="font-weight-bold">Total Cost: &nbsp;&nbsp;&nbsp; </div>
+                                        <div id="{{proj.id}}totalcost1" class="font-weight-bold text-primary"><button class="btn btn-sm btn-outline-success" id="{{proj.id}}totalcostbtn" onclick="dototal('{{proj.id}}totalcost')">get Grand Total</button></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-4 border-bottom-success">
+                                <!-- Card Header - Accordion -->
+                                <a href="#acceptproj" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="acceptproj">
+                                    <h6 class="m-0 font-weight-bold text-success">Accept Project</h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse" id="acceptproj">
+                                    <div class="card-body">
+                                        <form method="POST" action="/acceptdpr/{{proj.id}}">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <p class="col-md-6 font-weight-bold">Project ID:</p>
+                                                <input type="text" class="form-control border-left-success bg-gray-200 col-md-6" name="newid{{proj.id}}" id="newid{{proj.id}}" placeholder="Enter new project ID" required>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <p class="col-md-6 font-weight-bold">Category of funding:</p>
+                                                <input type="text" class="form-control border-left-success bg-gray-200 col-md-6" name="fundcategory{{proj.id}}" id="fundcategory{{proj.id}}" placeholder="Enter category of funding(eg. 5.1(c), 5.1(b) etc.)" required>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <p class="col-md-6 font-weight-bold">Quantum of funding:</p>
+                                                <input type="number" class="form-control border-left-success bg-gray-200  col-md-6" name="quantum{{proj.id}}" id="quantum{{proj.id}}" placeholder="Enter value between 0 to 100" max='100' min='0' required>
+                                            </div>
+                                            <br>
+
+                                            <div class="row">
+                                                <p class="col-md-6 font-weight-bold">Remarks:</p>
+                                                <input type="text" class="form-control border-left-success bg-gray-200 col-md-6" name="remark{{proj.id}}" id="remark{{proj.id}}" placeholder="Enter Remarks (if any)">
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <p class="col-md-6 font-weight-bold">Enter Administrator password:</p>
+                                                <input type="password" class="form-control bg-gray-200 border-left-success col-md-6" name="adminpass{{proj.id}}" id="adminpass{{proj.id}}" placeholder="Enter administrator password" required>
+                                            </div><br>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                </div>
+                                                <input type="submit" class="btn btn-outline-success btn-block col-md-4" value="Accept">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 ">
+                            <div class="card mb-4 border-bottom-danger ">
+                                <!-- Card Header - Accordion -->
+                                <a href="#rejectproj" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="rejectproj">
+                                    <h6 class="m-0 font-weight-bold text-danger">Reject Project</h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse" id="rejectproj">
+                                    <div class="card-body">
+                                        <form method="POST" action="/rejectdpr/{{proj.id}}">
+                                            {% csrf_token %}
+
+
+                                            <div class="row">
+                                                <p class="col-md-6 font-weight-bold">Remark:</p>
+                                                <input type="text" class="form-control bg-gray-200 border-left-danger col-md-6" name="rremark{{proj.id}}" id="rremark{{proj.id}}" placeholder="Enter Remarks" required>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <p class="col-md-6 font-weight-bold">Enter Administrator password to proceed:</p>
+                                                <input type="password" class="form-control bg-gray-200 border-left-danger col-md-6" name="radminpass{{proj.id}}" id="radminpass{{proj.id}}" placeholder="Enter administrator password" required>
+                                            </div><br>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                </div>
+                                                <input type="submit" class="btn btn-outline-danger btn-block col-md-4" value="Reject">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary " data-dismiss="modal">Close</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalforDown{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforDown{{proj.id}}" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id=""> <strong>{{proj.name}}</strong></h3>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3 font-weight-bold">Download DPR :</div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3 font-weight-bold">Download Forms by user :</div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3 font-weight-bold">Download Supporting Docs:</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <a class="btn btn-outline-info" href="/download_temp_project/DPR_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3 font-weight-bold">
+                            <a class="btn btn-outline-danger" href="/download_temp_project/forms_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <a class="btn btn-outline-warning" href="/download_temp_project/otherdocs_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary " data-dismiss="modal">Close</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+</div>
+<script>
+    function changeColor(thisbtn, openclose) {
+
+        var golbtn = document.getElementById(thisbtn);
+        var openclose = document.getElementById(openclose)
+        if (golbtn.classList.contains('btn-outline-primary')) {
+            openclose.innerText = "Close"
+            golbtn.classList.remove('btn-outline-primary');
+            golbtn.classList.add('btn-outline-danger');
+
+        } else {
+            openclose.innerText = "Open"
+            golbtn.classList.remove('btn-outline-danger');
+            golbtn.classList.add('btn-outline-primary');
+
+        }
+    }
+
+
+    function dototal(yehaiclass) {
+        var sum = 0;
+        console.log(yehaiclass);
+        $('.' + yehaiclass).each(function() {
+            sum += parseFloat($(this).text());
+        });
+        console.log(sum);
+        var totalfield = document.getElementById(yehaiclass + '1');
+        totalfield.innerHTML = '₹ ' + sum;
+        document.getElementById(yehaiclass + 'btn').style.display = 'none';
+    }
+
+    function get_temp_proj(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

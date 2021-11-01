@@ -1,0 +1,33 @@
+{% extends 'psdf_main/includes/auditor_layout.html'%} {% load static %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Auditor Dashboard</h1>
+
+
+        </div>
+    </div>
+    <div class="col-md-8">
+
+        <div class="d-sm-flex align-items-center justify-content-end mb-4">
+
+            <div class="d-sm-flex align-items-center justify-content-end mb-4">
+                {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}

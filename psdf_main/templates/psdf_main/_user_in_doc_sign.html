@@ -1,0 +1,137 @@
+{% extends 'psdf_main/includes/layout.html'%} {% load static %} {% block body %}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h1 class="h3 mb-2 text-gray-800">Upload Signed Document</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<hr>
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h5 class="m-0 font-weight-bold text-primary">Document Signing
+                    <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects" title="Search" style="margin:auto; width: 30%;">
+                </h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Project ID</th>
+                            <th>Project Name</th>
+                            <th>DPR submission date</th>
+
+                            <th>DPR acceptance date</th>
+                            <th>TESG date</th>
+                            <th>Appraisal date</th>
+                            <th>Monitoring date</th>
+                            <th class="alert alert-warning">Document Signing</th>
+                            <th>Action</th>
+                            <th>Download</th>
+
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Project ID</th>
+                            <th>Project Name</th>
+                            <th>DPR submission date</th>
+
+                            <th>DPR acceptance date</th>
+                            <th>TESG date</th>
+                            <th>Appraisal date</th>
+                            <th>Monitoring date</th>
+                            <th class="alert alert-warning">Document Signing</th>
+                            <th>Action</th>
+                            <th>Download</th>
+
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if not projs %}
+                        <tr>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+                            <td>Not Available</td>
+
+
+                        </tr>
+                        {% else %} {% for proj in projs %}
+                        <tr>
+                            <td class="font-weight-bolder">{{proj.newid}}</td>
+                            <td><a href="/user_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
+                            <td>{{proj.dprsubdate}}</td>
+                            <td>{{proj.dpraprdate}}</td>
+
+                            <td>
+                                {{proj.tesgaprdate}}
+                            </td>
+                            <td>{{proj.appraprdate}}</td>
+                            <td>{{proj.moniaprdate}}</td>
+                            {% if proj.approved == False or proj.approved == '' or proj.approved == None%}
+                            <form action="{% url 'user_in_doc_sign' %}" method="POST" enctype="multipart/form-data" name="userdocsign" id="userdocsign">
+                                {% csrf_token %}
+                                <td>
+                                    <input type="hidden" value="{{proj.id}}" name="projid" id="projid">
+                                    <input type="file" class="form-control-file btn btn-sm btn-outline-warning btn-block center" name="docsign" id="docsign" required>
+                                </td>
+                                {% if proj.doc_path == '' or proj.doc_path == None %}
+                                <td>
+                                    <input type="submit" class="form-control-file btn btn-sm btn-outline-success btn-block center" value="Submit">
+                                </td>
+                                <td>No document</td>
+                                {% else %}
+                                <td>
+                                    <input type="submit" class="form-control-file btn btn-sm btn-outline-danger btn-block center" value="Update">
+
+                                </td>
+                                <td><a class="btn btn-outline-info" href="/download_doc_sign/{{proj.id}}"><i class="fas fa-download"></i> Download </a></td>
+                                {% endif %}
+                            </form>
+
+                            {% else %}
+                            <td colspan="2" class="alert alert-success">
+                                <h6 class="font-weight-bold center">Document Accepted</h6>
+                            </td>
+                            <td><a class="btn btn-outline-success" href="/download_doc_sign/{{proj.id}}"><i class="fas fa-download"></i> Download </a></td>
+                            {% endif %}
+
+                        </tr>
+
+
+                        {% endfor %} {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

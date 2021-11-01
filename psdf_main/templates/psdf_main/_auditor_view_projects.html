@@ -1,0 +1,141 @@
+{% extends 'psdf_main/includes/auditor_layout.html'%} {% load static %} {% block body %}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h1 class="h3 mb-2 text-gray-800">All Projects</h1>
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-6">
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+                {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h5 class="m-0 font-weight-bold text-success">
+
+                        <h6 class="m-0 font-weight-bold text-success">List of all Projects</h6>
+
+
+                    </h5>
+                </div>
+
+
+                <!-- <div class="collapse" id="projtable"><br> --><br>
+                <input type="text" id="temp_proj_search1" class="form-control input-text pull-center border-left-info" onkeyup="get_temp_proj('temp_proj_search1','dataTable')" placeholder="Search projects by ID" title="Search" style="margin:auto; width: 30%;">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                        width: 100%;">
+                            <thead class="alert-dark">
+                                <tr>
+                                    <th>Project ID</th>
+                                    <th>Project Name</th>
+                                    <th>User</th>
+                                    <th>Entity</th>
+                                    <th>DPR Submission date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tfoot class="alert-dark">
+                                <tr>
+                                    <th>Project ID</th>
+                                    <th>Project Name</th>
+                                    <th>User</th>
+                                    <th>Entity</th>
+                                    <th>DPR Submission date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                {% if not projs %}
+                                <tr>
+                                    <td>Not Available</td>
+                                    <td>Not Available</td>
+                                    <td>Not Available</td>
+                                    <td>Not Available</td>
+                                    <td>Not Available</td>
+                                    <td>Not Available</td>
+
+                                </tr>
+                                {% else %} {% for proj in projs %}
+                                <tr>
+                                    <td class="font-weight-bolder">{{proj.newid}}</td>
+                                    <td><a href="/auditor_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
+                                    <td>{{proj.userid.username}}</td>
+                                    <td>{{proj.userid.region}}</td>
+                                    <td>{{proj.dprsubdate}}</td>
+                                    {% if proj.deny %}
+                                    <td class="alert-danger">
+                                        <h5 class="font-weight-bold">Rejected</h5>
+                                    </td>
+                                    {% elif proj.status == '1' %}
+                                    <td class="alert-warning">
+                                        <h5 class="font-weight-bold">Under TESG</h5>
+                                    </td class="alert-warning">
+                                    {% elif proj.status == '2' %}
+                                    <td>
+                                        <h5 class="font-weight-bold">Under Appraisal</h5>
+                                    </td class="alert-warning">
+                                    {% elif proj.status == '3' %}
+                                    <td>
+                                        <h5 class="font-weight-bold">Under Monitoring</h5>
+                                    </td>
+                                    {% elif proj.status == '4' %}
+                                    <td class="alert-success">
+                                        <h5 class="font-weight-bold">Under Final approval</h5>
+                                    </td>
+
+
+                                    {% endif %}
+                                </tr>
+                                {% endfor %} {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <!-- </div> -->
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    function get_temp_proj(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

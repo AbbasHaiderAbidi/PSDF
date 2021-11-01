@@ -1,0 +1,259 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+
+
+
+
+<div class="row">
+    <div class="col-md-4 d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">TESG Chain of Project : {{proj.name}} ({{proj.id}})</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="col-md-2">
+        <h4 class="text-gray-800"><a href="/TESG_projects">Back</a></h4>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="modalfortesg" tabindex="-1" role="dialog" aria-labelledby="modalfortesg" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-black-50" id=""> <strong>New TESG for {{proj.name}} ({{proj.newid}})</strong></h3>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+
+
+            <div class="modal-body">
+                <form action="{% url 'tesgchain_form' %}" method="POST" enctype="multipart/form-data" name="tesgchain" id="tesgchain">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{proj.id}}" id="projid" name="projid">
+                    <div class="row">
+                        <p class="text-primary col-md-4 font-weight-bold">Project "{{proj.name}}" discussed in :</p>
+
+                        {% if tesg_list == '' %}
+                        <h5 class="col-md-6">No TESG for this project so far</h5>
+                        {% else %}
+                        <select id="tesgnum" name="tesgnum" class="form-control bg-gray-200 border-left-primary col-md-6" required>
+                            <option value="">-- Select from TESG list --</option>
+                                {% for tesgnum in tesg_list %}
+                                    <option value="{{tesgnum}}">{{tesgnum}}</option>
+                                {% endfor %}
+                        </select> {% endif %}
+                        <div class="col-md-2"></div>
+                    </div><br>
+                    <div class="row">
+                        <p class="text-primary col-md-4 font-weight-bold">Upload Outcomes (optional):</p>
+                        <input type="file" class="form-control-file btn btn-outline-success col-md-4" name="observations" id="observations">
+                        <div class="col-md-2"></div>
+                    </div><br>
+
+                    <div class="row">
+                        <p class="text-primary col-md-4 font-weight-bold">Enter TESG outcome</p>
+                        <textarea id="tesg_outcome" name="tesg_outcome" rows="4" cols="4" class="form-control col-md-8 border-bottom-danger" placeholder="Enter TESG ouctomes..."></textarea>
+                    </div><br>
+                    <hr><br>
+                    <div class="row">
+                        <p class="text-primary col-md-4 font-weight-bold">Administrator Password:</p>
+                        <input type="password" class="form-control bg-gray-200 border-left-warning col-md-6" name="adminpass" id="adminpass" required placeholder="Enter administrator password to proceed">
+                        <div class="col-md-2"></div>
+                    </div><br>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp;
+                        <input type="submit" class="btn btn-outline-success btn-lg" value="Submit TESG outcome">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h5 class="m-0 font-weight-bold text-primary">TESG details
+
+            <button type="button" class="btn btn-outline-danger btn-responsive form-control input-text pull-right" data-toggle="modal" data-target="#modalfortesg" style="margin:auto; width: 30%;">
+                <i class="fa fa-plus"></i> &nbsp; New TESG outcome
+            </button>
+        </h5>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                width: 100%;">
+                <thead class="font-weight-bold">
+                    <tr>
+                        <th>TESG number</th>
+                        <th>TESG Date</th>
+                        <th>Outcomes</th>
+
+                        <th>Response</th>
+                        <th>Date of response</th>
+                        <th>Accept response</th>
+
+
+                    </tr>
+                </thead>
+                <tfoot class="font-weight-bold">
+                    <tr>
+                        <th>TESG number</th>
+                        <th>TESG Date</th>
+                        <th>Outcomes</th>
+
+                        <th>Response</th>
+                        <th>Date of response</th>
+                        <th>Accept response</th>
+
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% if not proj_tesg %}
+                    <tr>
+                        <td>Not available</td>
+                        <td>Not available</td>
+                        <td>Not available</td>
+                        <td>Not available</td>
+                        <td>Not available</td>
+
+                        <td>Not available</td>
+
+                    </tr>
+                    {% else %} {% for tesg in proj_tesg %}
+                    <tr>
+
+                        <td>{{tesg.tesgnum.TESG_no}}</td>
+                        <td>{{tesg.tesgnum.TESG_date}}</td>
+                        <td><button type="button" class="btn btn-outline-warning btn-responsive" data-toggle="modal" data-target="#modaltesg{{tesg.tesgnum.TESG_no}}">
+                            <i class="fa fa-eye"></i> &nbsp; View TESG outcomes
+                        </button></td>
+
+
+                        <div class="modal fade" id="modaltesg{{tesg.tesgnum.TESG_no}}" tabindex="-1" role="dialog" aria-labelledby="modaltesg{{tesg.tesgnum.TESG_no}}" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title text-black-50" id=""> <strong>TESG num - {{tesg.tesgnum.TESG_no}} outcomes for project ID - {{tesg.project.id}}</strong></h3>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Download supporting files:
+                                        <a href="/downloadTESGrequest/{{tesg.id}}" class="btn btn-outline-info">Download</a>
+                                        <br>
+                                        <hr>
+                                        <h2>TESG Committee observations : </h2>
+                                        {{tesg.admin_outcome}}<br><br>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp;
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <td><button type="button" class="btn btn-outline-primary btn-responsive" data-toggle="modal" data-target="#modalutesg{{tesg.tesgnum.TESG_no}}">
+                            <i class="fa fa-eye"></i> &nbsp; View TESG response
+                        </button></td>
+
+
+                        <div class="modal fade" id="modalutesg{{tesg.tesgnum.TESG_no}}" tabindex="-1" role="dialog" aria-labelledby="modalutesg{{tesg.tesgnum.TESG_no}}" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title text-black-50" id=""> <strong>TESG num - {{tesg.tesgnum.TESG_no}} outcomes for project ID - {{tesg.project.id}}</strong></h3>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Download supporting files:
+                                        <a href="/downloadTESGresponse/{{tesg.id}}" class="btn btn-outline-info">Download</a>
+                                        <br>
+                                        <hr>
+                                        <h2>Entity response: </h2>{{tesg.user_response}} <br><br>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <td>{{tesg.user_res_date}}</td>
+                        {% if tesg.active %}
+                        <td><button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#acptres{{tesg.tesgnum.TESG_no}}">
+                            <i class="fa fa-check"></i> &nbsp; Accept
+                        </button></td>
+                        <div class="modal fade" id="acptres{{tesg.tesgnum.TESG_no}}" tabindex="-1" role="dialog" aria-labelledby="acptres{{tesg.tesgnum.TESG_no}}" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title text-black-50" id=""> <strong>Accept TESG response</strong></h3>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{% url 'acceptTESG' %}" method="POST">
+
+                                            {% csrf_token %}
+                                            <input type="hidden" name="projid" id="projid" value="{{proj.id}}">
+                                            <input type="hidden" name="userid" id="userid" value="{{tesg.project.userid.id}}">
+                                            <input type="hidden" name="tesgnum" id="tesgnum" value="{{tesg.tesgnum.TESG_no}}">
+                                            <div class="row">
+                                                <div class="col-md-6">Enter Administrator password to confirm</div>
+                                                <div class="col-md-6">
+                                                    <input type="password" class="form-control" placeholder="Enter Administrator password" name="adminpass" id="adminpass"></div>
+                                            </div>
+                                            <br>
+                                            <div class="modal-footer">
+                                                <input type="submit" class="btn btn-lg btn-outline-success" value="Accept">
+                                                <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp;
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <td class="alert-success"> ACCEPTED </td>
+                        {% endif %}
+
+                    </tr>
+                    {% endfor %} {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
