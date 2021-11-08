@@ -20,6 +20,8 @@ def auditoronline(request):
         return False
 
 def proj_of_user(request, projid):
+    if adminonline(request):
+        return True
     if useronline(request):
         if (projects.objects.get(id = projid).userid.username == request.session['user']):
             return True
@@ -30,7 +32,10 @@ def proj_of_user(request, projid):
 
 
 def getuser(request, username):
-    return users.objects.filter(username = request.session['user'])[:1].get()
+    try:
+        return users.objects.filter(username = request.session['user'])[:1].get()
+    except:
+        return oops(request)
 
 def projectofuser(request, username,projid):
     if projects.objects.get(id = projid).userid == getuser(request, username):
@@ -297,6 +302,13 @@ def sanitize(str0):
     str4 = str3.replace("]["," ")
     return str4
 
+def sanitize_name(str0):
+    str1 = str0.replace("\"","_")
+    str2 = str1.replace("\'","_")
+    str3 = str2.replace("/","")
+    str4 = str3.replace("]["," ")
+    return str4
+
 def username_sanitize(str0):
     str1 = sanitize(str0)
     str2 = str1.replace(" ","")
@@ -364,7 +376,12 @@ def notification(userid, notification):
     project_user.save(update_fields=['notification'])
     
     
-    
+def workflow(projid, work):
+    thisproject = projects.objects.get(id = projid)
+    thisproject.workflow = str(thisproject.workflow) + ']*[' + str(work)
+    thisproject.save(update_fields= ['workflow'])
+
+
 def get_TESG_id(request,tesgnum, projid):
     if adminonline(request):
         return TESG_master.objects.filter(tesgnum = TESG_admin.objects.filter(TESG_no = int(tesgnum))[:1].get(), project = projects.objects.get(id = projid))[:1].get().id

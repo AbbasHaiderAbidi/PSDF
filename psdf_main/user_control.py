@@ -48,9 +48,6 @@ def newdpr(request):
                         if not isnum(boq.cell(row = i, column = 1).value):
                             messages.error(request, "Error in Row no. "+str(i)+" ITEM NUMBER column")
                             return render(request, 'psdf_main/_user_new_dpr.html', context)
-                        if not isnum(boq.cell(row = i, column = 2).value):
-                            messages.error(request, "Error in Row no. "+str(i)+" in ITEM NAME column")
-                            return render(request, 'psdf_main/_user_new_dpr.html', context)
                         if not isnum(boq.cell(row = i, column = 4).value):
                             messages.error(request, "Error in Row no. "+str(i)+" QUANTITY column")
                             return render(request, 'psdf_main/_user_new_dpr.html', context)
@@ -65,10 +62,10 @@ def newdpr(request):
                     # {'itemname':sanitize(req['itemname'+str(i)]),'itemno':sanitize(req['itemno'+str(i)]),'itemdesc': sanitize(req['itemdesc'+str(i)]), 'itemqty': itemqty, 'itemprice': itemprice, 'itemcost' : str(float(float(itemprice)*float(itemqty)))}
                     for i in range(2, m_rows+1):
                         itemno = boq.cell(row = i, column = 1).value
-                        itemname = sanitize(boq.cell(row = i, column = 2).value)
+                        itemname = sanitize_name(boq.cell(row = i, column = 2).value)
                         itemdesc = sanitize(boq.cell(row = i, column = 3).value)
                         itemqty = int(boq.cell(row = i, column = 4).value)
-                        itemprice = float(boq.cell(row = i, column = 4).value)
+                        itemprice = float(boq.cell(row = i, column = 5).value)
                         itemcost = itemqty * itemprice
                         boqlist.append({'itemname':itemname, 'itemno':itemno, 'itemdesc': itemdesc, 'itemqty':itemqty, 'itemprice': itemprice, 'itemcost': itemcost})
                     ## CHECK FOR AMOUNT EQUALITY
@@ -218,7 +215,7 @@ def user_boq_view(request, projid):
                 context['sub_boq'] = boqdata.objects.filter(project = context['proj'], boqtype = '1')
                 context['sub_boq_total'] = boq_grandtotal(context['sub_boq'])
                 context['approved_boq'] = boqdata.objects.filter(project = context['proj'], boqtype = '2')
-                context['approved_total'] = boq_grandtotal(context['approved_boq'])
+                context['approved_boq_total'] = boq_grandtotal(context['approved_boq'])
                 context['backpage'] = backpages[backpage]
                 return render(request, 'psdf_main/_user_view_project_boq.html', context)
     else:

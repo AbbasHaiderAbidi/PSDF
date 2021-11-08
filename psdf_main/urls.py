@@ -34,6 +34,9 @@ urlpatterns = [
     #view Users
     path('view_user/<str:userid>', views.view_user, name="view_user/"),
 
+    #Control
+    path('del_tesg/<str:tesgid>', views.del_tesg, name="del_tesg/"),
+
     #TESG
     path('TESG_chain/<str:project_id>', views.TESG_chain, name = "TESG_chain"),
     path('tesgchain_form/', views.tesgchain_form, name = "tesgchain_form"),
@@ -106,11 +109,18 @@ urlpatterns = [
     path('auditor_view_user/<str:userid>', views.auditor_view_user, name="auditor_view_user"),
     path('auditor_download_project/<str:projid>', views.auditor_download_project, name="auditor_download_project"),
     
-    #Payment
-    
-    path('init_record/', views.init_record, name="init_record"),
-    path('init_release/', views.init_release, name="init_release"),
+
+    #LOA Handling
     path('new_loa/', views.new_loa, name="new_loa"),
     path('submitloa/', views.submitloa, name="submitloa"),
+    path('updateloa/', views.updateloa, name="updateloa"),
+    path('downloadloa/<str:loaid>', views.downloadloa, name="downloadloa"),
+    path('userloa/', views.userloa, name="userloa"),    
+    path('adminloa/', views.adminloa, name="adminloa"),
+    
+    #Payment
+    path('init_record/', views.init_record, name="init_record"),
+    path('init_release/', views.init_release, name="init_release"),
+    
     
 ]

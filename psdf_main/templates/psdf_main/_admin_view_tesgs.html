@@ -30,7 +30,7 @@
                                 <th>TESG date</th>
                                 <th>Projects Discussed</th>
                                 <th>Download Report</th>
-
+                                <th>Delete</th>
 
                             </tr>
                         </thead>
@@ -42,7 +42,7 @@
                                 <th>TESG date</th>
                                 <th>Projects Discussed</th>
                                 <th>Download Report</th>
-
+                                <th>Delete</th>
                             </tr>
 
                         </tfoot>
@@ -52,6 +52,8 @@
                             {% if not tesgs %}
 
                             <tr>
+
+                                <td>Not Available</td>
 
                                 <td>Not Available</td>
 
@@ -71,6 +73,7 @@
                                 <td>{{tesg.TESG_date}}</td>
                                 <td>{{tesg.projects}}</td>
                                 <td><a class="btn btn-outline-success" href="/download_tesg_report/{{tesg.id}}"><i class="fas fa-download"></i> Download </a></td>
+                                <td><a class="btn btn-outline-danger" href="/del_tesg/{{tesg.id}}"><i class="fas fa-close"></i> Delete </a></td>
                             </tr>
                             {% endfor %} {% endif %}
                         </tbody>

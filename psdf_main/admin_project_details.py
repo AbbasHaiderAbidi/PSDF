@@ -8,6 +8,10 @@ def admin_project_details(request, projid):
         context = full_admin_context(request)
         context['proj'] = projects.objects.get(id = projid)
         context['proj'].workflow = context['proj'].workflow.split(']*[')[1:]
+        context['sub_boq'] = boqdata.objects.filter(project = context['proj'], boqtype = '1')
+        context['sub_boq_total'] = boq_grandtotal(context['sub_boq'])
+        context['approved_boq'] = boqdata.objects.filter(project = context['proj'], boqtype = '2')
+        context['approved_boq_total'] = boq_grandtotal(context['approved_boq'])
         context['tesgs'] = TESG_master.objects.filter(project = context['proj'])
         return render(request, 'psdf_main/_admin_view_project.html', context)
     else:

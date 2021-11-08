@@ -155,6 +155,90 @@ def TESG_upload(request):
             if request.FILES:
                 tesgnum = req['tesgnum']
                 tesgdate = req['tesgdate']
+                projids = req['projids']
+                tesgpath = ''
+                allTESG = TESG_admin.objects.values_list('TESG_no')
+                projids = projids.replace(" ","")
+                allproj = projects.objects.all()
+                files = request.FILES
+                allids = []
+                if projids == '':
+                    messages.error(request,"Please enter comma seperated Project IDs")
+                    return control_poanel(request)
+
+                for proj in allproj:
+                    allids.append(str(proj.newid))
+                
+                givenids = projids.split(",")
+                
+                for givenid in givenids:
+                    if not givenid in allids:
+                        messages.error(request,"The Project for ID: "+givenid+" does not exists")
+                        return control_panel(request)
+
+                for TESGnum in allTESG:
+                    if int(tesgnum) in TESGnum:
+                        messages.error(request, 'ERROR! TESG number '+ tesgnum +' entry already exists')
+                        return control_panel(request)
+
+                if 'momupload' in files.keys():
+                    mompload = files['momupload']
+                    try:
+                        ext = '.' + mompload.name.split('.')[1]
+                    except:
+                        ext = ''
+                    naam = 'TESG_'+tesgnum + str(ext)
+                    tesgpath =os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/TESG/')
+                    if smkdir(tesgpath):
+                        tesgpath = os.path.join(tesgpath, naam)
+                        handle_uploaded_file(tesgpath,files['momupload'])
+                    else:
+                        return oops(request)
+                else:
+                    messages.error(request, "No MoM file uploaded")
+                    return control_panel(request)
+
+
+
+                TESG_admin1 = TESG_admin()
+                TESG_admin1.TESG_no = tesgnum
+                TESG_admin1.filepath = tesgpath
+                TESG_admin1.TESG_date = tesgdate
+                TESG_admin1.projects = projids
+                TESG_admin1.save()
+                tesgprojs = projids.split(',')
+                print(tesgprojs)
+                allprojs = projects.objects.all()
+                for proj in allprojs:
+                    if str(proj.newid) in tesgprojs:
+                        projectid = projects.objects.get(id = proj.id)
+                        if projectid.tesg_list:
+                            projectid.tesg_list = str(projectid.tesg_list) +',' + str(tesgnum)
+                        else:
+                            projectid.tesg_list = str(tesgnum)
+                        projectid.save(update_fields=['tesg_list'])
+                messages.success(request, 'New TESG number: '+tesgnum+' added.')
+                return control_panel(request)
+        else:
+            return oops(request)
+    else:
+        return oops(request)
+    
+
+    if adminonline(request):
+        if request.method == 'POST':
+            req = request.POST
+            if not 'adminpassT' in req.keys():
+                messages.error(request, 'Enter Administrator password.')
+                return control_panel(request)
+            adminpassF = req['adminpassT']
+            if not check_password(adminpassF,userDetails(request.session['user'])['password']):
+                messages.error(request, 'Invalid Administrator password.')
+                return control_panel(request)
+            
+            if request.FILES:
+                tesgnum = req['tesgnum']
+                tesgdate = req['tesgdate']
                 projids = str(req['projids'])
                 tesgpath = ''
                 files = request.FILES
@@ -183,6 +267,15 @@ def TESG_upload(request):
                     tesgpath =os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/TESG/')
                     if smkdir(tesgpath):
                         tesgpath = os.path.join(tesgpath, naam)
+                        try:
+                            alreadyfile = glob.glob(os.path.join(tesgpath,'TESG_'+str(tesgnum))+'*')[0]
+                        
+                            if os.path.exists(alreadyfile):
+                                sremove(alreadyfile)
+                            else:
+                                print("NOT EXISTS")
+                        except:
+                            pass
                         if handle_uploaded_file(tesgpath,files['momupload']):
                             messages.success(request, 'TESG upload successful, MoM for TESG '+tesgnum+' uploaded.')
                         else:
@@ -198,8 +291,7 @@ def TESG_upload(request):
                 TESG_admin1.TESG_date = tesgdate
                 TESG_admin1.projects = projids
                 TESG_admin1.save()
-                tesgprojs = projids.split(',')
-                print(tesgprojs)
+                tesgprojs = projids
                 allprojs = projects.objects.all()
                 for proj in allprojs:
                     if str(proj.newid) in tesgprojs:
@@ -291,7 +383,7 @@ def MONI_upload(request):
         projid = req['projid']
         apprpath = ''
         try:
-            oro = projects.objects.get(id = projid)
+            oro = projects.objects.filter(newid = projid).get()
         except:
             messages.error(request, 'No project with project ID ' +projid+ ' exists.')
             return control_panel(request)
@@ -313,7 +405,7 @@ def MONI_upload(request):
                         return oops(request)
                 else:
                     return oops(request)
-            thisproj = projects.objects.get(id = projid)
+            thisproj = projects.objects.filter(newid = projid).get()
             moni = Monitoring_admin()
             moni.project = thisproj
             moni.userid = thisproj.userid
@@ -326,3 +418,5 @@ def MONI_upload(request):
             pass
     else:
         return oops(request)
+
+

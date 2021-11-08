@@ -52,8 +52,7 @@ def user_tesg_response(request):
                         
                         if os.path.exists(alreadyfile):
                             sremove(alreadyfile)
-                        else:
-                            print("NOT EXISTS")
+                        
                     except:
                         pass
                     try:

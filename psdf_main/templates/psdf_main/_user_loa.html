@@ -1,0 +1,190 @@
+{% extends 'psdf_main/includes/layout.html'%} {% load static %} {% block body %}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Project LOA details</h1>
+</div>
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h5 class="m-0 font-weight-bold text-primary">LOA details
+                    <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects" title="Search" style="margin:auto; width: 30%;">
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                {% endfor %}<br>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                    width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>Project Name</th>
+                                <th>LOA submission date</th>
+                                <th class="alert-warning">LOA Amount</th>
+                                <th class="alert-warning">Upload</th>
+                                <th class="alert-warning">Update</th>
+                                <th>Document</th>                                
+                                <th>LOA Acknowledgement</th>
+                                <th>LOA Acceptance Date</th>
+                                <th>Remarks</th>
+                                
+
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>Project Name</th>
+                                <th>LOA submission date</th>
+                                <th class="alert-warning">LOA Amount</th>
+                                <th class="alert-warning">Upload</th>
+                                <th class="alert-warning">Update</th>
+                                <th>Document</th>                                
+                                <th>LOA Acknowledgement</th>
+                                <th>LOA Acceptance Date</th>
+                                <th>Remarks</th>
+                                
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% if not loaprojs %}
+                            <tr>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+
+                            </tr>
+                            {% else %} {% for proj in loaprojs %}
+                            <tr>
+                                <td class="font-weight-bolder">{{proj.project.newid}}</td>
+                                <td><a href="/view_project/{{proj.id}}" class="font-weight-bold text-danger">{{proj.project.name}}</a></td>
+                                <td>{{proj.subdate}}</td>
+                                {% if proj.approved == False or proj.approved == '' or proj.approved == none %}
+                                <form action="{% url 'updateloa' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                <input type="hidden" name="loaid" id="loaid" value="proj.id">
+                                <td class=""><input type="number" class="form-control" name="amt" id="amt" value='{{proj.amt}}'></td>
+                                <td class=""><input type="file" class="form-control-file btn btn-sm btn-outline-success" name="loa" id="loa" required></td>
+                                <td class="">
+                                    <button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#modalforAppr">
+                                        <i class="fa fa-check"></i> Update </button>
+                                        </td>
+                                <td>
+                                    <a href="/downloadloa/{{proj.id}}" class="btn btn-block btn-outline-primary">
+                                    Download
+                                    </a>
+                                </td>
+                                
+                                    <td class="alert-danger">Pending</td>
+
+
+                                    <div class="modal fade" id="modalforAppr" tabindex="-1" role="dialog" aria-labelledby="modalforAppr" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id=""> <strong>Confirmation
+                                                           </strong></h3>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-2"></div>
+                                                        <p><i>NOTE: </i> Kindly make sure that all requirements are fulfilled before proceeding, this action cannot be undone.</p>
+                                                    </div>
+                                                    <hr>
+                                                    
+                                                        <br>
+        
+                                                        <div class="row">
+                                                            <p class="col-md-6 font-weight-bold">Enter your password to proceed:
+                                                            </p>
+                                                            <input type="password" class="form-control bg-gray-200 border-left-success col-md-6" name="userpass" id="userpass" placeholder="Enter administrator password" required>
+                                                        </div><br>
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp;
+                                                            <input type="submit" class="btn btn-block btn-outline-success" value="Update">
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                                {% else %}
+                                <td class="alert-sucess">{{proj.amt}}</td>
+                                <td class="alert-sucess">Uploaded</td>
+                                <td>n/a</td>
+                                <td>
+                                    <a href="/downloadloa/{{proj.id}}" class="btn btn-block btn-outline-primary">
+                                    Download
+                                    </a>
+                                </td>
+                                    <td class="alert-success">Acknowledged</td>
+                                {% endif %}
+                                
+                                <td>
+                                    {{proj.ackdate}}
+                                </td>
+                                <td>
+                                    {{proj.remark}}
+                                </td>
+
+                            </tr>
+
+
+
+                            {% endfor %} {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function get_temp_proj(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

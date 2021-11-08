@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
 
 # Create your models here.
 class users(models.Model):
@@ -42,13 +43,13 @@ class projects(models.Model):
     name = models.CharField(max_length=200, null = False)
     newid = models.IntegerField(null = True, unique=True)
     dprsubdate = models.DateField(null = True)
-    amt_asked = models.FloatField(null = False)
-    amt_approved = models.FloatField(null = True)
-    amt_released = models.FloatField(null = True)
+    amt_asked = models.IntegerField(null = False)
+    amt_approved = models.IntegerField(null = True)
+    amt_released = models.IntegerField(default = 0)
     schedule = models.IntegerField(null = True)
     fundcategory = models.CharField(max_length=20, null = True)
     projectpath = models.TextField(null = True)
-    quantumOfFunding = models.FloatField(null = True)
+    quantumOfFunding = models.IntegerField(null = True)
     status = models.CharField(max_length=1, null = True, default = '1')
     submitted_boq  = models.TextField(null=True)
     
@@ -69,14 +70,13 @@ class projects(models.Model):
     appraprdate = models.DateField(null = True)
     
     moniaprdate = models.DateField(null = True)
-    
-    
+
     
     workflow = models.TextField(null=True)
 
-    # doc_path = models.TextField(null=True)
+    doc_path = models.TextField(null=True)
     
-    # doc_sign_date = models.DateField(null=True)
+    doc_sign_date = models.DateField(null=True)
     
     
     ##################################
@@ -130,12 +130,16 @@ class boqdata(models.Model):
 
 class loadata(models.Model):
     project = models.ForeignKey(projects, null = True, on_delete= models.CASCADE)
-    tranche = models.IntegerField(null=True, default=0)
-    req_boq = models.TextField(null=True)
+    user = models.ForeignKey(users, null = True, on_delete= models.CASCADE)
+    amt = models.IntegerField(null=True)
     filepath = models.TextField(null=True)
-    subdate = models.DateField(null = True, auto_now_add=True)
+    subdate = models.DateField(null = True)
     compdate = models.DateField(null = True, auto_now_add=False)
-    approved = models.CharField(max_length = 1, default = 2)
+    ackdate = models.DateField(null=True)
+    completed = models.BooleanField(default = False)
+    approved = models.BooleanField(default = False)
+    remark = models.TextField(null = True, default = "Not Available")
+
 # 1-- Completed
 # 2-- Ongoing
 # 3-- Rejected
@@ -143,6 +147,23 @@ class loadata(models.Model):
 
 class init_payment(models.Model):
     project = models.ForeignKey(projects, null = True, on_delete= models.CASCADE)
+    user = models.ForeignKey(users, null = True, on_delete= models.CASCADE)
     ref_no = models.TextField(null=True, default='Not available')
     amount = models.IntegerField(null=True)
     release_date = models.DateField(null=True, auto_now_add=True)
+    recv_date = models.DateField(null=True)
+    filepath = models.TextField(null = True)
+    ack = models.BooleanField(default= False)
+
+
+class payment(models.Model):
+    project = models.ForeignKey(projects, null = True, on_delete= models.CASCADE)
+    user = models.ForeignKey(users, null = True, on_delete= models.CASCADE)
+    loa = models.ForeignKey(loadata, null=True, on_delete= models.CASCADE)
+    ref_no = models.TextField(null=True, default='Not available')
+    amount = models.IntegerField(null=True)
+    release_date = models.DateField(null=True, auto_now_add=True)
+    recv_date = models.DateField(null=True)
+    filepath = models.TextField(null = True)
+    remark = models.TextField(null=True, default = 'Not Available')
+    ack = models.BooleanField(default= False)

@@ -1,0 +1,48 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load custom_tags %} {% load static %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4">
+        <h1 class="h3 mb-2 text-gray-800">Apply for new project</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<hr>
+<br>
+
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-info">View Instructions</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse" id="format">
+                <div class="card-body">
+                    <div class="row">
+                        lorem ipsum dolor
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

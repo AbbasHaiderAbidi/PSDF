@@ -1,1 +1,3 @@
-init payment wala banana hai LOA jaisa hi, ke usme project select karke admin de payment info
+loa updation ka bana rahe hain aur usme file upload pe kaam chal raha 
+iske baad admin side pe loa ack wala bana hai
+aur phir payment release

@@ -27,6 +27,24 @@ def view_TESGs(request):
         return oops(request)
     
 
+def del_tesg(request, tesgid):
+    if adminonline(request):
+        istheretesg = TESG_master.objects.filter(tesgnum = TESG_admin.objects.get(id = tesgid))
+        if istheretesg:
+            messages.error(request, "Cannot delete a valid TESG entry")
+            return view_TESGs(request)
+        else:
+            try:
+                todel = TESG_admin.objects.get(id = tesgid)
+                sremove(todel.filepath)
+                todel.delete()
+                messages.success(request, "TESG entry deleted")
+                return view_TESGs(request)
+            except:
+                return oops(request)
+    else:
+        return oops(request)
+
 def view_apprs(request):
     if adminonline(request):
         context = full_admin_context(request)

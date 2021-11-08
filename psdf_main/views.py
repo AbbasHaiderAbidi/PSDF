@@ -19,7 +19,7 @@ from .user_monitoring_projects import *
 
 from .auditor_control import *
 
-from .user_payment import *
+from .loa_handling import *
 
 from .approval import *
 

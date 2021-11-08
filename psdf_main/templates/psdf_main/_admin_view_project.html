@@ -1,4 +1,4 @@
-{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+{% extends 'psdf_main/includes/admin_layout.html'%}  {% load custom_tags %}{% load static %} {% block body %}
 
 
 <div class="container-fluid">
@@ -287,7 +287,11 @@
 
                         {% elif proj.status == '4' %}
                         <h5 class="m-0 font-weight-bold btn btn-success">Under Final Approval</h5>
+                        
+                        {% elif proj.status == '5' %}
+                        <h5 class="m-0 font-weight-bold btn btn-primary">Payment in progress</h5>
                         {% endif %}
+
                     </div>
                     <div class="col-md-2">
                     </div>
@@ -316,7 +320,48 @@
 
             </div>
             <div class="modal-body">
+                <div class="table-responsive">
 
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Item No. </th>
+                                <th>Item Name</th>
+                                <th>Item Description</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total Cost</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+                            {% for boq in sub_boq %}
+                            <tr>
+                                <td>{{boq.itemno}}</td>
+                                <td>{{boq.itemname}}</td>
+                                <td>{{boq.itemdesc}}</td>
+                                <td>{{boq.itemqty}}</td>
+                                <td>₹ {{boq.unitcost}}</td>
+                                <td>₹ {% multiply boq.itemqty boq.unitcost %}</td>
+                            </tr>
+                            {% endfor %}
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="font-weight-bold">Grand Total</td>
+                                <td>
+                                    <h6 class="font-weight-bold text-danger">₹ {{sub_boq_total}} </h6>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             </div>
         </div>
@@ -335,7 +380,53 @@
 
             </div>
             <div class="modal-body">
+                <div class="table-responsive">
 
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Item No. </th>
+                                <th>Item Name</th>
+                                <th>Item Description</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if not approved_boq %}
+                            <tr>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                            </tr>
+                            {% else %} {% for boq in approved_boq %}
+                            <tr>
+                                <td>{{boq.itemno}}</td>
+                                <td>{{boq.itemname}}</td>
+                                <td>{{boq.itemdesc}}</td>
+                                <td>{{boq.itemqty}}</td>
+                                <td>₹ {{boq.unitcost}}</td>
+                                <td>₹ {% multiply boq.itemqty boq.unitcost %}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="font-weight-bold">Grand Total</td>
+                                <td>
+                                    <h6 class="font-weight-bold text-danger">₹ {{approved_boq_total}} </h6>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
         </div>
@@ -504,7 +595,10 @@
                         <h5 class="m-0 font-weight-bold btn btn-info">Under Monitoring</h5>
 
                         {% elif proj.status == '4' %}
-                        <h5 class="m-0 font-weight-bold btn btn-success">Under Final Approval</h5>
+                        <h5 class="m-0 font-weight-bold btn btn-success">Document Signing</h5>
+                        
+                        {% elif proj.status == '5' %}
+                        <h5 class="m-0 font-weight-bold btn btn-primary">Payment in progress</h5>
                         {% endif %}
                     </div>
                 </div>
