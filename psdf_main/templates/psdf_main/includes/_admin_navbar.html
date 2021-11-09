@@ -81,10 +81,12 @@
         </a>
         <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Payment Phase: </h6>
                 <a class="collapse-item" href="{% url 'init_release' %}">Initial payment release
                 </a>
-                <a class="collapse-item" href="{% url 'admin_pending_projects' %}">LOA placed &nbsp;&nbsp;&nbsp;</a>
+                <h6 class="collapse-header">Payment Phase: </h6>
+                <a class="collapse-item" href="{% url 'adminloa' %}">Pending LOAs
+                </a>
+                <a class="collapse-item" href="{% url 'admin_pending_projects' %}">View All LOAs &nbsp;&nbsp;&nbsp;</a>
                 <hr class="sidebar-divider">
                 <h6 class="collapse-header">Payment</h6>
                 

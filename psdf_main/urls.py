@@ -117,6 +117,10 @@ urlpatterns = [
     path('downloadloa/<str:loaid>', views.downloadloa, name="downloadloa"),
     path('userloa/', views.userloa, name="userloa"),    
     path('adminloa/', views.adminloa, name="adminloa"),
+    path('ack_loa/', views.ack_loa, name="ack_loa"),
+    path('sendloaremark/', views.sendloaremark, name="sendloaremark"),
+    
+    
     
     #Payment
     path('init_record/', views.init_record, name="init_record"),

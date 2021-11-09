@@ -275,7 +275,7 @@ def handle_uploaded_file(path, f):
         return False
 
 def handle_download_file(filepath, request):
-    print("DOWNLOAD STARTED")
+    
     if os.path.exists(filepath):
         print("EXISTS")
         with open(filepath,'rb') as fh:
@@ -283,7 +283,7 @@ def handle_download_file(filepath, request):
             response['Content-Disposition'] = 'inline;filename =' + filepath.split('/')[-1]
             return response
     else:
-        print("DOES NOT EXISTS")
+        
         return oops(request)
 
 # def getTempProjects(request):
