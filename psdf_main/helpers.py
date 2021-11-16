@@ -1,3 +1,4 @@
+from openpyxl.cell import cell
 from .helper_imports import *
 
 
@@ -31,14 +32,14 @@ def proj_of_user(request, projid):
         return False
 
 
-def getuser(request, username):
+def getuser(request):
     try:
         return users.objects.filter(username = request.session['user'])[:1].get()
     except:
         return oops(request)
 
 def projectofuser(request, username,projid):
-    if projects.objects.get(id = projid).userid == getuser(request, username):
+    if projects.objects.get(id = projid).userid == getuser(request):
         return True
     else:
         return False
@@ -303,7 +304,7 @@ def sanitize(str0):
     return str4
 
 def sanitize_name(str0):
-    str1 = str0.replace("\"","_")
+    str1 = str0.replace("/","_")
     str2 = str1.replace("\'","_")
     str3 = str2.replace("/","")
     str4 = str3.replace("]["," ")
@@ -313,6 +314,12 @@ def username_sanitize(str0):
     str1 = sanitize(str0)
     str2 = str1.replace(" ","")
     return str2
+
+def emp_check(celldata):   
+    if celldata == '' or celldata == ' ' or celldata == '  ' or celldata == None or celldata == ',' or celldata == '..' or celldata == '-':
+        return True
+    else:
+        return False
 
 def getTempProjects_user(request, userid):
     if useronline(request):
@@ -388,8 +395,51 @@ def get_TESG_id(request,tesgnum, projid):
     else:
         return oops(request)
 
-def emp_check(celldata):
-    if celldata == '' or celldata == ' ' or celldata == '  ' or celldata == None:
+def add_amount(projid, amt, request):
+    try:
+        proj = projects.objects.get(id = projid)
+    except:
+        return oops(request)
+    if proj.amt_released == None or proj.amt_released == '' or proj.amt_released == ' ' or proj.amt_released == 0:
+        amt_rel = 0
+    else:
+        amt_rel = proj.amt_released
+    proj.amt_released = int(amt_rel) + int(amt)
+    if int(proj.amt_approved) == int(proj.amt_released):
+        proj.approved = True
+        proj.approvedate = datetime.now().date()
+        proj.status = '9'
+        proj.save(update_fields = ['approved','approvedate','amt_released','status'])
+        workflow(proj.id,"Total approved amount for project ID "+str(proj.newid)+' released.')
+        notification(getadmin_id(), 'Total approved amount for project ID '+str(proj.newid)+' released.')
+        notification(proj.userid.id, 'Total approved amount for project ID '+str(proj.newid)+' released.')
         return True
     else:
+        proj.save(update_fields = ['amt_released'])
+        workflow(proj.id,"Amount of ₹"+ str(amt)+" released for project ID "+str(proj.newid))
+        notification(proj.userid.id, "Amount of ₹"+ str(amt)+" released for project ID "+str(proj.newid))
         return False
+    
+def add_amount_loa(loaid,amt, request):
+    try:
+        thisloa = loadata.objects.get(id = loaid)
+    except:
+        return oops(request)
+    if thisloa.amt_released == None or thisloa.amt_released == '' or thisloa.amt_released == ' ' or thisloa.amt_released == 0:
+        amt_rel = 0
+    else:
+        amt_rel = thisloa.amt_released
+    thisloa.amt_released = int(amt_rel) + int(amt)
+    
+    if int(thisloa.amt_released) == int(thisloa.amt):
+        thisloa.completed = True
+        thisloa.compdate = datetime.now().date()
+        thisloa.save(update_fields = ['completed','compdate'])
+        workflow(thisloa.project.id,'Total amount of '+str(thisloa.amt)+' against LOA placed on '+str(thisloa.subdate)+' has been released.')
+        notification(thisloa.user.id,'Total amount against LOA placed on '+str(thisloa.subdate)+' has been released for project ID '+str(thisloa.project.newid))
+        return True
+    else:
+        thisloa.save(update_fields = ['amt_released'])
+        return False
+        
+    

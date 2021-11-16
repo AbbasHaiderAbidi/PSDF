@@ -132,6 +132,7 @@ class loadata(models.Model):
     project = models.ForeignKey(projects, null = True, on_delete= models.CASCADE)
     user = models.ForeignKey(users, null = True, on_delete= models.CASCADE)
     amt = models.IntegerField(null=True)
+    amt_released = models.IntegerField(null=True, default=0)
     filepath = models.TextField(null=True)
     subdate = models.DateField(null = True)
     compdate = models.DateField(null = True, auto_now_add=False)

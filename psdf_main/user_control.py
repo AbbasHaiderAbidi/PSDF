@@ -45,29 +45,46 @@ def newdpr(request):
                             messages.error(request, "Extra rows in BOQ file.")
                             return render(request, 'psdf_main/_user_new_dpr.html', context)
                     for i in range(2, m_rows+1):
-                        if not isnum(boq.cell(row = i, column = 1).value):
-                            messages.error(request, "Error in Row no. "+str(i)+" ITEM NUMBER column")
-                            return render(request, 'psdf_main/_user_new_dpr.html', context)
-                        if not isnum(boq.cell(row = i, column = 4).value):
-                            messages.error(request, "Error in Row no. "+str(i)+" QUANTITY column")
-                            return render(request, 'psdf_main/_user_new_dpr.html', context)
-                        if not isfloat(boq.cell(row = i, column = 5).value):
-                            messages.error(request, "Error in Row no. "+str(i)+" UNIT PRICE column")
-                            return render(request, 'psdf_main/_user_new_dpr.html', context)
-                        total_cost = total_cost + float(int(boq.cell(row = i, column = 4).value)*float(boq.cell(row = i, column = 5).value))
+                        temp_temp = boq.cell(row = i, column = 2).value
+                        if temp_temp == None or temp_temp == '':
+                            pass
+                        else:
+                            temp_itemname = sanitize_name(temp_temp)
+                            if emp_check(temp_itemname):
+                                pass
+                            else:
+                                if not isnum(boq.cell(row = i, column = 1).value):
+                                    messages.error(request, "Error in Row no. "+str(i)+" ITEM NUMBER column")
+                                    return render(request, 'psdf_main/_user_new_dpr.html', context)
+                                if not isnum(boq.cell(row = i, column = 4).value):
+                                    messages.error(request, "Error in Row no. "+str(i)+" QUANTITY column")
+                                    return render(request, 'psdf_main/_user_new_dpr.html', context)
+                                if not isfloat(boq.cell(row = i, column = 5).value):
+                                    messages.error(request, "Error in Row no. "+str(i)+" UNIT PRICE column")
+                                    return render(request, 'psdf_main/_user_new_dpr.html', context)
+                                total_cost = total_cost + float(int(boq.cell(row = i, column = 4).value)*float(boq.cell(row = i, column = 5).value))
                     if not total_cost == float(amount):
                         messages.error(request, "BOQ total amount should be equal to entered amount")
                         return render(request, 'psdf_main/_user_new_dpr.html', context)
                     boqlist = []
                     # {'itemname':sanitize(req['itemname'+str(i)]),'itemno':sanitize(req['itemno'+str(i)]),'itemdesc': sanitize(req['itemdesc'+str(i)]), 'itemqty': itemqty, 'itemprice': itemprice, 'itemcost' : str(float(float(itemprice)*float(itemqty)))}
                     for i in range(2, m_rows+1):
-                        itemno = boq.cell(row = i, column = 1).value
-                        itemname = sanitize_name(boq.cell(row = i, column = 2).value)
-                        itemdesc = sanitize(boq.cell(row = i, column = 3).value)
-                        itemqty = int(boq.cell(row = i, column = 4).value)
-                        itemprice = float(boq.cell(row = i, column = 5).value)
-                        itemcost = itemqty * itemprice
-                        boqlist.append({'itemname':itemname, 'itemno':itemno, 'itemdesc': itemdesc, 'itemqty':itemqty, 'itemprice': itemprice, 'itemcost': itemcost})
+                        temp_temp = boq.cell(row = i, column = 2).value
+                        if temp_temp == None or temp_temp == '':
+                            pass
+                        else:
+                            temp_itemname = sanitize_name(temp_temp)
+                            if emp_check(temp_itemname):
+                                pass
+                            else:
+                                itemname = sanitize_name(boq.cell(row = i, column = 2).value)
+                                itemno = boq.cell(row = i, column = 1).value
+                                itemdesc = sanitize(boq.cell(row = i, column = 3).value)
+                                itemqty = int(boq.cell(row = i, column = 4).value)
+                                itemprice = float(boq.cell(row = i, column = 5).value)
+                                itemcost = itemqty * itemprice
+                                boqlist.append({'itemname':itemname, 'itemno':itemno, 'itemdesc': itemdesc, 'itemqty':itemqty, 'itemprice': itemprice, 'itemcost': itemcost})
+                    
                     ## CHECK FOR AMOUNT EQUALITY
                     dpr = request.FILES['dpr']
                     a1 = request.FILES['a1']

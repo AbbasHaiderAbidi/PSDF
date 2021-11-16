@@ -159,7 +159,7 @@ def userloa(request):
     
     if useronline(request) and not adminonline(request):
         context = full_user_context(request)
-        thisuser = getuser(request,request.session['user'])
+        thisuser = getuser(request)
         # print(thisuser.id)
         # print(thisuser.username)
         # print(thisuser.password)

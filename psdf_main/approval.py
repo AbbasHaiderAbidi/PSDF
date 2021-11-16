@@ -70,30 +70,21 @@ def user_in_doc_sign(request):
                     doc_path = thisproj.projectpath + "/Signed_Document/"
                     srmdir(doc_path)
                     smkdir(doc_path)
-                    
-                    # try:
-                    #     alreadyfile = glob.glob(os.path.join(doc_path,str(thisproj.newid)+'_document')+'*')[0]
-                    #     if os.path.exists(alreadyfile):
-                    #         sremove(alreadyfile)
-                    #     else:
-                    #         print("NOT EXISTS")
-                    # except:
-                    #     pass
                     doc_path_file = os.path.join(doc_path,str(thisproj.newid)+'_document.'+extension)
                     if handle_uploaded_file(doc_path_file, docsign):
                         messages.success(request, 'Document Uploaded ')
                     else:
                         return oops(request)
                     thisproj.doc_path = doc_path_file
-                    
                     thisproj.approved = False
                     thisproj.workflow = str(thisproj.workflow) + ']*[' + 'Project document submitted by entity on '+ str(datetime.now().date())
                     thisproj.status = '4'
                     thisproj.save(update_fields=['doc_path','approved', 'status', 'workflow'])
+                    notification(getadmin_id(),'Signing Document submitted by ' + thisproj.utilname +' for project : '+ thisproj.newid)
                 
             else:
                 return oops(request)
-        context['projs'] = projects.objects.filter((Q(status = '4')| Q(status = '5')),userid = getuser(request, request.session['user']))
+        context['projs'] = projects.objects.filter((Q(status = '4')| Q(status = '5')),userid = getuser(request))
         return render(request, 'psdf_main/_user_in_doc_sign.html', context)
     else:
         return oops(request)

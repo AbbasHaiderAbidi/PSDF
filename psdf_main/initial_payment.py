@@ -1,6 +1,7 @@
 from .helpers import *
 
 def init_release(request):
+    # init_payment.objects.all().delete()
     if adminonline(request):
         context = full_admin_context(request)
         if request.method == 'POST':
@@ -33,6 +34,9 @@ def init_record(request):
                 return redirect('/init_release')
             if not check_password(adminpass,userDetails(request.session['user'])['password']):
                 messages.error(request, 'Invalid Administrator password.')
+                return redirect('/init_release')
+            if init_payment.objects.filter(project = project):
+                messages.error(request, 'A document signing payment entry exists.')
                 return redirect('/init_release')
             if not isnum(project.amt_approved):
                 return oops(request)
@@ -85,25 +89,58 @@ def init_record(request):
             inpay.release_date = datetime.now().date()
             inpay.filepath = filepathnew+filename
             inpay.save()
-            proj = projects.objects.get(id = inpay.project.id)
 
-            if proj.amt_released == None or proj.amt_released == '' or proj.amt_released == ' ' or proj.amt_released == 0:
-                amt_rel = 0
-            else:
-                amt_rel = proj.amt_released
-            proj.amt_released = int(amt_rel) + int(inpay.amount)
-            proj.save(update_fields = ['amt_released'])
+            add_amount(inpay.project.id, inpay.amount, request)
+            proj = projects.objects.get(id = inpay.project.id)
+            proj.status = '6' #init payment entry is there
+            proj.save(update_fields = ['status'])
+            
             messages.success(request, "Success! Payment of ₹"+amt+ " recorded.")
             workflow(inpay.project.id,"Initial payment of ₹"+inpay.amount+" released on "+str(inpay.release_date))
-            notification(inpay.project.userid.id, "Payment of ₹"+str(inpay.amount)+" for project ID "+str(inpay.project.newid)+" processed.")
+            # notification(inpay.project.userid.id, "Payment of ₹"+str(inpay.amount)+" for project ID "+str(inpay.project.newid)+" processed.")
             return redirect('/init_release')
     else:
         return oops(request)
 
 def user_init_payment(request):
+    # init_payment.objects.all().delete()
+    # proj = projects.objects.get(id = 1)
+    # proj.status = '7'
+    # proj.save(update_fields = ['status'])
+    # return False
+    # print(proj.status)
     if useronline(request) and not adminonline(request):
         context = full_user_context(request)
-        context['init_pays'] = init_payment.objects.filter(user = getuser(request, request.session['user']))
+        if request.method == 'POST':
+            req = request.POST
+            ackno = str(req.get('refno'))
+            payid = req.get('payid')
+            userpass = req.get('userpass')
+            if not check_password(userpass,userDetails(request.session['user'])['password']):
+                messages.error(request, 'Invalid password.')
+                return redirect('/user_init_payement')
+            try:
+                thispay = init_payment.objects.get(id = payid)
+            except:
+                messages.error(request, 'Invalid payment entry')
+                return redirect('/user_init_payment')
+            if not ackno.casefold() == str(thispay.ref_no).casefold():
+                messages.error(request, 'Reference number mismatch.')
+                return redirect('/user_init_payment')
+            else:
+                thispay.ack = True
+                thispay.recv_date = datetime.now().date()
+                try:
+                    proj = projects.objects.get(id = thispay.project.id)
+                    proj.status = '7'
+                except:
+                    messages.error(request, 'Invalid project ID')
+                    return redirect('/user_init_payment')
+                proj.save(update_fields = ['status'])
+                thispay.save(update_fields = ['ack','recv_date'])
+                notification(getadmin_id(), "Payment of ₹"+str(thispay.amount)+" for project ID "+str(thispay.project.newid)+" acknowledged by entity.")
+                workflow(thispay.project.id,"Initial payment of ₹"+str(thispay.amount)+" acknowledged on "+str(thispay.release_date)+" by entity.")
+        context['init_pays'] = init_payment.objects.filter(user = getuser(request))
         return render(request, 'psdf_main/_user_init_payment.html', context)
     else:
         return oops(request)

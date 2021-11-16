@@ -1,0 +1,213 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load custom_tags %} {% load static %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4">
+        <h1 class="h3 mb-2 text-gray-800">Payment Release</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<hr>
+<br>
+
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-info">View Instructions</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse" id="format">
+                <div class="card-body">
+                    <div class="row">
+                        lorem ipsum dolor
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% if loas and not thisloa%}
+<div class="row">
+
+    <div class="col-lg-4 center">
+
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Select from placed LOAs</h6>
+            </div>
+            <div class="card-body">
+
+                <div class="input-group" style="height:200px">
+
+                    <form action="{% url 'admin_pay' %}" method="POST" class="row" name='loaform' id='loaform'>
+                        {% csrf_token %}
+                        <div class="input-group container" style="margin-top:20%">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="loaid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-6">
+                                    <select name="loaid" id="loaid" class="form-control" onchange="autosubmit()">
+                            <option value="0"  class="form-control">-- Select LOA from list --</option>
+                            {% for loa in loas %}
+                            <option value="{{loa.id}}"  class="form-control"><strong>{{loa.project.newid}} {{loa.project.name}}</strong><br>
+                                <p>| Amount: {{loa.amt}} | Submission Date: {{loa.subdate}}</p></option>
+                            
+
+                            <hr>
+                            {% endfor %}
+                        </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+                <br>
+
+            </div><br>
+
+        </div>
+    </div>
+
+</div>
+{% endif %} {% if loas and thisloa %}
+<div class="row">
+
+    <div class="col-lg-4">
+
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Select from following LOAs</h6>
+            </div>
+            <div class="card-body">
+
+                <div class="input-group">
+
+                    <form action="{% url 'init_release' %}" method="POST" class="row" name='loaform' id='loaform'>
+                        {% csrf_token %}
+                        <div class="input-group container" style="margin-top:0%">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="loaid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-6">
+                                    <select name="loaid" id="loaid" class="form-control" onchange="autosubmit()">
+                            <option value="0"  class="form-control">-- Select Project from list --</option>
+                            {% for loa in loas %}
+                            <option value="{{loa.id}}"  class="form-control"><strong>{{loa.project.newid}} {{loa.project.name}}</strong><br>
+                                <p>| Amount: {{loa.amt}} | Submission Date: {{loa.subdate}}</p></option>
+                            
+
+                            <hr>
+                            {% endfor %}
+                        </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <hr>
+
+                <p class="text-dark font-weight-bold">LOA for project:<h5 class="m-0 font-weight-bold text-danger"> <a href="/view_project/{{loa.project.id}}" class="font-weight-bold text-danger">{{thisloa.project.name}}</a></h5> </p>
+                
+                <div class="row">
+                <div class="col-md-6"><p class="text-info font-weight-bold">Approved Amount:</p>
+                <h5 class="m-0 font-weight-bold text-dark"> {{thisloa.project.amt_approved}}</h5><br>
+            </div>
+            <div class="col-md-6">
+                <p class="text-info font-weight-bold">Amount:</p>
+                <h5 class="m-0 font-weight-bold text-dark"> {{thisloa.amt}}</h5><br>
+            </div>
+            </div>
+                <p class="text-info font-weight-bold">Date of LOA submission:</p>
+                <h5 class="m-0 font-weight-bold text-dark"> {{thisloa.subdate}}</h5><br>
+                
+
+                <br>
+
+            </div><br>
+
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-danger">Enter Payment Details</h6>
+            </div>
+            <div class="card-body">
+
+
+                <form action="{% url 'approve_admin_pay' %}" method="POST" class="row" name='initform' id='initform' enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{thisloa.id}}" name="loaid" id="loaid" required>
+                    <input type="hidden" value="{{thisloa.project.id}}" name="projid" id="projid" required>
+                    <div class="input-group container">
+                        Enter payment Reference number: &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="text" class="form-control input-group-append bg-gray-200 border-0 small" placeholder="Unique transaction ID or reference number" name="refno" id="refno" required>
+                    </div>
+                    <div class="input-group container">
+                        Enter amount (in ₹ ): &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="number" class="form-control input-group-append bg-gray-200 border-0 small" placeholder="Enter transaction amount (in ₹ )" name="amt" id="amt" required>
+                    </div>
+                    <div class="input-group container">
+                        Upload supporting file: &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="file" class="form-control-file btn btn-outline-info border-bottom-info col-md-6" name="reciept" id="reciept">
+                    </div>
+
+                    <div class="input-group container">
+                        Remark: &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="text" class="form-control input-group-append bg-gray-200 border-0 small" placeholder="Enter remark" name="remark" id="remark">
+                    </div>
+                    <div class="input-group container">
+                        Enter Administrator password: &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="password" class="form-control input-group-append small" placeholder="Enter administrator password to proceed" name="adminpass" id="adminpass" required>
+                    </div>
+                    <hr>
+                    <div class="input-group container">
+                        <input type="submit" class="btn btn-outline-success btn-lg" value="Inform {{thisloa.user.utilname}}">
+                    </div>
+                </form>
+
+                <hr>
+
+            </div><br>
+
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+<script>
+    function autosubmit() {
+        var projectid = document.getElementById('loaid')
+        var projform = document.getElementById('loaform')
+        if (projectid.value != '0') {
+            projform.submit();
+        }
+
+    }
+</script>
+
+{% endblock %}

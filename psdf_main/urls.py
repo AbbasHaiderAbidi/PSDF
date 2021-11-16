@@ -125,6 +125,10 @@ urlpatterns = [
     #Payment
     path('init_record/', views.init_record, name="init_record"),
     path('init_release/', views.init_release, name="init_release"),
+    path('user_init_payment/', views.user_init_payment, name="user_init_payment"),
+    path('admin_pay/', views.admin_pay, name="admin_pay"),
+    path('approve_admin_pay/', views.approve_admin_pay, name="approve_admin_pay"),
+    path('user_ack_pay/', views.user_ack_pay, name="user_ack_pay"),
     
     
 ]

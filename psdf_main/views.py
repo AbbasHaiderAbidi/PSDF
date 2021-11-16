@@ -24,3 +24,5 @@ from .loa_handling import *
 from .approval import *
 
 from .initial_payment import *
+
+from .payment import *

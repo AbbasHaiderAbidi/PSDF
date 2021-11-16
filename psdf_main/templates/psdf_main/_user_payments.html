@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <h1 class="h3 mb-2 text-gray-800">Acknowledge Document Signing payment</h1>
+        <h1 class="h3 mb-2 text-gray-800">Acknowledge payments</h1>
     </div>
     <div class="col-md-2">
 
@@ -49,7 +49,7 @@
     <div class="col-lg-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h5 class="m-0 font-weight-bold text-primary">Document Signing
+                <h5 class="m-0 font-weight-bold text-primary">Payment Releases
                     <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects" title="Search" style="margin:auto; width: 30%;">
                 </h5>
             </div>
@@ -60,8 +60,8 @@
                         <tr>
                             <th>Project ID</th>
                             <th>Project Name</th>
-                            <th>Signing Document</th>
-                            <th>Signing Date</th>
+                            <th>LOA Details</th>
+                            <th>LOA Download</th>
                             <th>Amount Released</th>
                             <th>Release Date</th>
                             <th>Reference No.</th>
@@ -72,8 +72,8 @@
                         <tr>
                             <th>Project ID</th>
                             <th>Project Name</th>
-                            <th>Signing Document</th>
-                            <th>Signing Date</th>
+                            <th>LOA Details</th>
+                            <th>LOA Download</th>
                             <th>Amount Released</th>
                             <th>Release Date</th>
                             <th>Reference No.</th>
@@ -81,7 +81,7 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        {% if not init_pays %}
+                        {% if not pays %}
                         <tr>
                             <td>Not Available</td>
                             <td>Not Available</td>
@@ -92,21 +92,21 @@
                             <td>Not Available</td>
                             <td>Not Available</td>
                         </tr>
-                        {% else %} {% for proj in init_pays %}
+                        {% else %} {% for proj in pays %}
                         <tr>
                             <td class="font-weight-bolder">{{proj.project.newid}}</td>
                             <td><a href="/user_project_details/{{proj.project.id}}" class="font-weight-bold text-danger">{{proj.project.name}}</a></td>
-                            <td><a class="btn btn-outline-success" href="/download_doc_sign/{{proj.project.id}}"><i class="fas fa-download"></i> Download </a></td>
-                            <td>{{proj.project.doc_sign_date}}</td>
+                            <td>Amount: <strong>{{proj.loa.amt}}</strong> <br> Released: <strong>₹ {{proj.loa.amt_released}} </strong><br> Date: <strong>{{proj.loa.subdate}}</strong></td>
+                            <td><a href="/download_loa/{{proj.loa.id}}" class="btn btn-outline-warning btn-block">Download</a></td>
                             <td>₹{{proj.amount}}</td>
                             <td>{{proj.release_date}}</td>
                             
                             
                             {% if proj.ack == False or proj.ack == '' or proj.ack == ' ' %}
-                            <form action = "{% url 'user_init_payment' %}" method="post">
+                            <form action = "{% url 'user_ack_pay' %}" method="post">
                                 {% csrf_token %}
-                                <td>    <input type = "text" name = "refno" id = "refno" class="form-control"></td>
-                                <td>    <button type="button" class="btn btn-outline-danger btn-responsive text-center btn-block" data-toggle="modal" data-target="#forpay">
+                                <td>    <input type = "text" name = "refno" id = "refno" class="form-control" placeholder="Enter ref no."></td>
+                                <td>    <button type="button" class="btn btn-outline-primary btn-responsive text-center btn-block" data-toggle="modal" data-target="#forpay">
                                     Accept
                                  </button></td>
 
