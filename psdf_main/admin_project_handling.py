@@ -31,6 +31,7 @@ def acceptdpr(request, projid):
                 newproject.remark = remark
             
             newproject.submitted_boq = temp_proj.submitted_boq
+            newproject.remark_date = datetime.now().date()
             newproject.workflow = 'DPR accepted on '+ str(datetime.now().date())
             newproject.save()
             
@@ -162,13 +163,14 @@ def rejectproject(request, projid):
                 project.deny = True
                 project.denydate = denydate
                 project.remark = remark
+                project.remark_date = datetime.now().date()
                 project.workflow = str(project.workflow) + ']*[' + 'Project rejected on ' + denydate
                 project.save(update_fields=['denydate' , 'deny' , 'remark' , 'workflow'])
                 messages.success(request, 'Project : ' + project.name + ' has been rejected.')
-                notification(projects.objects.get(id = proid).userid.id, 'Project ID: '+projid+' has been rejected in '+page+' phase')
+                notification(project.userid.id, 'Project ID: '+str(project.newid)+' ,name: '+str(project.name)+' has been rejected in '+page+' phase')
             else:
                 messages.success(request, 'Aborted! Invalid administrator password.')
-            return redirect(pages[page])
+            return redirect(backpages[page])
         else:
             return oops(request)
     else:
@@ -217,7 +219,7 @@ def update_boq(request, projectid):
                 
             boq_project.workflow = str(boq_project.workflow) + ']*[' + 'BoQ updated on ' + str(datetime.now().date())
             boq_project.save(update_fields=['workflow'])
-            notification(boq_project.userid.id, 'BoQ submitted for project: ' + boq_project.name + ' has been updated by PSDF Sectt.' )
+            notification(boq_project.userid.id, 'BoQ submitted for project ID: '+str(boq_project.newid)+' ' + boq_project.name + ' has been updated by PSDF Sectt.' )
             messages.success(request, 'BoQ successfully updated and intimated to user.')
             return redirect('/update_boq/0')
         if projid == '0':
@@ -242,8 +244,20 @@ def update_boq(request, projectid):
     else:
         return oops(request)
 
-def final_approval(request):
+def add_remark(request,thispage):
     if adminonline(request):
-        pass
+        if request.method == 'POST':
+            req = request.POST
+            remark = sanitize(req.get('remark'))
+            projid = req.get('projid')
+            try:
+                proj = projects.objects.get(id = projid)
+            except:
+                return oops(request)
+            proj.remark = remark
+            proj.remark_date = datetime.now().date()
+            proj.save(update_fields = ['remark','remark_date'])
+            messages.success(request,'Remark Updated.')
+            return redirect('/'+str(thispage))
     else:
         return oops(request)

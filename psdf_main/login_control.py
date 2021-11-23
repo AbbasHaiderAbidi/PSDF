@@ -72,7 +72,7 @@ def registeruser(request):
                 messages.warning(request, 'User : ' +username + ' pending for verification. ')
                 return redirect('/')
     context ={'form':form}
-    print(form.errors)
+    
     return render(request, 'psdf_main/userRegister.html', context)
 
 

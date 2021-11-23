@@ -1,3 +1,4 @@
+from psdf_main.admin_appraisal import delete_appr_doc
 from .helpers import *
 # Create your views here.
 
@@ -164,7 +165,7 @@ def TESG_upload(request):
                 allids = []
                 if projids == '':
                     messages.error(request,"Please enter comma seperated Project IDs")
-                    return control_poanel(request)
+                    return control_panel(request)
 
                 for proj in allproj:
                     allids.append(str(proj.newid))
@@ -272,8 +273,7 @@ def TESG_upload(request):
                         
                             if os.path.exists(alreadyfile):
                                 sremove(alreadyfile)
-                            else:
-                                print("NOT EXISTS")
+                            
                         except:
                             pass
                         if handle_uploaded_file(tesgpath,files['momupload']):
@@ -310,59 +310,68 @@ def TESG_upload(request):
             return oops(request)
     else:
         return oops(request)
-    
+
+
     
 def APPR_upload(request):
     if adminonline(request):
         if request.method == 'POST':
             req = request.POST
-        if not 'adminpassA' in req.keys():
-            messages.error(request, 'Enter Administrator password.')
-            return control_panel(request)
-        adminpassF = req['adminpassA']
-        if not check_password(adminpassF,userDetails(request.session['user'])['password']):
-            messages.error(request, 'Invalid Administrator password.')
-            return control_panel(request)
-        apprdate = req['apprdate']
-        projid1 = req['projid']
-        try:
-            oro = projects.objects.filter(newid = projid1)[:1].get()
-            projid = str(oro.id)
-        except:
-            messages.error(request, 'No project with project ID ' +str(projid)+ ' exists.')
-            return control_panel(request)
-        
-        apprpath = ''
-        
-        if request.FILES:
-            files = request.FILES
-            if 'momupload' in files.keys():
-                mompload = files['momupload']
-                try:
-                    ext = '.' + mompload.name.split('.')[-1]
-                except:
-                    ext = ''
-                naam = 'Appraisal_'+ projid + '_' + apprdate + str(ext)
-                apprpath =os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Appraisal/')
-                if smkdir(apprpath):
-                    apprpath = os.path.join(apprpath, naam)
-                    if handle_uploaded_file(apprpath,files['momupload']):
-                        messages.success(request, 'MoM entry added ')
+            if not 'adminpassA' in req.keys():
+                messages.error(request, 'Enter Administrator password.')
+                return control_panel(request)
+            adminpassF = req['adminpassA']
+            if not check_password(adminpassF,userDetails(request.session['user'])['password']):
+                messages.error(request, 'Invalid Administrator password.')
+                return control_panel(request)
+            apprdate = req.get('apprdate')
+            projid1 = req.get('projid')
+            apprid = req.get('apprid')
+            try:
+                oro = projects.objects.filter(newid = projid1)[:1].get()
+                projid = str(oro.id)
+            except:
+                messages.error(request, 'No project with project ID ' +str(projid1)+ ' exists.')
+                return control_panel(request)
+            
+            
+            apprpath = ''
+            if request.FILES:
+                files = request.FILES
+                if 'momupload' in files.keys():
+                    mompload = files['momupload']
+                    try:
+                        ext = '.' + mompload.name.split('.')[-1]
+                    except:
+                        ext = ''
+                    naam = 'Appraisal_'+ projid + '_' + apprdate + str(ext)
+                    apprpath =os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Appraisal/')
+                    if smkdir(apprpath):
+                        apprpath = os.path.join(apprpath, naam)
+                        if handle_uploaded_file(apprpath,files['momupload']):
+                            messages.success(request, 'MoM entry added ')
+                        else:
+                            return oops(request)
                     else:
                         return oops(request)
-                else:
-                    return oops(request)
-            thisproj = projects.objects.get(id = projid)
-            appr = Appraisal_admin()
-            appr.project = thisproj
-            appr.apprpath = apprpath
-            appr.apprdate = apprdate
-            appr.userid = thisproj.userid
-            appr.save()
-            messages.success(request, 'Appraisal committee entry added for project '+ appr.project.name)
-            return control_panel(request)
+                allthere = Appraisal_admin.objects.filter(project = oro)
+                for there in allthere:
+                    sremove(there.apprpath)
+                allthere.delete()
+                
+                appr = Appraisal_admin()
+                appr.aprid = apprid
+                appr.project = oro
+                appr.apprpath = apprpath
+                appr.apprdate = apprdate
+                appr.userid = oro.userid
+                appr.save()
+                messages.success(request, 'Appraisal committee entry added for project '+ appr.project.name)
+                return control_panel(request)
+            else:
+                pass
         else:
-            pass
+            return oops(request)
     else:
         return oops(request)
     
@@ -379,11 +388,13 @@ def MONI_upload(request):
         if not check_password(adminpassF,userDetails(request.session['user'])['password']):
             messages.error(request, 'Invalid Administrator password.')
             return control_panel(request)
-        apprdate = req['monidate']
-        projid = req['projid']
+        apprdate = req.get('monidate')
+        projid = req.get('projid')
+        moniid = req.get('moniid')
         apprpath = ''
         try:
-            oro = projects.objects.filter(newid = projid).get()
+            oro = projects.objects.filter(newid = projid)[:1].get()
+            projid = str(oro.id)
         except:
             messages.error(request, 'No project with project ID ' +projid+ ' exists.')
             return control_panel(request)
@@ -405,10 +416,14 @@ def MONI_upload(request):
                         return oops(request)
                 else:
                     return oops(request)
-            thisproj = projects.objects.filter(newid = projid).get()
+            allthere = Monitoring_admin.objects.filter(project = oro)
+            for there in allthere:
+                sremove(there.monipath)    
+            allthere.delete()
             moni = Monitoring_admin()
-            moni.project = thisproj
-            moni.userid = thisproj.userid
+            moni.project = oro
+            moni.moniid = moniid
+            moni.userid = oro.userid
             moni.monipath = apprpath
             moni.monidate = apprdate
             moni.save()

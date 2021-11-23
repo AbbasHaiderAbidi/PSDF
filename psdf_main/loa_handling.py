@@ -2,6 +2,10 @@ from .helpers import *
 
 
 def new_loa(request):
+    # abc = projects.objects.get(id = '4')
+    
+    # abc.completed = False
+    # abc.save(update_fields=['completed'])
     if useronline(request) and not adminonline(request):
         context = full_user_context(request)
         if request.method == 'POST':
@@ -15,7 +19,7 @@ def new_loa(request):
             return render(request, 'psdf_main/_user_new_loa.html', context)
         userobj = users.objects.filter(username = request.session['user'])[:1].get()
         
-        context['projectlist'] = projects.objects.filter(status = '5', userid = userobj)
+        context['projectlist'] = projects.objects.filter(status = '6', userid = userobj, completed = False)
         
         return render(request, 'psdf_main/_user_new_loa.html', context)
     else:

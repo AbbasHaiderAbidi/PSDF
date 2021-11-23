@@ -77,7 +77,7 @@ def tesgchain_form(request):
             tesg.admin_filepath = fullpath
             tesg.save()
             messages.error(request, 'Outcome of TESG '+tesgnum+' have been intimated to the user.')
-            notification(str(tesg.project.userid.id), 'TESG #'+tesgnum+' updated for project ID : '+str(tesg.project.id))
+            notification(str(tesg.project.userid.id), 'TESG #'+tesgnum+' updated for project ID : '+str(tesg.project.newid))
             return redirect('/TESG_chain/'+projid)
     else:
         return oops(request)
@@ -100,7 +100,8 @@ def acceptTESG(request):
                 tesg.rejected = False
                 tesg.active = False
                 tesg.save(update_fields=['accepted','rejected','active'])
-                notification(userid, 'Response for TESG : '+tesgnum+', project ID: '+projid+ ' has been Accepted.')
+                proji = projects.objects.get(id = projid)
+                notification(userid, 'Response for TESG : '+tesgnum+' for project ID: '+str(proji.newid)+ ' has been Accepted.')
                 messages.error(request, 'Response for TESG number '+tesgnum+' accepted.')
                 return redirect('/TESG_chain/'+projid)
     else:
@@ -126,9 +127,11 @@ def rejectTESG(request):
                 tesg.active = False
                 pro = projects.objects.get(id = projid)
                 pro.remark = remarks
+                pro.remark_date = datetime.now().date()
                 pro.save(update_fields=['remark'])
                 tesg.save(update_fields=['accepted','rejected','active'])
-                notification(userid, 'Response for TESG : '+tesgnum+', project ID: '+projid+ ' has been Rejected.')
+                proji = projects.objects.get(id = projid)
+                notification(userid, 'Response for TESG : '+tesgnum+', project ID: '+str(proji.newid)+ ' has been Rejected.')
                 messages.error(request, 'Response for TESG number '+tesgnum+' Rejected.')
                 return redirect('/TESG_chain/'+projid)
     else:
@@ -213,7 +216,7 @@ def approveTESG(request, projid):
                 project.tesgaprdate = tesgaprdate
                 project.save(update_fields=['status','workflow','tesgaprdate'])
                 messages.success(request, 'Project : '+ project.name + ' has been approved in TESG phase.')
-                notification(projects.objects.get(id = projid).userid.id, 'Project ID: '+projid+' has been approved in TESG phase')
+                notification(projects.objects.get(id = projid).userid.id, 'Project ID: '+str(project.newid)+' has been approved in TESG phase')
             else:
                 messages.success(request, 'Aborted! Invalid administrator password.')
             

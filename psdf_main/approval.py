@@ -1,10 +1,10 @@
 from .helpers import *
 
 def admin_in_doc_sign(request):
-    # abc = projects.objects.get(id = '1')
-    # abc.status = '4'
+    # abc = projects.objects.get(id = '2')
+    # abc.status = '5'
     # abc.approved = False
-    # abc.save(update_fields=['status','approved'])
+    # abc.save(update_fields=['status'])
     if adminonline(request):
         context = full_admin_context(request)
         if request.method == 'POST':
@@ -44,7 +44,7 @@ def admin_in_doc_sign(request):
             messages.success(request, 'Project Approved and document accepted.')
             
             notification(thisproj.userid.id, "Project with ID: "+str(thisproj.newid)+" has been approved and document is accepted.")
-        context['projs'] = projects.objects.filter(Q(status = '4')| Q(status = '5'))
+        context['projs'] = projects.objects.filter(Q(status = '5')| Q(status = '6'))
         return render(request, 'psdf_main/_admin_doc_sign.html', context)
     else:
         return oops(request)
@@ -80,7 +80,7 @@ def user_in_doc_sign(request):
                     thisproj.workflow = str(thisproj.workflow) + ']*[' + 'Project document submitted by entity on '+ str(datetime.now().date())
                     thisproj.status = '4'
                     thisproj.save(update_fields=['doc_path','approved', 'status', 'workflow'])
-                    notification(getadmin_id(),'Signing Document submitted by ' + thisproj.utilname +' for project : '+ thisproj.newid)
+                    notification(getadmin_id(),'Signing Document submitted by ' + str(thisproj.userid.utilname) +' for project ID : '+ str(thisproj.newid))
                 
             else:
                 return oops(request)

@@ -21,7 +21,7 @@
                     {{message}}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>z
+                    </button>
                 </div>
                 {% endfor %}<br>
                 <div class="table-responsive">
@@ -32,18 +32,25 @@
                         <thead class="alert-primary">
                             <tr>
                                 <th>Project ID</th>
+                                <th>Monitoring ID</th>
+                                
                                 <th>Project Name</th>
                                 <th>Monitoring Date</th>
                                 <th>Download MoM</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tfoot class="alert-primary">
 
                             <tr>
                                 <th>Project ID</th>
+                                <th>Monitoring ID</th>
+                                
                                 <th>Project Name</th>
                                 <th>Monitoring Date</th>
                                 <th>Download MoM</th>
+                                <th>Delete</th>
+
                             </tr>
 
                         </tfoot>
@@ -53,6 +60,9 @@
                             {% if not monis %}
 
                             <tr>
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
 
                                 <td>Not Available</td>
 
@@ -69,9 +79,12 @@
                             {% else %} {% for moni in monis %}
                             <tr>
                                 <td class="font-weight-bold text-danger">{{moni.project.newid}}</td>
+                                <td>{{moni.moniid}}</td>
+                                
                                 <td>{{moni.project.name}}</td>
                                 <td>{{moni.monidate}}</td>
                                 <td><a class="btn btn-outline-success" href="/download_moni_mom/{{moni.id}}"><i class="fas fa-download"></i> Download </a></td>
+                                <td><a class="btn btn-outline-danger" href="/del_moni_mom/{{moni.id}}"><i class="fas fa-close"></i> Delete </a></td>
                             </tr>
                             {% endfor %} {% endif %}
                         </tbody>

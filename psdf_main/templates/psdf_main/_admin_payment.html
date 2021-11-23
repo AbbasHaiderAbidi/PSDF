@@ -43,32 +43,76 @@
     </div>
 
 </div>
-{% if loas and not thisloa%}
+
+{% if projs and not loas and not thisloa%}
+<div class="row">
+    <div class="col-lg-4 center">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Select project</h6>
+            </div>
+            <div class="card-body">
+
+                <div class="input-group" style="height:200px">
+
+                    <form action="{% url 'admin_pay_proj' %}" method="POST" class="row" name='projform' id='projform'>
+                        {% csrf_token %}
+                        <div class="input-group container" style="margin-top:20%">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="projid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-6">
+                                    <select name="projid" id="projid" class="form-control" onchange="autosubmitproj()">
+                            <option value="0"  class="form-control">-- Select project from list --</option>
+                            {% for proj in projs %}
+                            <option value="{{proj.id}}"  class="form-control"><strong>{{proj.newid}} {{proj.name}}</strong></option>
+                            <hr>
+                            {% endfor %}
+                        </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+                <br>
+
+            </div><br>
+
+        </div>
+    </div>
+
+</div>
+{% endif %}
+{% if loas and thisproj and not thisloa %}
 <div class="row">
 
     <div class="col-lg-4 center">
 
         <div class="card shadow">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Select from placed LOAs</h6>
+                <h6 class="m-0 font-weight-bold text-primary">LOAs for project ID [ {{thisproj.newid}} ] </h6>
             </div>
             <div class="card-body">
 
                 <div class="input-group" style="height:200px">
-
+Project name: <strong class="text-danger"> {{thisproj.name}}</strong>
                     <form action="{% url 'admin_pay' %}" method="POST" class="row" name='loaform' id='loaform'>
+                        
                         {% csrf_token %}
                         <div class="input-group container" style="margin-top:20%">
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="loaid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
                                 <div class="col-md-2"></div>
+                                <input type="hidden" value="{{thisproj.id}}" name="projid" id="projid">
                                 <div class="col-md-6">
                                     <select name="loaid" id="loaid" class="form-control" onchange="autosubmit()">
                             <option value="0"  class="form-control">-- Select LOA from list --</option>
                             {% for loa in loas %}
-                            <option value="{{loa.id}}"  class="form-control"><strong>{{loa.project.newid}} {{loa.project.name}}</strong><br>
-                                <p>| Amount: {{loa.amt}} | Submission Date: {{loa.subdate}}</p></option>
+                            <option value="{{loa.id}}"  class="form-control">Amount: ₹ {{loa.amt}} | Submission Date: {{loa.subdate}}</option>
                             
 
                             <hr>
@@ -89,70 +133,44 @@
     </div>
 
 </div>
-{% endif %} {% if loas and thisloa %}
+{% endif %} {% if proj and thisloa %}
 <div class="row">
 
     <div class="col-lg-4">
 
         <div class="card shadow">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Select from following LOAs</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Selected</h6>
             </div>
             <div class="card-body">
 
-                <div class="input-group">
+                
 
-                    <form action="{% url 'init_release' %}" method="POST" class="row" name='loaform' id='loaform'>
-                        {% csrf_token %}
-                        <div class="input-group container" style="margin-top:0%">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label for="loaid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
-                                <div class="col-md-2"></div>
-                                <div class="col-md-6">
-                                    <select name="loaid" id="loaid" class="form-control" onchange="autosubmit()">
-                            <option value="0"  class="form-control">-- Select Project from list --</option>
-                            {% for loa in loas %}
-                            <option value="{{loa.id}}"  class="form-control"><strong>{{loa.project.newid}} {{loa.project.name}}</strong><br>
-                                <p>| Amount: {{loa.amt}} | Submission Date: {{loa.subdate}}</p></option>
-                            
-
-                            <hr>
-                            {% endfor %}
-                        </select>
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-                <hr>
-
-                <p class="text-dark font-weight-bold">LOA for project:<h5 class="m-0 font-weight-bold text-danger"> <a href="/view_project/{{loa.project.id}}" class="font-weight-bold text-danger">{{thisloa.project.name}}</a></h5> </p>
+                <p class="text-dark font-weight-bold">LOA for project:<h5 class="m-0 font-weight-bold text-danger"> <a href="/admin_project_details/{{thisloa.project.id}}" class="font-weight-bold text-danger">{{thisloa.project.name}}</a></h5> </p>
                 
                 <div class="row">
                 <div class="col-md-6"><p class="text-info font-weight-bold">Approved Amount:</p>
-                <h5 class="m-0 font-weight-bold text-dark"> {{thisloa.project.amt_approved}}</h5><br>
+                <h5 class="m-0 font-weight-bold text-dark">₹ {% roundoff thisloa.project.amt_approved %}</h5><br>
             </div>
             <div class="col-md-6">
                 <p class="text-info font-weight-bold">Amount:</p>
-                <h5 class="m-0 font-weight-bold text-dark"> {{thisloa.amt}}</h5><br>
+                <h5 class="m-0 font-weight-bold text-dark">₹ {% roundoff thisloa.amt %}</h5><br>
             </div>
             </div>
                 <p class="text-info font-weight-bold">Date of LOA submission:</p>
-                <h5 class="m-0 font-weight-bold text-dark"> {{thisloa.subdate}}</h5><br>
+                <h5 class="m-0 font-weight-bold text-dark"> {{thisloa.subdate}}</h5>
                 
-
-                <br>
-
+<hr>
+<a href="/downloadloa/{{thisloa.id}}" class="btn btn-am btn-block btn-outline-warning">Download</a>
             </div><br>
 
         </div>
+        <h5><a href="/admin_pay" class="btn btn-block btn-ouline-primary">BACK</a></h5>
     </div>
     <div class="col-lg-8">
         <div class="card shadow">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-danger">Enter Payment Details</h6>
+                <h6 class="m-0 font-weight-bold text-success">Enter Payment Details</h6>
             </div>
             <div class="card-body">
 
@@ -203,6 +221,14 @@
     function autosubmit() {
         var projectid = document.getElementById('loaid')
         var projform = document.getElementById('loaform')
+        if (projectid.value != '0') {
+            projform.submit();
+        }
+
+    }
+    function autosubmitproj() {
+        var projectid = document.getElementById('projid')
+        var projform = document.getElementById('projform')
         if (projectid.value != '0') {
             projform.submit();
         }

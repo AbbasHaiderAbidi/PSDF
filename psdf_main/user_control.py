@@ -54,16 +54,16 @@ def newdpr(request):
                                 pass
                             else:
                                 if not isnum(boq.cell(row = i, column = 1).value):
-                                    messages.error(request, "Error in Row no. "+str(i)+" ITEM NUMBER column")
+                                    messages.error(request, "Error in Row no. "+str(i)+" ITEM NUMBER column of BOQ")
                                     return render(request, 'psdf_main/_user_new_dpr.html', context)
                                 if not isnum(boq.cell(row = i, column = 4).value):
-                                    messages.error(request, "Error in Row no. "+str(i)+" QUANTITY column")
+                                    messages.error(request, "Error in Row no. "+str(i)+" QUANTITY column of BOQ")
                                     return render(request, 'psdf_main/_user_new_dpr.html', context)
                                 if not isfloat(boq.cell(row = i, column = 5).value):
-                                    messages.error(request, "Error in Row no. "+str(i)+" UNIT PRICE column")
+                                    messages.error(request, "Error in Row no. "+str(i)+" UNIT PRICE column of BOQ")
                                     return render(request, 'psdf_main/_user_new_dpr.html', context)
-                                total_cost = total_cost + float(int(boq.cell(row = i, column = 4).value)*float(boq.cell(row = i, column = 5).value))
-                    if not total_cost == float(amount):
+                                total_cost = total_cost + float(float(boq.cell(row = i, column = 4).value)*int(boq.cell(row = i, column = 5).value))
+                    if not int(total_cost) == int(amount):
                         messages.error(request, "BOQ total amount should be equal to entered amount")
                         return render(request, 'psdf_main/_user_new_dpr.html', context)
                     boqlist = []
@@ -80,9 +80,9 @@ def newdpr(request):
                                 itemname = sanitize_name(boq.cell(row = i, column = 2).value)
                                 itemno = boq.cell(row = i, column = 1).value
                                 itemdesc = sanitize(boq.cell(row = i, column = 3).value)
-                                itemqty = int(boq.cell(row = i, column = 4).value)
-                                itemprice = float(boq.cell(row = i, column = 5).value)
-                                itemcost = itemqty * itemprice
+                                itemqty = float(boq.cell(row = i, column = 4).value)
+                                itemprice = int(boq.cell(row = i, column = 5).value)
+                                itemcost = float(itemqty * itemprice)
                                 boqlist.append({'itemname':itemname, 'itemno':itemno, 'itemdesc': itemdesc, 'itemqty':itemqty, 'itemprice': itemprice, 'itemcost': itemcost})
                     
                     ## CHECK FOR AMOUNT EQUALITY
@@ -224,7 +224,7 @@ def user_boq_view(request, projid):
                 # project = temp_projectDetails(proj.id)
                 context['proj'] = temp_projects.objects.filter(id = proj.id)
                 context['proj'].submitted_boq = get_boq_details(proj.submitted_boq)
-                print(context['proj'].submitted_boq)
+                
                 context['backpage'] = backpages[backpage]
                 return render(request, 'psdf_main/_user_view_boq.html', context)
             else:

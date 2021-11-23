@@ -52,32 +52,27 @@ class projects(models.Model):
     quantumOfFunding = models.IntegerField(null = True)
     status = models.CharField(max_length=1, null = True, default = '1')
     submitted_boq  = models.TextField(null=True)
-    
     approved = models.BooleanField(default = False)
-    
+    ext1 = models.IntegerField(default = 0)
+    ext2 = models.IntegerField(default = 0)
+    ext3 = models.IntegerField(default = 0)
     deny = models.BooleanField(default = False)
     remark = models.TextField(null = True)
-    
+    remark_date = models.DateField(null = True)
+    completedate = models.DateField(null = True)
     denydate = models.DateField(null = True)
     approvedate = models.DateField(null = True)
-    
     tesg_list = models.TextField(null=True)
-    
     dpraprdate = models.DateField(null = True, auto_now_add=True)
-    
     tesgaprdate = models.DateField(null = True)
-    
     appraprdate = models.DateField(null = True)
-    
     moniaprdate = models.DateField(null = True)
-
-    
     workflow = models.TextField(null=True)
-
+    
+    sanction_date = models.DateField(null=True)
     doc_path = models.TextField(null=True)
-    
     doc_sign_date = models.DateField(null=True)
-    
+    completed = models.BooleanField(null=True, default=False)
     
     ##################################
     ## 1 - DPR approved
@@ -108,12 +103,14 @@ class TESG_master(models.Model):
     rejected = models.BooleanField(default=False)
 
 class Appraisal_admin(models.Model):
+    aprid = models.IntegerField(null=True, unique=True)
     project = models.ForeignKey(projects, null = True, on_delete= models.SET_NULL)
     userid = models.ForeignKey(users, null = True, on_delete= models.SET_NULL)
     apprpath = models.TextField(null=True)
     apprdate = models.DateField(null = True)
 
 class Monitoring_admin(models.Model):
+    moniid = models.IntegerField(null=True, unique=True)
     project = models.ForeignKey(projects, null = True, on_delete= models.SET_NULL)
     userid = models.ForeignKey(users, null = True, on_delete= models.SET_NULL)
     monipath = models.TextField(null=True)

@@ -116,13 +116,29 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Projects in Document Signing</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if ndocs %} {{ndocs}} {% else %} None {% endif %}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Projects ongoing payment</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if npending %} {{npending}} {% else %} None {% endif %}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if npays %} {{npays}} {% else %} None {% endif %}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
@@ -132,22 +148,7 @@
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Projects Approved</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if ntesg %} {{ntesg}} {% else %} None {% endif %}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
 
 
@@ -159,7 +160,7 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                 Projects completed payment </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if nmoni %} {{nmoni}} {% else %} None {% endif %}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if ncomp %} {{ncomp}} {% else %} None {% endif %}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
@@ -221,7 +222,7 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    {% if not all_projs %}
+                                    {% if not all_aprojs %}
                                     <tr>
                                         <td>Not Available</td>
                                         <td>Not Available</td>
@@ -231,7 +232,7 @@
                                         <td>Not Available</td>
 
                                     </tr>
-                                    {% else %} {% for proj in all_projs %}
+                                    {% else %} {% for proj in all_aprojs %}
                                     <tr>
                                         <td class="font-weight-bolder">{{proj.newid}}</td>
                                         <td><a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>

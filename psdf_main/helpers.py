@@ -99,10 +99,11 @@ def projectDetails(projid):
         proj['quantum'] = proj1.quantumOfFunding
         proj['status'] = proj1.status
         proj['remark'] = proj1.remark
+        proj['remark_date'] = proj1.remark_date
         proj['submitted_boq'] = sub_boq
         # proj['submitted_boq'] = get_boq_details(proj1.submitted_boq)
         
-        proj['submitted_boq_Gtotal'] = Gtotal
+        proj['submitted_boq_Gtotal'] = 0
         proj['user_username'] = proj1.userid.username
         proj['user_nodal'] = proj1.userid.nodal
         proj['user_region'] = proj1.userid.region
@@ -118,12 +119,12 @@ def projectDetails(projid):
         return False
 
 def get_boq_details(submitted_boq):
-    print(submitted_boq)
+    
     # print()
     eachboq = submitted_boq[1:-1].replace("\'", "\"").replace("}, {","}&%#{").split('&%#')
     abc = []
     for boq in eachboq :
-        print(boq)
+        
         one_boq = json.loads(boq)
         # attrlist = boq.split(', ')
         
@@ -151,7 +152,7 @@ def get_Gtotal_list(abc):
 
 def get_Gtotal(abc):
     item_Gtotal = {}
-    Gtotal_list = []
+    
     totalval = 0
     for boq in abc:
         if boq['itemname'] in item_Gtotal.keys():
@@ -278,7 +279,7 @@ def handle_uploaded_file(path, f):
 def handle_download_file(filepath, request):
     
     if os.path.exists(filepath):
-        print("EXISTS")
+        
         with open(filepath,'rb') as fh:
             response = HttpResponse(fh.read(), content_type = "application/adminupload")
             response['Content-Disposition'] = 'inline;filename =' + filepath.split('/')[-1]
@@ -407,9 +408,9 @@ def add_amount(projid, amt, request):
     proj.amt_released = int(amt_rel) + int(amt)
     if int(proj.amt_approved) == int(proj.amt_released):
         proj.approved = True
-        proj.approvedate = datetime.now().date()
-        proj.status = '9'
-        proj.save(update_fields = ['approved','approvedate','amt_released','status'])
+        proj.completedate = datetime.now().date()
+        proj.completed = True
+        proj.save(update_fields = ['approved','approvedate','amt_released','completed'])
         workflow(proj.id,"Total approved amount for project ID "+str(proj.newid)+' released.')
         notification(getadmin_id(), 'Total approved amount for project ID '+str(proj.newid)+' released.')
         notification(proj.userid.id, 'Total approved amount for project ID '+str(proj.newid)+' released.')

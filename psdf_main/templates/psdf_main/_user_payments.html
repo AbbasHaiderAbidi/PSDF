@@ -50,7 +50,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h5 class="m-0 font-weight-bold text-primary">Payment Releases
-                    <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects" title="Search" style="margin:auto; width: 30%;">
+                    <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects by ID" title="Search" style="margin:auto; width: 30%;">
                 </h5>
             </div>
             <div class="table-responsive">
@@ -66,6 +66,7 @@
                             <th>Release Date</th>
                             <th>Reference No.</th>
                             <th>Acknowledge</th>
+                            <th>Remark</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -78,6 +79,7 @@
                             <th>Release Date</th>
                             <th>Reference No.</th>
                             <th>Acknowledge</th>
+                            <th>Remark</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -91,12 +93,13 @@
                             <td>Not Available</td>
                             <td>Not Available</td>
                             <td>Not Available</td>
+                            <td>Not Available</td>
                         </tr>
                         {% else %} {% for proj in pays %}
                         <tr>
                             <td class="font-weight-bolder">{{proj.project.newid}}</td>
                             <td><a href="/user_project_details/{{proj.project.id}}" class="font-weight-bold text-danger">{{proj.project.name}}</a></td>
-                            <td>Amount: <strong>{{proj.loa.amt}}</strong> <br> Released: <strong>₹ {{proj.loa.amt_released}} </strong><br> Date: <strong>{{proj.loa.subdate}}</strong></td>
+                            <td>Amount: <strong>₹ {{proj.loa.amt}}</strong> <br> Released: <strong>₹ {{proj.loa.amt_released}} </strong><br> Date: <strong>{{proj.loa.subdate}}</strong></td>
                             <td><a href="/download_loa/{{proj.loa.id}}" class="btn btn-outline-warning btn-block">Download</a></td>
                             <td>₹{{proj.amount}}</td>
                             <td>{{proj.release_date}}</td>
@@ -106,7 +109,9 @@
                             <form action = "{% url 'user_ack_pay' %}" method="post">
                                 {% csrf_token %}
                                 <td>    <input type = "text" name = "refno" id = "refno" class="form-control" placeholder="Enter ref no."></td>
+                                <input type="hidden" id="payid" name="payid" value="{{proj.id}}">
                                 <td>    <button type="button" class="btn btn-outline-primary btn-responsive text-center btn-block" data-toggle="modal" data-target="#forpay">
+
                                     Accept
                                  </button></td>
 
@@ -127,7 +132,7 @@
                                                 <h5 class="font-weight-bold">Please confirm</h5>
                                                 <hr>
                                                 <br>
-                                                <input type="hidden" value="{{proj.id}}" name="payid" id="payid">
+                                                
                                                 <div class="row container-fluid">
                                                     <input type="password" class="form-control col-md-6" name="userpass" id="userpass" placeholder="Enter your password.">
                                                     <div class="col-md-1"></div>
@@ -147,7 +152,7 @@
                             <td class="alert-success"><strong>Acknowledged</strong></td>
                             {% endif %}
                             
-                           
+                           <td>{{proj.remark}}</td>
                         </tr>
 
 

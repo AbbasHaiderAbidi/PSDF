@@ -63,18 +63,29 @@ def view_monis(request):
         return oops(request)
 
 def view_all_projs(request):
+    # proj = projects.objects.filter(status = '7')[:1].get()
+    # proj.status = '6'
+    # proj.save(update_fields=['status'])
     if adminonline(request):
         context = full_admin_context(request)
-        context['all_projs'] = projects.objects.filter(deny = False)
+        context['all_aprojs'] = projects.objects.filter((Q(status = '1')| Q(status = '2')| Q(status = '3')| Q(status = '4')| Q(status = '5')| Q(status = '6')| Q(status = '7')),deny = False)
+        
         context['all_rprojs'] = projects.objects.filter(deny = True)
+        context['all_docprojs'] = projects.objects.filter(status = '5')
+        context['all_pays'] = projects.objects.filter(status = '6')
         context['all_rpprojs'] = temp_projects.objects.filter(deny = True)
         context['all_temps'] = temp_projects.objects.filter(deny = False)
-        context['npending'] = temp_projects.objects.filter(deny = False).count()
+        context['all_comp'] = projects.objects.filter(status = '9', deny = False)
+        
+        context['npays'] = context['all_pays'].count()
+        context['ncomp'] = context['all_comp'].count()
+        context['ndocs'] = context['all_docprojs'].count()
+        context['npending'] = context['all_temps'].count()
         context['ntesg'] = projects.objects.filter(status = '1', deny = False).count()
         context['nappr'] = projects.objects.filter(status = '2', deny = False).count()
         context['nmoni'] = projects.objects.filter(status = '3', deny = False).count()
         context['nfinal'] = projects.objects.filter(status = '4', deny = False).count()
-        context['nreject'] = projects.objects.filter(deny = True).count() + temp_projects.objects.filter(deny = True).count()
+        context['nreject'] = context['all_rprojs'].count() + context['all_rpprojs'].count()
         return render(request, 'psdf_main/_admin_view_all_projects.html', context)
     else:
         return oops(request)
@@ -142,5 +153,15 @@ def admin_boq_view(request, projid):
             context['approved_boq_total'] = boq_grandtotal(context['approved_boq'])
             context['backpage'] = backpages[backpage]
             return render(request, 'psdf_main/_admin_view_project_boq.html', context)
+    else:
+        return oops(request)
+    
+    
+def view_all_pays(request):
+    if adminonline(request):
+        context = full_admin_context(request)
+        context['all_pays'] = payment.objects.all()
+        context['all_init_pays'] = init_payment.objects.all()
+        return render(request,'psdf_main/_admin_view_pays.html',context)
     else:
         return oops(request)

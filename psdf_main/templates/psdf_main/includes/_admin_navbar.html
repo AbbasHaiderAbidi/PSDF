@@ -64,6 +64,9 @@
                     {% if nomon > 0 %}<span class="badge badge-danger badge-counter">{{nomon}}</span> {% endif %}
                 </a>
                 <hr class="sidebar-divider">
+                <a class="collapse-item" href="{% url 'admin_sanction' %}"><strong>Sanction Order</strong>
+                </a>
+                <hr class="sidebar-divider">
                 <a class="collapse-item" href="{% url 'admin_in_doc_sign' %}"><strong>Document Signing</strong>
                 </a>
 
@@ -92,9 +95,8 @@
                 
                 <a class="collapse-item" href="{% url 'admin_pay' %}"><strong>Approve payment</strong>
                 </a>
-                
                 <hr class="sidebar-divider">
-                <h6><a class="collapse-item" href="{% url 'view_all_projs' %}"><strong>View All</strong></a></h6>
+                <h6><a class="collapse-item" href="{% url 'view_all_pays' %}"><strong>View All</strong></a></h6>
             </div>
         </div>
     </li>

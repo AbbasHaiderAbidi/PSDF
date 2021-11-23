@@ -27,15 +27,16 @@ urlpatterns = [
     path('acceptdpr/<str:projid>', views.acceptdpr, name="acceptdpr"),
     path('rejectdpr/<str:projid>', views.rejectdpr, name="rejectdpr"),
     path('notificationread/<str:userid>', views.notificationread, name="notificationread"),
+    path('add_remark/<str:thispage>',views.add_remark,name='add_remark'),
 
     #pending_projects
     path('under_examination/', views.under_examination, name="under_examination"),
 
     #view Users
-    path('view_user/<str:userid>', views.view_user, name="view_user/"),
+    path('view_user/<str:userid>', views.view_user, name="view_user"),
 
     #Control
-    path('del_tesg/<str:tesgid>', views.del_tesg, name="del_tesg/"),
+    path('del_tesg/<str:tesgid>', views.del_tesg, name="del_tesg"),
 
     #TESG
     path('TESG_chain/<str:project_id>', views.TESG_chain, name = "TESG_chain"),
@@ -60,12 +61,13 @@ urlpatterns = [
     #Appraisal
     path('appraisal_projects/', views.appraisal_projects, name="appraisal_projects"),
     path('approve_appraisal/<str:projectid>', views.approve_appraisal, name="approve_appraisal"),
-    path('delete_appr_doc/<str:projid>', views.delete_appr_doc, name = 'delete_appr_doc'),
+    # path('delete_appr_doc/<str:projid>', views.delete_appr_doc, name = 'delete_appr_doc'),
     path('send_to_tesg/<str:projid>', views.send_to_tesg, name = 'send_to_tesg'),
     path('user_appraisal_projects/', views.user_appraisal_projects, name="user_appraisal_projects"),
     path('APPR_upload/', views.APPR_upload, name="APPR_upload"),
     path('view_apprs/', views.view_apprs, name="view_apprs"),
     path('download_appr_mom/<str:apprid>', views.download_appr_mom, name = 'download_appr_mom'),
+    path('del_appr_mom/<str:aprid>', views.del_appr_mom, name = 'del_appr_mom'),
     
     
     
@@ -80,6 +82,7 @@ urlpatterns = [
     path('view_monis/', views.view_monis, name="view_monis"),
     path('download_moni_mom/<str:moniid>', views.download_moni_mom, name = 'download_moni_mom'),
     path('approve_monitoring/<str:projectid>', views.approve_monitoring, name = "approve_monitoring"),
+    path('del_moni_mom/<str:aprid>', views.del_moni_mom, name = 'del_moni_mom'),
 
 
     #approval
@@ -123,10 +126,15 @@ urlpatterns = [
     
     
     #Payment
+    
+    path('view_all_pays/', views.view_all_pays, name="view_all_pays"),
+    path('admin_sanction/', views.admin_sanction, name="admin_sanction"),
+    path('download_sanction/<str:projid>', views.download_sanction, name="download_sanction" ),
     path('init_record/', views.init_record, name="init_record"),
     path('init_release/', views.init_release, name="init_release"),
     path('user_init_payment/', views.user_init_payment, name="user_init_payment"),
     path('admin_pay/', views.admin_pay, name="admin_pay"),
+    path('admin_pay_proj/', views.admin_pay_proj, name="admin_pay_proj"),
     path('approve_admin_pay/', views.approve_admin_pay, name="approve_admin_pay"),
     path('user_ack_pay/', views.user_ack_pay, name="user_ack_pay"),
     

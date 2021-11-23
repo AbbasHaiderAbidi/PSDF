@@ -32,7 +32,7 @@
                                 <th>Project ID</th>
                                 <th>Project Name</th>
                                 <th>User</th>
-                                <th>Entity</th>
+                                <th colspan = "2">Remark</th>
                                 <th>View BoQ</th>
                                 <th>Approve</th>
                                 <th>TESG Approval Date</th>
@@ -45,7 +45,7 @@
                                 <th>Project ID</th>
                                 <th>Project Name</th>
                                 <th>User</th>
-                                <th>Entity</th>
+                                <th colspan = "2">Remark</th>
                                 <th>View BoQ</th>
                                 <th>Approve</th>
                                 <th>TESG Approval Date</th>
@@ -65,13 +65,21 @@
                                 <td>Not Available</td>
                                 <td>Not Available</td>
                                 <td>Not Available</td>
+                                <td>Not Available</td>
                             </tr>
                             {% else %} {% for proj in appraisal_projects %}
                             <tr>
                                 <td class="font-weight-bolder">{{proj.newid}}</td>
                                 <td><a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
                                 <td>{{proj.userid.username}}</td>
-                                <td>{{proj.userid.region}}</td>
+                                <form action="/add_remark/appraisal_projects" method="POST" name="add_remark" id="add_remark">
+                                    {% csrf_token %}
+                                    <td colspan = "2">
+                                        <input type="hidden" id="projid" name="projid" value="{{proj.id}}">
+                                        <input type="text" class="form-control" name="remark" id="remark" value="{{proj.remark}}"><br>
+                                        <input type="submit" class="btn btn-sm btn-outline-danger" value="update">
+                                    </td>
+                                </form>
                                 <td><a href="/admin_boq_view/{{proj.id}}_adminappraisalprojects" class="btn btn-outline-info">View</a></td>
 
                                 <td class="text-center"><button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#modalforAppr{{proj.id}}">

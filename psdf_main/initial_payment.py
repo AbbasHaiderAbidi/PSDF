@@ -1,5 +1,95 @@
 from .helpers import *
 
+
+def admin_sanction(request):
+    # proj = projects.objects.get(id = '1')
+    # proj.status = '6'
+    # print(proj.id)
+    # proj.save(update_fields = ['status'])
+    if adminonline(request):
+        context = full_admin_context(request)
+        if request.method == 'POST':
+            req = request.POST
+            projid = req.get('projid')
+            amt_approved = req.get('grant')
+            adminpass = req.get('adminpass')
+            if not check_password(adminpass,users.objects.get(id = getadmin_id()).password):
+                messages.error(request, "Invalid administrator password")
+                return redirect('/admin_sanction')
+            try:
+                project = projects.objects.get(id = projid)  
+            except:
+                messages.error(request, "No such project")
+                return redirect('/admin_sanction')
+            
+            # if not isfloat(amt_approved):
+            #     messages.error(request, "Grant amount must be a number")
+            #     return redirect('/admin_sanction')
+            
+            if request.FILES:
+                if 'reciept' in request.FILES:
+                    reciept = request.FILES['reciept']
+                    ext = ""
+                    try:
+                        ext = "."+str(reciept.name.split('.')[-1])
+                    except:
+                        ext = ""
+                    filepath = project.projectpath
+                    filepathnew = filepath+'/Sanction_Order/'
+                    try:
+                        alreadyfile = glob.glob(os.path.join(filepathnew,'Sanction_Order')+'*')[0]
+                        if os.path.exists(alreadyfile):
+                            sremove(alreadyfile)
+                    except:
+                        pass
+                    if smkdir(filepathnew):
+                        filename = 'Sanction_Order'+ext
+                        if handle_uploaded_file(filepathnew+filename, reciept):
+                            project.amt_approved = amt_approved
+                            project.sanction_date = datetime.now().date()
+                            project.save(update_fields = ['amt_approved','sanction_date'])
+                            messages.success(request,"Sanction order uploaded for project ID: "+str(project.newid))
+                            notification(project.userid.id,"Sanction order for project ID: "+str(project.newid)+" released.")
+                            return redirect('/admin_sanction')
+                        else:
+                            messages.error(request, "Unable to upload file")
+                            return redirect('/admin_sanction')
+                        
+                    else:
+                    
+                        messages.error(request, "Unable to create directory")
+                        return redirect('/admin_sanction')
+                else:
+                    return oops(request)
+            else:
+                messages.error(request, "ERROR! No file selected.")
+                return redirect('/admin_sanction')
+        context['sancs'] = projects.objects.filter(status = '4')
+        return render(request, 'psdf_main/_admin_sanction.html',context)
+            
+    else:
+        return oops(request)
+    
+def download_sanction(request, projid):
+    if adminonline(request):
+        try:
+            proj = projects.objects.get(id = projid)
+        except:
+            messages.error(request, 'Invalid project ID')
+            return redirect('/admin_sanction')
+        try:
+            filethere = glob.glob(proj.projectpath+'/Sanction_Order/Sanction_Order'+'*')[0]
+        except:
+            messages.error(request, 'Sanction Order does not exists')
+            return redirect('/admin_sanction')
+        if os.path.exists(filethere):
+            return handle_download_file(filethere, request)
+        else:
+            messages.error(request, 'Sanction Order does not exists')
+            return redirect('/admin_sanction')
+    else:
+        return oops(request)
+
 def init_release(request):
     # init_payment.objects.all().delete()
     if adminonline(request):
@@ -62,8 +152,7 @@ def init_record(request):
                             sremove(alreadyfile)
                     except:
                         pass
-                    print(filepath) 
-                    print(filepathnew)
+                  
                     if smkdir(filepathnew):
                         filename = 'reciept'+ext
                         if handle_uploaded_file(filepathnew+filename, reciept):
@@ -130,13 +219,6 @@ def user_init_payment(request):
             else:
                 thispay.ack = True
                 thispay.recv_date = datetime.now().date()
-                try:
-                    proj = projects.objects.get(id = thispay.project.id)
-                    proj.status = '7'
-                except:
-                    messages.error(request, 'Invalid project ID')
-                    return redirect('/user_init_payment')
-                proj.save(update_fields = ['status'])
                 thispay.save(update_fields = ['ack','recv_date'])
                 notification(getadmin_id(), "Payment of ₹"+str(thispay.amount)+" for project ID "+str(thispay.project.newid)+" acknowledged by entity.")
                 workflow(thispay.project.id,"Initial payment of ₹"+str(thispay.amount)+" acknowledged on "+str(thispay.release_date)+" by entity.")

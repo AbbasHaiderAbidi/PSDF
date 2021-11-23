@@ -69,7 +69,7 @@
                             {% else %} {% for moni in monis %}
                             <tr>
                                 <td class="font-weight-bold text-danger">{{moni.project.newid}}</td>
-                                <td>{{moni.project.name}}</td>
+                                <td><a href="/admin_project_details/{{moni.project.id}}" class="font-weight-bold text-danger">{{moni.project.name}}</a></td>
                                 <td>{{moni.monidate}}</td>
                                 <td><a class="btn btn-outline-success" href="/download_moni_mom/{{moni.id}}"><i class="fas fa-download"></i> Download </a></td>
                             </tr>

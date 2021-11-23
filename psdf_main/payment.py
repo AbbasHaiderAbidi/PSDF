@@ -1,5 +1,26 @@
 from .helpers import *
 
+def admin_pay_proj(request):
+    
+    if adminonline(request):
+        context = full_admin_context(request)
+        if request.method == 'POST':
+            req = request.POST
+            projid = req.get('projid')
+            try:
+                proj = projects.objects.get(id = projid)
+            except:
+                return oops(request)
+            context['loas'] = loadata.objects.filter(project = proj, completed = False)
+            context['thisproj'] = proj
+            return render(request, 'psdf_main/_admin_payment.html', context)
+        else:
+            return redirect('/admin_pay')
+        
+    else:
+        return oops(request)
+
+
 
 def admin_pay(request):
     if adminonline(request):
@@ -7,13 +28,18 @@ def admin_pay(request):
         if request.method == 'POST':
             req = request.POST
             loaid = req.get('loaid')
+            projid = req.get('projid')
             context['thisloa'] = loadata.objects.get(id = loaid)
-        context['loas'] = loadata.objects.filter(completed = False)
+            context['proj'] = projects.objects.get(id = projid)
+        context['projs'] = projects.objects.filter(status = '6', completed = False)
+        # context['loas'] = loadata.objects.filter(completed = False)
         return render(request, 'psdf_main/_admin_payment.html', context)
     else:
         return oops(request)
-    
+
+
 def approve_admin_pay(request):
+    
     if adminonline(request):
         if request.method == 'POST':
             req = request.POST
@@ -76,9 +102,6 @@ def approve_admin_pay(request):
                         filename = 'LOA_'+str(thisloa.amt)+ext
                         if handle_uploaded_file(filepathnew+filename, reciept):
                             messages.success(request,'Payment file uploaded')
-        
-                            add_amount_loa(thisloa.id,amt,request)
-                            add_amount(thisloa.project.id,amt,request)
                             newpay = payment()
                             newpay.project = thisloa.project
                             newpay.user = thisloa.user
@@ -87,6 +110,8 @@ def approve_admin_pay(request):
                             newpay.amount = int(amt)
                             newpay.release_date = datetime.now().date()
                             newpay.filepath = filepathnew+filename
+                            add_amount_loa(thisloa.id,amt,request)
+                            add_amount(thisloa.project.id,amt,request)
                             if emp_check(remark):
                                 pass
                             else:
@@ -115,11 +140,34 @@ def approve_admin_pay(request):
 def user_ack_pay(request):
     if useronline(request):
         context = full_user_context(request)
+        
+        if request.method == 'POST':
+            req = request.POST
+            refno = sanitize(req.get('refno'))
+            userpass = req.get('userpass')
+            payid = req.get('payid')
+            try:
+                thispay = payment.objects.get(id = payid)
+            except:
+                messages.error(request, 'No payment record exists')
+                return redirect('/user_ack_pay')
+            if not check_password(userpass,userDetails(request.session['user'])['password']):
+                messages.error(request, 'Enter correct password.')
+                return redirect('/user_ack_pay')
+            # if emp_check(refno):
+            #     messages.error(request, 'Enter valid reference number')
+            #     return redirect('/user_ack_pay')
+            if not str(refno).casefold() == str(thispay.ref_no).casefold():
+                messages.error(request, 'Reference number mismatch.')
+                return redirect('/user_ack_pay')
+            else:
+                thispay.ack = True
+                thispay.recv_date = datetime.now().date()
+                thispay.save(update_fields = ['ack','recv_date'])
+                messages.success(request, 'Payment Successfully acknowledged.')
         context['pays'] = payment.objects.filter(user = getuser(request))
-        print(context['pays'])
         return render(request, 'psdf_main/_user_payments.html', context)
     else:
         return oops(request)
     
     
-# USER KA REF IDHAR PAKADNA HAI AUR VERIFY KARNA HAI

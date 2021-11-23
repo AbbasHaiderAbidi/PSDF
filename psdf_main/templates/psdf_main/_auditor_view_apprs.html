@@ -31,6 +31,7 @@
                     width: 100%;">
                         <thead class="alert-primary">
                             <tr>
+                                <th>Appraisal ID</th>
                                 <th>Project ID</th>
                                 <th>Project Name</th>
                                 <th>Appraisal Date</th>
@@ -40,6 +41,7 @@
                         <tfoot class="alert-primary">
 
                             <tr>
+                                <th>Appraisal ID</th>
                                 <th>Project ID</th>
                                 <th>Project Name</th>
                                 <th>Appraisal Date</th>
@@ -53,7 +55,7 @@
                             {% if not apprs %}
 
                             <tr>
-
+                                <td>Not Available</td>
                                 <td>Not Available</td>
 
                                 <td>Not Available</td>
@@ -68,8 +70,9 @@
 
                             {% else %} {% for appr in apprs %}
                             <tr>
+                                <td>{{appr.aprid}}</td>
                                 <td class="font-weight-bold text-danger">{{appr.project.newid}}</td>
-                                <td>{{appr.project.name}}</td>
+                                <td><a href="/admin_project_details/{{appr.project.id}}" class="font-weight-bold text-danger">{{appr.project.name}}</a></td>
                                 <td>{{appr.apprdate}}</td>
                                 <td><a class="btn btn-outline-success" href="/download_appr_mom/{{appr.id}}"><i class="fas fa-download"></i> Download </a></td>
                             </tr>

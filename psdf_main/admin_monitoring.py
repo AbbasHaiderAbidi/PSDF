@@ -3,7 +3,7 @@ from .helpers import *
 def monitoring_projects(request):
     if adminonline(request):
         context = full_admin_context(request)
-        print(context['monitoring_projects'])
+        
         return render(request, 'psdf_main/_admin_monitoring_projects.html', context)
     else:
         return oops(request)
@@ -17,6 +17,10 @@ def approve_monitoring(request, projectid):
             adminpass = req['adminpass']
             if check_password(adminpass,users.objects.get(id = context['user']['id']).password):
                 project = projects.objects.get(id = projectid)
+                monientry = Monitoring_admin.objects.filter(project = project)
+                if not monientry:
+                    messages.error(request, 'Atleast one Monitoring committee report must be added for the project.')
+                    return redirect('/monitoring_projects/')
                 project.status = '4'
                 moniaprdate = datetime.now().date()
                 project.workflow = str(project.workflow) + ']*[' + 'Project approved in Monitoring Phase on '+ str(moniaprdate)
@@ -37,7 +41,8 @@ def approve_monitoring(request, projectid):
                         tboq.unitcost = sboq.unitcost
                         tboq.save()
                 messages.success(request, 'Project : '+ project.name + ' has been approved Monitoring Committee.')
-                notification(projects.objects.get(id = projectid).userid.id, 'Project ID: '+ projectid +' has been approved by Monitoring committee')
+                proji = projects.objects.get(id = projectid)
+                notification(proji.userid.id, 'Project ID: '+ str(proji.newid) +', name: '+proji.name+' has been approved by Monitoring committee')
             else:
                 messages.success(request, 'Aborted! Invalid administrator password.')
             return redirect('/monitoring_projects/')
@@ -55,7 +60,7 @@ def send_to_appr(request, projid):
         thisproject.moniaprdate = None
         thisproject.appraprdate = None
         thisproject.save(update_fields = ['status','workflow','moniaprdate','appraprdate'])
-        notification(thisproject.userid.id, 'Project '+ thisproject.name +' sent back to Appraisal from Monitoring phase')
+        notification(thisproject.userid.id, 'Project ID: '+ str(thisproject.newid)+' ,name: '+thisproject.name +' sent back to Appraisal from Monitoring phase')
         messages.success(request, 'Project '+ thisproject.name +' sent back to Appraisal.')
         return redirect('/monitoring_projects')
     else:
@@ -72,8 +77,24 @@ def msend_to_tesg(request, projid):
         thisproject.tesgaprdate = None
         thisproject.save(update_fields = ['status','workflow','moniaprdate','appraprdate','tesgaprdate'])
         
-        notification(thisproject.userid.id, 'Project '+ thisproject.name +' sent back to TESG from Monitoring phase')
+        notification(thisproject.userid.id, 'Project ID: '+ str(thisproject.newid)+' ,name: '+thisproject.name +' sent back to TESG from Monitoring phase')
         messages.success(request, 'Project '+ thisproject.name +' sent back to TESG phase.')
         return redirect('/monitoring_projects')
+    else:
+        return oops(request)
+ 
+def delete_moni_doc(aprid):
+    thisapr = Monitoring_admin.objects.get(id = aprid)
+    if sremove(thisapr.monipath):
+        return True
+    else:
+        return False
+       
+def del_moni_mom(request ,moniid):
+    if adminonline(request):
+        delete_moni_doc(moniid)
+        Monitoring_admin.objects.get(id = moniid).delete()
+        messages.success(request,'Monitoring Entry deleted')
+        return redirect('/view_monis')
     else:
         return oops(request)

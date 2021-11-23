@@ -4,8 +4,6 @@ from .helpers import *
 def appraisal_projects(request):
     if adminonline(request):
         context = full_admin_context(request)
-        
-        context['appr_projects'] = Appraisal_admin.objects.all()
         return render(request, 'psdf_main/_admin_appraisal_projects.html', context)
     else:
         return oops(request)
@@ -19,7 +17,7 @@ def approve_appraisal(request, projectid):
             # if not Appraisal_admin.objects.filter(projid = projectid)[:1].get():
             #     messages.success(request, 'Aborted! No entry regarding appraisal exists.')
             #     return redirect('/appraisal_projects/')
-            if check_password(adminpass,users.objects.get(id = context['user']['id']).password):
+            if check_password(adminpass,users.objects.get(id = getadmin_id()).password):
                 project = projects.objects.get(id = projectid)
                 project.status = '3'
                 appraprdate =  datetime.now().date()
@@ -27,7 +25,8 @@ def approve_appraisal(request, projectid):
                 project.appraprdate = appraprdate
                 project.save(update_fields=['status','appraprdate'])
                 messages.success(request, 'Project : '+ project.name + ' has been approved Appraisal Committee.')
-                notification(projects.objects.get(id = projectid).userid.id, 'Project ID: '+projectid+' has been approved by Appraisal committee')
+                proji = projects.objects.get(id = projectid)
+                notification(proji.userid.id, 'Project ID: '+str(proji.newid)+', name: '+str(proji.name)+' has been approved by Appraisal committee')
             else:
                 messages.success(request, 'Aborted! Invalid administrator password.')
             
@@ -38,22 +37,37 @@ def approve_appraisal(request, projectid):
         return oops(request)
 
 
-    
-def delete_appr_doc(request, projid):
+
+def delete_appr_doc(aprid):
+    thisapr = Appraisal_admin.objects.get(id = aprid)
+    if sremove(thisapr.apprpath):
+        return True
+    else:
+        return False
+def del_appr_mom(request, aprid):
     if adminonline(request):
-        thisproject = Appraisal_admin.objects.filter(projid = projid)[:1].get()
-        filepathway = thisproject.filepath
-        thisproject.filepath = ''
-        thisproject.save(update_fields = ['filepath'])
-        if sremove(filepathway):
-            messages.error(request, 'File removed successfully')
-            return redirect('/appraisal_projects/')
-        else:
-            messages.error(request, 'Unable to remove the file.')
-            return redirect('/appraisal_projects/')
-        
+        delete_appr_doc(aprid)
+        Appraisal_admin.objects.get(id = aprid).delete()
+        messages.success(request,'Appraisal Entry deleted')
+        return redirect('/view_apprs')
     else:
         return oops(request)
+
+# def delete_appr_doc(request, projid):
+#     if adminonline(request):
+#         thisproject = Appraisal_admin.objects.filter(projid = projid)[:1].get()
+#         filepathway = thisproject.filepath
+#         thisproject.filepath = ''
+#         thisproject.save(update_fields = ['filepath'])
+#         if sremove(filepathway):
+#             messages.error(request, 'File removed successfully')
+#             return redirect('/appraisal_projects/')
+#         else:
+#             messages.error(request, 'Unable to remove the file.')
+#             return redirect('/appraisal_projects/')
+        
+#     else:
+#         return oops(request)
     
 def send_to_tesg(request, projid):
     if adminonline(request):
@@ -63,7 +77,7 @@ def send_to_tesg(request, projid):
         thisproject.appraprdate = None
         thisproject.tesgaprdate = None
         thisproject.save(update_fields = ['status', 'workflow','appraprdate','tesgaprdate'])
-        notification(thisproject.userid.id, 'Project '+ thisproject.name +' sent back to TESG by PSDF Sectt.')
+        notification(thisproject.userid.id, 'Project ID: '+str(thisproject.newid)+ ' ,name: '+str(thisproject.name) +' sent back to TESG by PSDF Sectt.')
         messages.success(request, 'Project '+ thisproject.name +' sent back to TESG.')
         return redirect('/appraisal_projects')
     else:

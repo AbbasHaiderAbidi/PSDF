@@ -10,9 +10,9 @@
 
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Under TESG
+                <h5 class="m-0 font-weight-bold text-primary">Under TESG
                     <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects by ID" title="Search" style="margin:auto; width: 30%;">
-                </h6>
+                </h5>
             </div>
             <div class="card-body">
                 {% for message in messages %}
@@ -33,7 +33,7 @@
                                 <th>Amount</th>
                                 <th>View BoQ</th>
                                 <th>User</th>
-                                <th>Entity</th>
+                                <th colspan="2">Remark</th>
                                 <th>View TESG Chain</th>
                                 <th>Update BoQ</th>
                                 <th>Approve TESG</th>
@@ -47,7 +47,7 @@
                                 <th>Amount</th>
                                 <th>View BoQ</th>
                                 <th>User</th>
-                                <th>Entity</th>
+                                <th colspan="2">Remark</th>
                                 <th>View TESG Chain</th>
                                 <th>Update BoQ</th>
                                 <th>Approve TESG</th>
@@ -78,15 +78,25 @@
                             <tr>
                                 <td class="font-weight-bolder">{{proj.newid}}</td>
                                 <td><a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
-                                <td>{{proj.amt_asked}}</td>
+                                <td>₹ {{proj.amt_asked}}</td>
                                 <td>
-                                    <a href="/admin_boq_view/{{proj.id}}_admintesgprojects" class="btn btn-outline-info">View</a>
+                                    <a href="/admin_boq_view/{{proj.id}}_admintesgprojects" class="btn btn-outline-info btn-block">View</a>
                                 </td>
                                 <td><a href="/view_user/{{proj.userid.id}}" class="text-danger">{{proj.userid.username}}</a></td>
-                                <td>{{proj.userid.region}}</td>
+                                <form action="/add_remark/TESG_projects" method="POST" name="add_remark" id="add_remark">
+                                    {% csrf_token %}
+                                    <td colspan = "2">
+                                        <input type="hidden" id="projid" name="projid" value="{{proj.id}}">
+                                        <input type="text" class="form-control" name="remark" id="remark" value="{{proj.remark}}"><br>
+                                        <input type="submit" class="btn btn-sm btn-outline-danger" value="update">
+                                        <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modalforRemark{{proj.id}}">
+                                            <i class="fa fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </form>
                                 <td>
                                     <a class="btn btn-outline-primary btn-responsive" href="/TESG_chain/{{proj.id}}">
-                                        <i class="fa fa-eye"></i> View TESG Chain
+                                        <i class="fa fa-folder"></i> TESG Chain
                                     </a>
                                 </td>
                                 <td class=" text-center">
@@ -179,6 +189,26 @@
 
                                                 </div>
                                             </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal fade" id="modalforRemark{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforRemark{{proj.id}}" aria-hidden="true">
+                                <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" class="text-uppercase"> <strong>Remark for {{proj.newid}} - {{proj.name}} </strong></h5>
+
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                        </div>
+
+
+                                        <div class="modal-body">
+
+                                            <h6>{{proj.remark}}</h6>
                                         </div>
                                     </div>
                                 </div>

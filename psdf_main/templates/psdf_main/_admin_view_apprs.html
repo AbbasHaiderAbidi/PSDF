@@ -12,7 +12,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">
-                    <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects by ID" title="Search" style="margin:auto; width: 30%;">
+                    <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search Appraisal by Project ID" title="Search" style="margin:auto; width: 30%;">
                 </h6>
             </div>
             <div class="card-body">
@@ -21,7 +21,7 @@
                     {{message}}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>z
+                    </button>
                 </div>
                 {% endfor %}<br>
                 <div class="table-responsive">
@@ -32,18 +32,24 @@
                         <thead class="alert-primary">
                             <tr>
                                 <th>Project ID</th>
+                                <th>Appraisal ID</th>
+                                
                                 <th>Project Name</th>
                                 <th>Appraisal Date</th>
                                 <th>Download MoM</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tfoot class="alert-primary">
 
                             <tr>
                                 <th>Project ID</th>
+                                <th>Appraisal ID</th>
+                                
                                 <th>Project Name</th>
                                 <th>Appraisal Date</th>
                                 <th>Download MoM</th>
+                                <th>Delete</th>
                             </tr>
 
                         </tfoot>
@@ -53,6 +59,9 @@
                             {% if not apprs %}
 
                             <tr>
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
 
                                 <td>Not Available</td>
 
@@ -68,10 +77,13 @@
 
                             {% else %} {% for appr in apprs %}
                             <tr>
-                                <td class="font-weight-bold text-danger">{{appr.project.newid}}</td>
-                                <td>{{appr.project.name}}</td>
+                                <td class="font-weight-bold">{{appr.project.newid}}</td>
+                                <td class="font-weight-bold">{{appr.aprid}}</td>
+                                
+                                <td><a href="/admin_project_details/{{appr.project.id}}" class="font-weight-bold text-danger">{{appr.project.name}}</a></td>
                                 <td>{{appr.apprdate}}</td>
                                 <td><a class="btn btn-outline-success" href="/download_appr_mom/{{appr.id}}"><i class="fas fa-download"></i> Download </a></td>
+                                <td><a class="btn btn-outline-danger" href="/del_appr_mom/{{appr.id}}"><i class="fas fa-close"></i> Delete </a></td>
                             </tr>
                             {% endfor %} {% endif %}
                         </tbody>
