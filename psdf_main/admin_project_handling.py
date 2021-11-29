@@ -139,42 +139,35 @@ def download_project(request, projid):
     return oops(request)
 
 
-def rejectproject(request, projid):
-    # pages = {'TESG':'/TESG_projects', 'Appraisal':'/appraisal_projects'}
-    backpages = {'adminmonitoringprojects':'/monitoring_projects','adminappraisalprojects':'/appraisal_projects','admintesgprojects':'/TESG_projects'}
+def rejectproject(request):
     if adminonline(request):
-        context = full_admin_context(request)
-        if request.POST:
-            try:
-                page_id = projid.split('_')
-                proid = page_id[1]
-                page = page_id[0]
-            except:
-                return oops(request)
+        if request.method == 'POST':
             req = request.POST
-            denydate = req['rejectdate'+proid]
-            remark = req['rremark'+proid]
-            radmin = req['radminpass'+proid]
-            if remark == '':
-                messages.success(request, 'Aborted! Remarks cannot be empty')
-                return redirect(backpages[page])
-            if check_password(radmin,users.objects.get(id = context['user']['id']).password):
-                project = projects.objects.get(id = proid)
-                project.deny = True
-                project.denydate = denydate
-                project.remark = remark
-                project.remark_date = datetime.now().date()
-                project.workflow = str(project.workflow) + ']*[' + 'Project rejected on ' + denydate
-                project.save(update_fields=['denydate' , 'deny' , 'remark' , 'workflow'])
-                messages.success(request, 'Project : ' + project.name + ' has been rejected.')
-                notification(project.userid.id, 'Project ID: '+str(project.newid)+' ,name: '+str(project.name)+' has been rejected in '+page+' phase')
-            else:
-                messages.success(request, 'Aborted! Invalid administrator password.')
-            return redirect(backpages[page])
-        else:
-            return oops(request)
-    else:
-        return oops(request)
+            projid = req.get('projid')
+            remark = req.get('remark')
+            reject_date = req.get('rejectdate')
+            adminpass = req.get('adminpass')
+            
+            try:
+                thisproj = projects.objects.get(id = projid)
+            except:
+                messages.error(request,"Invalid Project selected")
+            if not check_password(adminpass, users.objects.get(id = getadmin_id()).password):
+                messages.error(request,"Invalid Administrator password")
+                return redirect("/admin_project_details/"+str(thisproj.id))
+            thisproj.deny = True
+            thisproj.remark = remark
+            thisproj.denydate = reject_date
+            workflow(thisproj.id,"Project Rejected on "+str(reject_date))
+            notification(thisproj.userid.id,"Project with ID "+str(thisproj.newid)+" has been rejected by PSDF sectt. on "+str(reject_date))
+            thisproj.save(update_fields = ['deny','remark','denydate'])
+            messages.success(request,"Project has been REJECTED")
+            return redirect("/admin_project_details/"+str(thisproj.id))
+    
+    return oops(request)
+    
+            
+        
     
     
 def update_boq(request, projectid):
@@ -223,7 +216,7 @@ def update_boq(request, projectid):
             messages.success(request, 'BoQ successfully updated and intimated to user.')
             return redirect('/update_boq/0')
         if projid == '0':
-            context['project_list'] = projects.objects.filter(status = '1')
+            context['project_list'] = projects.objects.filter(status = '1', deny = False)
                 
             return render(request, 'psdf_main/_admin_boq.html', context)
         else:
@@ -255,6 +248,7 @@ def add_remark(request,thispage):
             except:
                 return oops(request)
             proj.remark = remark
+            
             proj.remark_date = datetime.now().date()
             proj.save(update_fields = ['remark','remark_date'])
             messages.success(request,'Remark Updated.')

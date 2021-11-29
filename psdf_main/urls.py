@@ -37,13 +37,14 @@ urlpatterns = [
 
     #Control
     path('del_tesg/<str:tesgid>', views.del_tesg, name="del_tesg"),
-
+    path('admin_password_page/', views.admin_password_page, name="admin_password_page"),
+    path('admin_password_user/', views.admin_password_user, name="admin_password_user"),
     #TESG
     path('TESG_chain/<str:project_id>', views.TESG_chain, name = "TESG_chain"),
     path('tesgchain_form/', views.tesgchain_form, name = "tesgchain_form"),
     path('TESG_projects/', views.TESG_projects, name="TESG_projects"),
     path('TESG_upload/', views.TESG_upload, name="TESG_upload"),
-    path('rejectproject/<str:projid>', views.rejectproject, name="rejectproject"),
+    path('rejectproject/', views.rejectproject, name="rejectproject"),
     path('acceptTESG/', views.acceptTESG, name="acceptTESG"),
     path('rejectTESG/', views.rejectTESG, name="rejectTESG"),
     path('user_tesg/', views.user_tesg, name="user_tesg"),
@@ -69,8 +70,13 @@ urlpatterns = [
     path('download_appr_mom/<str:apprid>', views.download_appr_mom, name = 'download_appr_mom'),
     path('del_appr_mom/<str:aprid>', views.del_appr_mom, name = 'del_appr_mom'),
     
-    
-    
+    #requests
+    path('apply_ext/', views.apply_ext, name="apply_ext"),
+    path('apply_ext_conf/', views.apply_ext_conf, name="apply_ext_conf"),
+    path('admin_approve_ext/', views.admin_approve_ext, name="admin_approve_ext"),
+    path('admin_reject_ext/', views.admin_reject_ext, name="admin_reject_ext"),
+    path('download_ext_file/<str:idstr>', views.download_ext_file, name = 'download_ext_file'),
+    path('delete_ext_req/<str:idstr>', views.delete_ext_req, name = 'delete_ext_req'),
     
     #monitoring
     path('monitoring_projects/', views.monitoring_projects, name="monitoring_projects"),
@@ -99,9 +105,10 @@ urlpatterns = [
     path('appr_mom_download/<str:projid>', views.appr_mom_download, name = "appr_mom_download"),
     path('moni_mom_download/<str:projid>', views.moni_mom_download, name = "moni_mom_download"),
     path('admin_boq_view/<str:projid>', views.admin_boq_view, name = "admin_boq_view"),
-
+    path('user_view_all_pays/', views.user_view_all_pays, name="user_view_all_pays"),
     path('user_boq_view/<str:projid>', views.user_boq_view, name = "user_boq_view"),
     path('user_back/<str:backpage>', views.user_back, name = "user_back"),
+    path('download_data_bank/<str:projid>', views.download_data_bank, name = "download_data_bank"),
     
     #Auditor
     path('auditor_view_TESGs/', views.auditor_view_TESGs, name="auditor_view_TESGs"),
@@ -125,8 +132,9 @@ urlpatterns = [
     
     
     
-    #Payment
     
+    #Payment
+    path('downloadinitpay/<str:payid>', views.downloadinitpay, name="downloadinitpay" ),
     path('view_all_pays/', views.view_all_pays, name="view_all_pays"),
     path('admin_sanction/', views.admin_sanction, name="admin_sanction"),
     path('download_sanction/<str:projid>', views.download_sanction, name="download_sanction" ),
@@ -137,6 +145,7 @@ urlpatterns = [
     path('admin_pay_proj/', views.admin_pay_proj, name="admin_pay_proj"),
     path('approve_admin_pay/', views.approve_admin_pay, name="approve_admin_pay"),
     path('user_ack_pay/', views.user_ack_pay, name="user_ack_pay"),
+    path('downloadpay/<str:payid>', views.downloadpay, name="downloadpay" ),
     
     
 ]

@@ -56,8 +56,8 @@ def registeruser(request):
         password = request.POST['password']
         if(password != cnfpassword):
             form.add_error("password" ,"Both password fields must match")
-        # elif(len(password)<6):
-        #     form.add_error("password" ,"Password must be of atleast 6 characters")
+        elif not pass_valid(password):
+            form.add_error("password" ,"Password must be of atleast 6 chracters, with atleast 1 uppercase letter, 1 lowercase letter, 1 speacial character (i.e. @ # $ & ! *), and atleast 1 number.")
         else:
             if form.is_valid():
                 form_main = form.save(commit=False)
@@ -95,3 +95,38 @@ def logout(request):
     
     return redirect('/')
 
+def admin_password_page(request):
+    if adminonline(request):
+        context = full_admin_context(request)
+        context['user_list'] = users.objects.all()
+        if request.method == 'POST':
+            req = request.POST
+            adminpass = req.get('adminpass')
+            adminnewpass = req.get('adminnewpass')
+            radminnewpass = req.get('radminnewpass')
+            if adminnewpass != radminnewpass:
+                messages.error(request,'Both password fields must match')
+                return redirect('/admin_password_page')
+            thisuser = users.objects.get(id = getadmin_id())
+            if not check_password(adminpass, thisuser.password):
+                messages.error(request,'Invalid administrator password')
+                return redirect('/admin_password_page')
+            if not pass_valid(adminnewpass):
+                messages.error(request,'Password must be of atleast 6 chracters, with atleast 1 uppercase letter, 1 lowercase letter, 1 speacial character (i.e. @ # $ & ! *), and atleast 1 number.')
+                return redirect('/admin_password_page')
+            adminnewpass1 = make_password(adminnewpass)
+            thisuser.password = adminnewpass1
+            thisuser.save(update_fields = ['password'])
+            messages.success(request,'Adminstrator password updated.')
+            return redirect('/admin_password_page')
+        return render(request, 'psdf_main/_admin_password_change.html',context)
+    else:
+        return oops(request)
+    
+def admin_password_user(request):
+    if adminonline(request):
+        if request.method == 'POST':
+            req = request.POST
+            
+    else:
+        return oops(request)

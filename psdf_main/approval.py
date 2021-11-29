@@ -44,7 +44,7 @@ def admin_in_doc_sign(request):
             messages.success(request, 'Project Approved and document accepted.')
             
             notification(thisproj.userid.id, "Project with ID: "+str(thisproj.newid)+" has been approved and document is accepted.")
-        context['projs'] = projects.objects.filter(Q(status = '5')| Q(status = '6'))
+        context['projs'] = projects.objects.filter(Q(status = '5')| Q(status = '6'), deny=False)
         return render(request, 'psdf_main/_admin_doc_sign.html', context)
     else:
         return oops(request)
@@ -84,7 +84,7 @@ def user_in_doc_sign(request):
                 
             else:
                 return oops(request)
-        context['projs'] = projects.objects.filter((Q(status = '4')| Q(status = '5')),userid = getuser(request))
+        context['projs'] = projects.objects.filter((Q(status = '4')| Q(status = '5')),userid = getuser(request), deny= False)
         return render(request, 'psdf_main/_user_in_doc_sign.html', context)
     else:
         return oops(request)

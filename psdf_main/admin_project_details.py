@@ -6,6 +6,7 @@ from .helpers import *
 def admin_project_details(request, projid):
     if adminonline(request):
         context = full_admin_context(request)
+        
         context['proj'] = projects.objects.get(id = projid)
         context['proj'].workflow = context['proj'].workflow.split(']*[')[1:]
         context['sub_boq'] = boqdata.objects.filter(project = context['proj'], boqtype = '1')

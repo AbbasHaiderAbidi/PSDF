@@ -157,11 +157,17 @@ Project name: <strong class="text-danger"> {{thisproj.name}}</strong>
                 <h5 class="m-0 font-weight-bold text-dark">₹ {% roundoff thisloa.amt %}</h5><br>
             </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
                 <p class="text-info font-weight-bold">Date of LOA submission:</p>
                 <h5 class="m-0 font-weight-bold text-dark"> {{thisloa.subdate}}</h5>
-                
-<hr>
-<a href="/downloadloa/{{thisloa.id}}" class="btn btn-am btn-block btn-outline-warning">Download</a>
+            </div>
+            <div class="col-md-6">
+                <p class="text-info font-weight-bold">LOA Amount:</p>
+                <h5 class="m-0 font-weight-bold text-dark">₹ {{thisloa.amt}}</h5></div>
+            </div>
+            <hr>
+                <a href="/downloadloa/{{thisloa.id}}" class="btn btn-am btn-block btn-outline-warning">Download</a>
             </div><br>
 
         </div>

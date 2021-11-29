@@ -7,7 +7,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Total amount released</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹ {% roundoff 2345932 %}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹ {% roundoff paytotal %}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
@@ -23,7 +23,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                             Total amount pending</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹ {% roundoff 231145932 %}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹ {% roundoff pendingamt %}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
@@ -39,7 +39,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                             Total amount of all LOAs</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹ {% roundoff 231145932 %}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹ {% roundoff loatotal %}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
@@ -55,7 +55,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                             Total initial payment released</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹ {% roundoff 231145932 %}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">₹ {% roundoff totalinit %}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
@@ -157,7 +157,7 @@
                                                 <td>{{pay.release_date}}</td>
                                                 
                                                 <td>₹ {% roundoff pay.amount %}</td>
-                                                <td><a href="#" class="btn btn-sm btn-outline-warning">Download</a></td>
+                                                <td><a href="/downloadpay/{{pay.id}}" class="btn btn-sm btn-outline-warning">Download</a></td>
                                                 <td class="text-danger font-weight-bold"><i>"{{pay.ref_no}}"</i></td>
                                                 <td><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#view_remark{{pay.id}}">View</button></td>
                                                 <td><button type="button" class="btn-circle btn btn-outline-success" data-toggle="modal" data-target="#view_pay{{pay.id}}"><i class="fa fa-eye"></i></button></td>
@@ -216,7 +216,7 @@
                                                                 <div class="col-md-1"></div>
                                                                 <div class="col-md-4"><h6 class="text-primary"><strong>{% if pay.loa.ackdate %} {{pay.loa.ackdate}} {% else %}Not Available {% endif %}</strong></h6></div>
                                                                 <div class="col-md-3"><h6 class="text-primary"><strong>{% if pay.loa.compdate %} {{pay.loa.compdate}} {% else %}Not Available {% endif %}</strong></h6></div>
-                                                                <div class="col-md-4"><a href="#" class="btn btn-sm btn-outline-danger">Download</a></div>
+                                                                <div class="col-md-4"><a href="/downloadloa/{{pay.loa.id}}" class="btn btn-sm btn-outline-danger">Download</a></div>
                                                             </div>
                                                             <br>
                                                         </div>
@@ -271,7 +271,7 @@
                                                             
                                                             <div class="row">
                                                                 <div class="col-md-1"></div>
-                                                                <div class="col-md-4"><a href="#" class="btn btn-sm btn-outline-danger">Download</a></div>
+                                                                <div class="col-md-4"><a href="/downloadpay/{{pay.id}}" class="btn btn-sm btn-outline-danger">Download</a></div>
                                                                 <div class="col-md-3"><h6 class="text-primary"><strong>₹ {{pay.loa.amt_released}}</strong></h6></div>
                                                                 <div class="col-md-4"><h6 class="text-primary"><strong>{{pay.loa.ackdate}}</strong></h6></div>
                                                             </div>
@@ -283,17 +283,7 @@
                                             
                                             {% endfor %}
 
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="font-weight-bold">Grand Total</td>
-                                                <td>
-                                                    <h6 class="font-weight-bold text-danger">₹ {{sub_boq_total}} </h6>
-                                                </td>
-
-                                            </tr>
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -320,7 +310,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
 
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Project ID</th>
@@ -328,11 +318,11 @@
                                                 <th>Sanction Order</th>
                                                 <th>Signing Document</th>
                                                 <th>Payment release date</th>
-                                                
+                                                <th>Payment recieve date</th>
                                                 <th>Payment amount (in ₹)</th>
-                                                <th>Document</th>
+                                                <th>Payment Document</th>
                                                 <th>Refernence no.</th>
-                                                <th>Remark</th>
+                                                <th>Project Remark</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -343,18 +333,21 @@
                                                 <th>Sanction Order</th>
                                                 <th>Signing Document</th>
                                                 <th>Payment release date</th>
-                                                
+                                                <th>Payment recieve date</th>
                                                 <th>Payment amount (in ₹)</th>
-                                                <th>Document</th>
+                                                <th>Payment Document</th>
                                                 <th>Refernence no.</th>
-                                                <th>Remark</th>
+                                                <th>Project Remark</th>
                                             </tr>
                 
                                         </tfoot>
                 
                                         <tbody>
-                                            {% if not approved_boq %}
+                                            {% if not all_init_pays %}
                                             <tr>
+                                                <td>Not Available</td>
+                                                <td>Not Available</td>
+                                                <td>Not Available</td>
                                                 <td>Not Available</td>
                                                 <td>Not Available</td>
                                                 <td>Not Available</td>
@@ -362,26 +355,20 @@
                                                 <td>Not Available</td>
                                                 <td>Not Available</td>
                                             </tr>
-                                            {% else %} {% for boq in approved_boq %}
+                                            {% else %} {% for pay in all_init_pays %}
                                             <tr>
-                                                <td>{{boq.itemno}}</td>
-                                                <td>{{boq.itemname}}</td>
-                                                <td>{{boq.itemdesc}}</td>
-                                                <td>{{boq.itemqty}}</td>
-                                                <td>₹ {{boq.unitcost}}</td>
-                                                <td>₹ {% multiply boq.itemqty boq.unitcost %}</td>
+                                                <td>{{pay.project.newid}}</td>
+                                                <td><a href="/admin_project_details/{{pay.project.id}}" class="font-weight-bold text-danger">{{pay.project.name}}</a></td>
+                                                <td><a href="/download_sanction/{{pay.project.id}}" class="btn btn-sm btn-outline-danger">Sanction Order</a></td>
+                                                <td><a href="/download_doc_sign/{{pay.project.id}}" class="btn btn-sm btn-outline-warning">Download</a></td>
+                                                <td>{{pay.release_date}}</td>
+                                                <td>{{pay.recv_date}}</td>
+                                                <td class="wrap-text font-weight-bold">₹ {% roundoff pay.amount %}</td>
+                                                <td><a href="/downloadinitpay/{{pay.id}}" class="btn btn-sm btn-outline-info">Download</a></td>
+                                                <td class="text-danger font-weight-bold"><i>"{{pay.ref_no}}"</i></td>
+                                                <td>{{pay.project.remark}}</td>
                                             </tr>
                                             {% endfor %}
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="font-weight-bold">Grand Total</td>
-                                                <td>
-                                                    <h6 class="font-weight-bold text-danger">₹ {{approved_boq_total}} </h6>
-                                                </td>
-                                            </tr>
                                             {% endif %}
                                         </tbody>
                                     </table>
@@ -400,36 +387,6 @@
 
 
 <script>
-    function changeColor(thisbtn, openclose) {
-
-        var golbtn = document.getElementById(thisbtn);
-        var openclose = document.getElementById(openclose)
-        if (golbtn.classList.contains('btn-outline-primary')) {
-            openclose.innerText = "Close"
-            golbtn.classList.remove('btn-outline-primary');
-            golbtn.classList.add('btn-outline-danger');
-
-        } else {
-            openclose.innerText = "Open"
-            golbtn.classList.remove('btn-outline-danger');
-            golbtn.classList.add('btn-outline-primary');
-
-        }
-    }
-
-
-    function dototal(yehaiclass) {
-        var sum = 0;
-        console.log(yehaiclass);
-        $('.' + yehaiclass).each(function() {
-            sum += parseFloat($(this).text());
-        });
-        console.log(sum);
-        var totalfield = document.getElementById(yehaiclass + '1');
-        totalfield.innerHTML = '₹ ' + sum;
-        document.getElementById(yehaiclass + 'btn').style.display = 'none';
-    }
-
     function get_temp_proj(btnID, rpc) {
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById(btnID);

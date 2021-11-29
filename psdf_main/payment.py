@@ -31,7 +31,7 @@ def admin_pay(request):
             projid = req.get('projid')
             context['thisloa'] = loadata.objects.get(id = loaid)
             context['proj'] = projects.objects.get(id = projid)
-        context['projs'] = projects.objects.filter(status = '6', completed = False)
+        context['projs'] = projects.objects.filter(status = '6', completed = False, deny=False)
         # context['loas'] = loadata.objects.filter(completed = False)
         return render(request, 'psdf_main/_admin_payment.html', context)
     else:
@@ -90,7 +90,7 @@ def approve_admin_pay(request):
                     
                     filepath = project.projectpath
                     
-                    filepathnew = filepath+'/Payment/LOA/'+str(thisloa.subdate)+'_'+str(amt)+'_/'
+                    filepathnew = filepath+'/Payment/LOA/'+str(thisloa.subdate)+'_'+str(amt)+'/'
                     try:
                         alreadyfile = glob.glob(os.path.join(filepathnew,'LOA_payment_'+str(amt))+'*')[0]
                         if os.path.exists(alreadyfile):
@@ -143,9 +143,10 @@ def user_ack_pay(request):
         
         if request.method == 'POST':
             req = request.POST
-            refno = sanitize(req.get('refno'))
+            refno = str(req.get('refno'))
             userpass = req.get('userpass')
             payid = req.get('payid')
+            
             try:
                 thispay = payment.objects.get(id = payid)
             except:
@@ -154,9 +155,10 @@ def user_ack_pay(request):
             if not check_password(userpass,userDetails(request.session['user'])['password']):
                 messages.error(request, 'Enter correct password.')
                 return redirect('/user_ack_pay')
-            # if emp_check(refno):
-            #     messages.error(request, 'Enter valid reference number')
-            #     return redirect('/user_ack_pay')
+            if refno == " " or refno == " " or refno == "-":
+                messages.error(request, 'Enter valid reference number')
+                return redirect('/user_ack_pay')
+            
             if not str(refno).casefold() == str(thispay.ref_no).casefold():
                 messages.error(request, 'Reference number mismatch.')
                 return redirect('/user_ack_pay')
@@ -169,5 +171,15 @@ def user_ack_pay(request):
         return render(request, 'psdf_main/_user_payments.html', context)
     else:
         return oops(request)
+
+
     
-    
+def downloadpay(request, payid):
+    try:
+        pay = payment.objects.get(id = payid)
+    except:
+        return oops(request)
+    if proj_of_user(request, pay.project.id):
+        return handle_download_file(pay.filepath, request)
+    else:
+        return oops(request)

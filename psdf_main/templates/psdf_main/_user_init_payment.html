@@ -1,13 +1,13 @@
 {% extends 'psdf_main/includes/layout.html'%} {% load custom_tags %} {% load static %} {% block body %}
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <h1 class="h3 mb-2 text-gray-800">Acknowledge Document Signing payment</h1>
     </div>
     <div class="col-md-2">
 
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         {% for message in messages %}
         <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
             {{message}}
@@ -49,12 +49,12 @@
     <div class="col-lg-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h5 class="m-0 font-weight-bold text-primary">Document Signing
+                <h5 class="m-0 font-weight-bold text-primary">Initial Payment
                     <input type="text" id="temp_proj_search" class="form-control input-text pull-right border-left-warning" onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects" title="Search" style="margin:auto; width: 30%;">
                 </h5>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
                 width: 100%;">
                     <thead>
                         <tr>
@@ -64,6 +64,7 @@
                             <th>Signing Date</th>
                             <th>Amount Released</th>
                             <th>Release Date</th>
+                            <th>Supporting Doc</th>
                             <th>Reference No.</th>
                             <th>Acknowledge</th>
                         </tr>
@@ -76,6 +77,7 @@
                             <th>Signing Date</th>
                             <th>Amount Released</th>
                             <th>Release Date</th>
+                            <th>Supporting Doc</th>
                             <th>Reference No.</th>
                             <th>Acknowledge</th>
                         </tr>
@@ -83,6 +85,7 @@
                     <tbody>
                         {% if not init_pays %}
                         <tr>
+                            <td>Not Available</td>
                             <td>Not Available</td>
                             <td>Not Available</td>
                             <td>Not Available</td>
@@ -100,7 +103,7 @@
                             <td>{{proj.project.doc_sign_date}}</td>
                             <td>₹{{proj.amount}}</td>
                             <td>{{proj.release_date}}</td>
-                            
+                            <td><a href="/downloadinitpay/{{proj.id}}" class="btn btn-sm btn-outline-info">Download</a></td>
                             
                             {% if proj.ack == False or proj.ack == '' or proj.ack == ' ' %}
                             <form action = "{% url 'user_init_payment' %}" method="post">

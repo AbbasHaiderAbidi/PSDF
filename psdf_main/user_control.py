@@ -265,11 +265,26 @@ def user_view_all_projs(request):
         return oops(request)
 
 def user_project_details(request, projid):
-    context = full_user_context(request)
-    context['proj'] = projects.objects.get(id = projid)
-    if useronline(request) and context['proj'].userid.username == request.session['user']:
+    if proj_of_user(request,projid) and not adminonline(request):
+
+        context = full_user_context(request)
+        context['proj'] = projects.objects.get(id = projid)
         context['proj'].workflow = context['proj'].workflow.split(']*[')[1:]
+        context['sub_boq'] = boqdata.objects.filter(project = context['proj'], boqtype = '1')
+        context['sub_boq_total'] = boq_grandtotal(context['sub_boq'])
+        context['approved_boq'] = boqdata.objects.filter(project = context['proj'], boqtype = '2')
+        context['approved_boq_total'] = boq_grandtotal(context['approved_boq'])
         context['tesgs'] = TESG_master.objects.filter(project = context['proj'])
+        context['pays'] = payment.objects.filter(project = context['proj'])
+        context['init_pays'] = init_payment.objects.filter(project = context['proj'])
+        total_pay = 0
+        for i in context['pays']:
+            total_pay = total_pay + int(i.amount)
+        for j in context['init_pays']:
+            total_pay = total_pay + int(j.amount)
+        context['total_payment'] = total_pay
+        context['loas'] = loadata.objects.filter(project = context['proj'])
         return render(request, 'psdf_main/_user_view_project.html', context)
     else:
         return oops(request)
+    

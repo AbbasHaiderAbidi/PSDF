@@ -54,7 +54,7 @@
                 </h5>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
                 width: 100%;">
                     <thead>
                         <tr>
@@ -100,23 +100,23 @@
                             <td class="font-weight-bolder">{{proj.project.newid}}</td>
                             <td><a href="/user_project_details/{{proj.project.id}}" class="font-weight-bold text-danger">{{proj.project.name}}</a></td>
                             <td>Amount: <strong>₹ {{proj.loa.amt}}</strong> <br> Released: <strong>₹ {{proj.loa.amt_released}} </strong><br> Date: <strong>{{proj.loa.subdate}}</strong></td>
-                            <td><a href="/download_loa/{{proj.loa.id}}" class="btn btn-outline-warning btn-block">Download</a></td>
+                            <td><a href="/downloadloa/{{proj.loa.id}}" class="btn btn-outline-warning btn-block">Download</a></td>
                             <td>₹{{proj.amount}}</td>
                             <td>{{proj.release_date}}</td>
                             
                             
                             {% if proj.ack == False or proj.ack == '' or proj.ack == ' ' %}
-                            <form action = "{% url 'user_ack_pay' %}" method="post">
+                            <form action = "{% url 'user_ack_pay' %}" method="POST" name="form{{proj.id}}" id="form{{proj.id}}">
                                 {% csrf_token %}
-                                <td>    <input type = "text" name = "refno" id = "refno" class="form-control" placeholder="Enter ref no."></td>
+                                <td>   <input type = "text" name = "refno" id = "refno" class="form-control" placeholder="Enter ref no."></td>
                                 <input type="hidden" id="payid" name="payid" value="{{proj.id}}">
-                                <td>    <button type="button" class="btn btn-outline-primary btn-responsive text-center btn-block" data-toggle="modal" data-target="#forpay">
+                                <td>    <button type="button" class="btn btn-outline-primary btn-responsive text-center btn-block" data-toggle="modal" data-target="#forpay{{proj.id}}">
 
                                     Accept
                                  </button></td>
 
 
-                                <div class="modal fade" id="forpay" tabindex="-1" role="dialog" aria-labelledby="forpay" aria-hidden="true">
+                                <div class="modal fade" id="forpay{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="forpay{{proj.id}}" aria-hidden="true">
                                     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -148,7 +148,7 @@
                                 </div>
                             </form>
                             {% else %}
-                            <td>{{proj.ref_no}}</td>
+                            <td class="text-danger font-weight-bold"><i>"{{proj.ref_no}}"</i></td>
                             <td class="alert-success"><strong>Acknowledged</strong></td>
                             {% endif %}
                             

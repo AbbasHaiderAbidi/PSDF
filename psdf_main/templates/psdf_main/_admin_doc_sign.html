@@ -32,7 +32,7 @@
                 </h5>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
                 width: 100%;">
                     <thead>
                         <tr>
@@ -87,7 +87,7 @@
                         {% else %} {% for proj in projs %}
                         <tr>
                             <td class="font-weight-bolder">{{proj.newid}}</td>
-                            <td><a href="/user_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
+                            <td><a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
 
                             <td>{{proj.dpraprdate}}</td>
 

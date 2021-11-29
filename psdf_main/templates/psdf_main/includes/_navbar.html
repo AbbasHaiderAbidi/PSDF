@@ -72,8 +72,7 @@
                 <hr class="sidebar-divider">
                 <a class="collapse-item" href="{% url 'user_in_doc_sign' %}"><strong>Document Signing</strong>
                 </a>
-                <hr class="sidebar-divider">
-                <h6><a class="collapse-item" href="{% url 'user_view_all_projs' %}"><strong>View All</strong></a></h6>
+                
             </div>
         </div>
     </li>
@@ -93,8 +92,8 @@
                 <a class="collapse-item" href="{% url 'userloa' %}">View Submitted LOA</a>
                 <h6 class="collapse-header">Payment</h6>
                 <a class="collapse-item" href="{% url 'user_ack_pay' %}"><strong>Acknowledge Payment</strong></a> 
-                <hr class="sidebar-divider">
-                <h6><a class="collapse-item" href="{% url 'user_view_all_projs' %}">View All</a></h6>
+                <hr>
+                <a class="collapse-item text-uppercase" href="{% url 'user_view_all_pays' %}"><strong>View All payments</strong></a>
             </div>
         </div>
     </li>
@@ -108,13 +107,13 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">File new request:</h6>
-                <a class="collapse-item" href="cards.html">Ongoing projects</a>
+                <a class="collapse-item" href="{% url 'apply_ext' %}">Time Extension</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">View</h6>
-
-
                 <a class="collapse-item" href="cards.html">Completed projects</a>
                 <a class="collapse-item" href="cards.html">Rejected projects</a>
+                <hr class="sidebar-divider">
+                <h6><a class="collapse-item" href="{% url 'user_view_all_projs' %}"><strong>View All</strong></a></h6>
             </div>
         </div>
     </li>

@@ -39,7 +39,7 @@ def user_tesg_response(request):
                     return user_TESG_chain(request, projid)
                 
                 admin_tesg = TESG_admin.objects.filter(TESG_no = tesg_no)[:1].get()
-                admin_project = projects.objects.filter(id = projid)[:1].get()
+                admin_project = projects.objects.filter(id = projid, deny=False)[:1].get()
                 this_tesg = TESG_master.objects.filter(project = admin_project, tesgnum = admin_tesg, active = True)[:1].get()
                 tesgpath = ''
                 fullpath = ''

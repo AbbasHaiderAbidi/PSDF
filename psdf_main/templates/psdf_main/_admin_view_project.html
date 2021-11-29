@@ -128,7 +128,7 @@
                     </div>
                 </div>
                 <hr>
-                <div class="row">
+                <div class="row container-fluid">
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
@@ -152,7 +152,7 @@
                     <div class="col-sm-1">
                     </div>
                 </div>
-                <div class="row">
+                <div class="row container-fluid">
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
@@ -177,7 +177,7 @@
                     </div>
                 </div>
                 <hr>
-                <div class="row">
+                <div class="row container-fluid">
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
@@ -201,7 +201,7 @@
                     <div class="col-sm-1">
                     </div>
                 </div>
-                <div class="row">
+                <div class="row  container-fluid">
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
@@ -262,30 +262,53 @@
                 <br>
                 <hr>
                 <br>
-                <div class="row">
+                <div class="row container-fluid">
+                 
                     <div class="col-md-1">
                     </div>
-                    
                     <div class="col-md-2">
-                        <button type="button" class="btn btn-outline-danger btn-lg btn-responsive" data-toggle="modal" data-target="#workflow">
-                            <h6 class="m-0 font-weight-bold">View Workflow</h6>
+                        <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#workflow">
+                            <h6 class="m-0 font-weight-bold">Workflow</h6>
                         </button>
                     </div>
                     
-                    <div class="col-md-1">
-                    </div>
+                    
                     <div class="col-md-5">
                         <h6 class="text-uppercase text-danger">Remark</h6>
-                        <h6 class="font-weight-bold">{{proj.remark}}</h6>
-                    </div>
-                    <div class="col-md-1">
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="text-danger">Remark Date</h6>
-                        <h6 class="font-weight-bold">{{proj.remark_date}}</h6>
+                        
                     </div>
                     
+                    <div class="col-md-2">
+                        <h6 class="text-danger">Remark Date</h6>
+                       
+                    </div>
+                    <div class="col-md-2">
+                       
+                    </div>
                 </div>
+                <div class="row container-fluid">
+                 
+                    <div class="col-md-3">
+                        
+                    </div>
+                    
+                    
+                    <div class="col-md-5">
+                        <h6 class="font-weight-bold">{{proj.remark}}</h6>
+                        
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <h6 class="font-weight-bold">{{proj.remark_date}}</h6>
+                       
+                    </div>
+                    <div class="col-md-2">
+                        
+                    </div>
+                </div>
+                
+                
+                
                 <br>
                 <hr>
 
@@ -300,7 +323,7 @@
                 </div> -->
                 <div class="card-body">
                     <div class="card border-bottom-success shadow h-50 py-1">
-                        <a href="/moni_mom_download/{{proj.id}}" class="font-weight-bold text-success">
+                        <a href="/download_sanction/{{proj.id}}" class="font-weight-bold text-success">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 
@@ -319,7 +342,7 @@
                 </div>
                 <div class="card-body">
                     <div class="card border-bottom-primary shadow h-50 py-1">
-                        <a href="/moni_mom_download/{{proj.id}}" class="font-weight-bold text-primary">
+                        <a href="/download_doc_sign/{{proj.id}}" class="font-weight-bold text-primary">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 
@@ -343,8 +366,9 @@
                         Current Status
                     </h6>
                 </div>
-                
-                    {%if proj.status == '1' %}
+                {% if proj.deny == True %}
+                <div class="card-body alert-danger text-center text-uppercase"><h6 class="font-weight-bold">PROJECT REJECTED</h6></div>
+                    {% elif proj.status == '1' %}
                     <div class="card-body alert-info text-center text-uppercase"><h6 class="font-weight-bold">Under Techno-Economic clearance</h6></div>
 
                     {% elif proj.status == '2' %}
@@ -370,14 +394,15 @@
                         Project ID: 
                     </h5>
                 </div> -->
+                
                 <div class="card-body">
-                    <div class="card border-bottom-danger shadow h-50 py-1">
-                        <a href="/moni_mom_download/{{proj.id}}" class="font-weight-bold text-success">
+                    <div class="card border-bottom-primary shadow h-50 py-1">
+                        <a href="/download_data_bank/{{proj.id}}" class="font-weight-bold text-primary">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 
                                 <div class="col mr-2">
-                                     <div class="font-weight-bold text-danger mb-1 text-uppercase">Download Data Bank</div>
+                                     <div class="font-weight-bold text-primary mb-1 text-uppercase">Download Data Bank</div>
                                 </div>
                                 
                                 <div class="col-auto">
@@ -386,7 +411,24 @@
                             
                             </div>
                         </div>
-                    </a>
+                        </a>
+                    </div><br>
+                    <div class="card border-bottom-danger shadow h-25 py-1">
+                        <a href="#" class="font-weight-bold text-danger"  data-toggle="modal" data-target="#rejectproj">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                
+                                <div class="col mr-2">
+                                     <div class="font-weight-bold text-danger mb-1 text-uppercase">REJECT PROJECT</div>
+                                </div>
+                                
+                                <div class="col-auto">
+                                    <i class="fa fa-close fa-2x text-gray-400"></i>
+                                </div>
+                            
+                            </div>
+                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -407,7 +449,7 @@
             <div class="modal-body">
                 <div class="table-responsive">
 
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Item No. </th>
@@ -467,7 +509,7 @@
             <div class="modal-body">
                 <div class="table-responsive">
 
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Item No. </th>
@@ -519,11 +561,11 @@
 </div>
 
 
-<div class="modal fade" id="upBoQ" tabindex="-1" role="dialog" aria-labelledby="upBoQ" aria-hidden="true">
+<div class="modal fade" id="rejectproj" tabindex="-1" role="dialog" aria-labelledby="rejectproj" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title text-black-50" id="">Updated BoQ Details</h3>
+                <h5 class="modal-title text-black-50 text-uppercase text-danger font-weight-bold" id="">Reject project</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -531,7 +573,45 @@
             </div>
             <div class="modal-body">
 
-
+<form action="{% url 'rejectproject' %}" method = "POST">
+    {% csrf_token %}
+    <div class="row container-fluid">
+        <div class="col-md-4">
+            <h6 class="text-uppercase font-weight-bold text-danger">Enter Remark</h6>
+        </div>
+        <div class="col-md-8">
+            <input type="text" class="form-control border-bottom-danger" placeholder="Enter Reason for project rejection" id="remark" name="remark">
+        </div>
+    </div>
+    <br>
+    <div class="row container-fluid">
+        <div class="col-md-4">
+            <h6 class="text-uppercase font-weight-bold text-danger">Enter Date of Rejection</h6>
+        </div>
+        <div class="col-md-8">
+            <input type="date" class="form-control border-bottom-danger" placeholder="Enter date of project rejection" id="rejectdate" name="rejectdate">
+        </div>
+    </div>
+    <br>
+    <hr>
+    <div class="row container-fluid">
+        <div class="col-md-4">
+            <h6 class="text-uppercase font-weight-bold text-danger">Enter Administrator password</h6>
+        </div>
+        <div class="col-md-8">
+            <input type="password" class="form-control border-left-danger" placeholder="Enter administrator password to reject the project" id="adminpass" name="adminpass">
+        </div>
+    </div>
+    <input type="hidden" id="projid" name="projid" value="{{proj.id}}">
+<hr>
+<div class="row container0-fluid">
+<div class="col-md-8"></div>
+<div class="col-md-4"><input type="submit" class="btn btn-outline-danger center text-center" value="Reject Project">
+    &nbsp;&nbsp;&nbsp;
+<input type="reset" class="btn btn-outline-dark" value="Reset">
+</div>
+</div>
+</form>
             </div>
         </div>
     </div>
@@ -551,7 +631,7 @@
 
             </div>
             <div class="modal-body">
-                <table class="table table-bordered" width="100%" cellspacing="0" style="table-layout: fixed; width: 100%;">
+                <table class="table table-bordered table-hover" width="100%" cellspacing="0" style="table-layout: fixed; width: 100%;">
                     <thead>
                         <tr>
                             <th>TESG no.</th>

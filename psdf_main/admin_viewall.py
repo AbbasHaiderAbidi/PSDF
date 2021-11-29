@@ -161,7 +161,53 @@ def view_all_pays(request):
     if adminonline(request):
         context = full_admin_context(request)
         context['all_pays'] = payment.objects.all()
+        
+        paytotal = 0
+        for pay in context['all_pays']:
+            paytotal = paytotal + int(pay.amount)
+        context['paytotal'] = paytotal
+        
+        loatotal = 0
+        loas = loadata.objects.all()
+        for loa in loas:
+            loatotal = loatotal + int(loa.amt)
+        context['loatotal'] = loatotal
+        
+        context['pendingamt'] = loatotal - paytotal
+        
+        init_pays = init_payment.objects.all()
+        totalinit = 0
+        for init in init_pays:
+            totalinit = totalinit + int(init.amount)
+        context['totalinit'] = totalinit
+        
+        
+            
         context['all_init_pays'] = init_payment.objects.all()
         return render(request,'psdf_main/_admin_view_pays.html',context)
     else:
         return oops(request)
+    
+def download_data_bank(request, projid):
+    if proj_of_user(request, projid):
+        thisproj = projects.objects.get(id = projid)
+        userpath = ''
+        splits = str(thisproj.projectpath).split('/')
+        for i in range(1,len(splits)-1):
+            userpath = userpath +'/' + str(splits[i])
+            
+        datapath = str(userpath)+'/'+str(thisproj.newid)
+        if os.path.exists(datapath+'.zip'):
+            sremove(datapath+'.zip')
+        
+        try:
+            shutil.make_archive(datapath, 'zip', thisproj.projectpath)
+        except:
+            return oops(request)
+        try:
+            return handle_download_file(datapath+'.zip', request)
+        except:
+            return oops(request)
+        
+        
+        

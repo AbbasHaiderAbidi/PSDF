@@ -32,26 +32,28 @@
             <div class="table-responsive">
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
                     width: 100%;">
-                    <thead class="text-white bg-primary">
+                    <thead>
                         <tr>
                             <th>Username</th>
                             <th>Region</th>
                             <th>Utility</th>
                             <th>Nodal Officer</th>
                             <th>Contact</th>
+                            <th>E-mail</th>
                             <th>Creation Date</th>
                             <th>Activation Date</th>
                             <th>Last login</th>
                             <th>Active</th>
                         </tr>
                     </thead>
-                    <tfoot class="text-white bg-primary">
+                    <tfoot>
                         <tr>
                             <th>Username</th>
                             <th>Region</th>
                             <th>Utility</th>
                             <th>Nodal Officer</th>
                             <th>Contact</th>
+                            <th>E-mail</th>
                             <th>Creation Date</th>
                             <th>Activation Date</th>
                             <th>Last login</th>
@@ -70,6 +72,7 @@
                             <td>Not available</td>
                             <td>Not available</td>
                             <td>Not available</td>
+                            <td>Not available</td>
                         </tr>
                         {% else %} {% for user in allusers %} {% if user.active %}
                         <tr>
@@ -78,6 +81,7 @@
                             <td>{{user.utilname}}</td>
                             <td>{{user.nodal}}</td>
                             <td>{{user.contact}}</td>
+                            <td>{{user.email}}</td>
                             <td>{{user.reqdate}}</td>
                             <td>{{user.aprdate}}</td>
                             <td>{{user.lastlogin}}</td>
@@ -94,6 +98,7 @@
                                 <td>{{user.utilname}}</td>
                                 <td>{{user.nodal}}</td>
                                 <td>{{user.contact}}</td>
+                                <td>{{user.email}}</td>
                                 <td>{{user.reqdate}}</td>
                                 <td>{{user.aprdate}}</td>
                                 <td>{{user.lastlogin}}</td>

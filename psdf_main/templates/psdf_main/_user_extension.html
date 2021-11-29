@@ -1,0 +1,340 @@
+{% extends 'psdf_main/includes/layout.html'%} {% load custom_tags %} {% load static %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4">
+        <h1 class="h3 mb-2 text-gray-800">Time extension</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<br>
+{% if not project %}
+
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-info">Approved time extension applications</h6>
+            </a>
+            
+            <div class="collapse" id="format">
+                <div class="card-body">
+                    <div class="row">
+                        
+
+                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                            width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Project ID</th>
+                                        <th>Project name</th>
+                                        <th>Schedule</th>
+                                        <th>Extension</th>
+                                        
+        
+                                    </tr>
+                                </thead>
+                                <tfoot>
+        
+                                    <tr>
+                                        <th>Project ID</th>
+                                        <th>Project name</th>
+                                        <th>Schedule</th>
+                                        <th>Extension</th>
+                                        
+                                    </tr>
+        
+                                </tfoot>
+        
+                                <tbody>
+                                    {% if not extlist %}
+                                    <tr>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        
+                                    </tr>
+                                    {% else %}
+                                    {% for proj in extlist %}
+
+                                    <tr>
+                                        <td>{{proj.newid}}</td>
+                                        <td><a href="/user_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
+                                        <td>{{proj.schedule}}</td>
+                                        <td><button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#modalforext{{proj.id}}">
+                                            <i class="fa fa-eye"></i> View
+                                        </button></td>
+                                    </tr>
+                                    <div class="modal fade" id="modalforext{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforext{{proj.id}}" aria-hidden="true">
+                                        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="text-danger"><strong>Extensions for
+                                                            {{proj.name}} ({{proj.newid}})</strong></h3>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-2"></div>
+                                                        <div class="col-md-4 text-dark">Schedule Requested</div>
+                                                        <div class="col-md-4 text-dark">Supporting File</div>
+                                                        <div class="col-md-2"></div>
+                                                    </div>
+                                                    <hr>
+                                                    {% for ext in proj.extensions %}
+                                                    <div class="row">
+                                                        <div class="col-md-2"></div>
+                                                        <div class="col-md-4 text-dark font-weight-bold">{{ext.exttime}} Months</div>
+                                                        <div class="col-md-4"><a href="/download_ext_file/{{proj.id}}_{{ext.filename}}" class="btn btn-outline-primary btn-block">Download</a></div>
+                                                        <div class="col-md-2"></div>
+                                                    </div>
+                                                    <hr>
+                                                {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#forma1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-danger">Pending time extension applications</h6>
+            </a>
+            
+            <div class="collapse" id="forma1">
+                <div class="card-body">
+                    <div class="row">
+                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                            width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Project ID</th>
+                                        <th>Project name</th>
+                                        <th>Schedule</th>
+                                        <th>Extension</th>
+                                        <th>Document</th>
+                                        <th>Delete</th>
+        
+                                    </tr>
+                                </thead>
+                                <tfoot>
+        
+                                    <tr>
+                                        <th>Project ID</th>
+                                        <th>Project name</th>
+                                        <th>Schedule</th>
+                                        <th>Extension</th>
+                                        <th>Document</th>
+                                        <th>Delete</th>
+                                    </tr>
+        
+                                </tfoot>
+        
+                                <tbody>
+                                    {% if not pextlist %}
+                                    <tr>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        <td>Not Available</td>
+                                        
+                                    </tr>
+                                    {% else %}
+                                    {% for proj in pextlist %}
+
+                                    <tr>
+                                        <td>{{proj.newid}}</td>
+                                        <td><a href="/user_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
+                                        <td>{{proj.schedule}}</td>
+                                        <td>{{proj.extension}}</td>
+                                       <td> <a href="/download_ext_file/{{proj.id}}_{{proj.filename}}" class="btn btn-outline-primary btn-block">Download</a></td>
+                                       <td><a href="/delete_ext_req/{{proj.id}}_{{proj.filename}}" class="btn btn-outline-danger btn-block">Delete</a></td>
+                                    </tr>
+                                    
+                                    {% endfor %}
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-lg-4 center">
+
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Submit a new Request</h6>
+            </div>
+            <div class="card-body">
+
+                <div class="input-group" style="height:100px">
+                    
+                    <form action="{% url 'apply_ext' %}" method="POST" class="row" name='projform' id='projform'>
+                        {% csrf_token %}
+                        <div class="input-group container" style="margin-top:20%">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="projectid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-6">
+                                    <select name="projectid" id="projectid" class="form-control" onchange="autosubmit()">
+                            <option value="0"  class="form-control">-- Select Project from list --</option>
+                            {% for proj in projectlist %}
+                            <option value="{{proj.id}}"  class="form-control">{{proj.newid}} -- {{proj.name}}</option>
+                            {% endfor %}
+                        </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    
+                </div>
+                <br>
+
+            </div><br>
+
+        </div>
+    </div>
+
+</div>
+{% endif %} {% if project %}
+
+
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-info">View Instructions</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse" id="format">
+                <div class="card-body">
+                    <div class="row">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Application for time extension</h6>
+            </div><br>
+            <h5 class="text-danger font-weight-bold container-fluid">{{project.name}}</h5>
+            <br>
+            <div class=" container-fluid">ID : <h5 class="text-danger font-weight-bold">{{project.newid}}</h5></div>
+            <hr>
+            <form action="{% url 'apply_ext_conf' %}" method="POST" enctype="multipart/form-data" name="loaform" id="loaform">
+                {% csrf_token %}
+                <input type="hidden" value="{{project.id}}" name = "projid" id = "projid">
+            <div class="card-body">
+                <div class="row container-fluid">Requested extension (in months): <input type="number" class="form-control col-md-6" name="ext" id="ext" required placeholder="Enter the number of months" style="margin-left: 5%;"></div>
+                <hr>
+                <div class="row container-fluid">Select supporting file : <input type="file" class="form-control-file btn btn-outline-danger col-md-6 " style="margin-left: 5%;" name="extfile" id="extfile" required></div>
+                
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Submission</h6>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                            <label class="form-check-label" for="terms">
+                
+                                <a>I confirm that the above given data is to the best of my knowledge and I shall be responsible for any discrepancy found in the submitted LOA and the claimed items</a>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <hr>
+                <div class="row">
+                    <h5 class="col-md-4">Enter your password: </h5>
+                    <div class="col-md-1"></div><input type="password" class="form-control col-md-6" name="userpass" id="userpass" required>
+                    <div class="col-md-1"></div>
+                </div>
+                <hr>
+                <input type="submit" class="btn btn-block btn-outline-success" value="Submit">
+            </div>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <a href="{% url 'apply_ext' %}" class="container-fluid"><h4>Back</h4></a>
+</div>
+
+</form>
+
+{% endif %}
+
+
+<script>
+    function autosubmit() {
+        var projectid = document.getElementById('projectid')
+        var projform = document.getElementById('projform')
+        if (projectid.value != '0') {
+            projform.submit();
+        }
+
+    }
+</script>
+
+{% endblock %}

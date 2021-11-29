@@ -3,11 +3,8 @@
 ₹
 
 
-
-
-
-
-payment release ki dtetail;s in admin end
-
-
-payment ka sara details
+broadcast message
+user view all projects
+dasboard
+user password change
+walkthrough

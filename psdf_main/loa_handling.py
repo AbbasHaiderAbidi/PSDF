@@ -19,7 +19,7 @@ def new_loa(request):
             return render(request, 'psdf_main/_user_new_loa.html', context)
         userobj = users.objects.filter(username = request.session['user'])[:1].get()
         
-        context['projectlist'] = projects.objects.filter(status = '6', userid = userobj, completed = False)
+        context['projectlist'] = projects.objects.filter(status = '6', userid = userobj, completed = False, deny=False)
         
         return render(request, 'psdf_main/_user_new_loa.html', context)
     else:
@@ -80,6 +80,7 @@ def submitloa(request):
                 return redirect('/new_loa')
     else:
         return oops(request)
+
 def updateloa(request):
     if useronline(request) and not adminonline(request):
         if request.method == 'POST' and request.FILES:
@@ -143,13 +144,13 @@ def updateloa(request):
 
 def downloadloa(request, loaid):
     loa = loadata.objects.get(id = loaid)
-    # thisuser = getuser(request, request.session['user'])
-    
-    if proj_of_user(request, loa.project.id):
-        
-        return handle_download_file(loa.filepath, request)
-    else:
+    if not loa:
         return oops(request)
+    else:
+        if proj_of_user(request, loa.project.id):
+            return handle_download_file(loa.filepath, request)
+        else:
+            return oops(request)
 
 def adminloa(request):
     if adminonline(request):

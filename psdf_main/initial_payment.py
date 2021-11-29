@@ -64,14 +64,14 @@ def admin_sanction(request):
             else:
                 messages.error(request, "ERROR! No file selected.")
                 return redirect('/admin_sanction')
-        context['sancs'] = projects.objects.filter(status = '4')
+        context['sancs'] = projects.objects.filter(status = '4', deny=False)
         return render(request, 'psdf_main/_admin_sanction.html',context)
             
     else:
         return oops(request)
     
 def download_sanction(request, projid):
-    if adminonline(request):
+    if adminonline(request) or (useronline(request) and projectofuser(request, request.session['user'], projid)):
         try:
             proj = projects.objects.get(id = projid)
         except:
@@ -99,9 +99,9 @@ def init_release(request):
             projid = req.get('projectid')
             thisproject = projects.objects.get(id = projid)
             context['thisproject'] = thisproject
-            context['apr_projects'] = projects.objects.filter(status = '5')#,  amt_released = 0)
+            context['apr_projects'] = projects.objects.filter(status = '5', deny=False)#,  amt_released = 0)
             return render(request, 'psdf_main/_admin_init_payment.html', context)
-        context['apr_projects'] = projects.objects.filter(status = '5')
+        context['apr_projects'] = projects.objects.filter(status = '5', deny=False)
         return render(request, 'psdf_main/_admin_init_payment.html', context)
     else:
         return oops(request)
@@ -224,5 +224,16 @@ def user_init_payment(request):
                 workflow(thispay.project.id,"Initial payment of ₹"+str(thispay.amount)+" acknowledged on "+str(thispay.release_date)+" by entity.")
         context['init_pays'] = init_payment.objects.filter(user = getuser(request))
         return render(request, 'psdf_main/_user_init_payment.html', context)
+    else:
+        return oops(request)
+
+
+def downloadinitpay(request, payid):
+    try:
+        pay = init_payment.objects.get(id = payid)
+    except:
+        return oops(request)
+    if proj_of_user(request, pay.project.id):
+        return handle_download_file(pay.filepath, request)
     else:
         return oops(request)

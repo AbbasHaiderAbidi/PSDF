@@ -24,7 +24,11 @@ def proj_of_user(request, projid):
     if adminonline(request):
         return True
     if useronline(request):
-        if (projects.objects.get(id = projid).userid.username == request.session['user']):
+        try:
+            thisproj = projects.objects.get(id = projid)
+        except:
+            return oops(request)
+        if (thisproj.userid.username == request.session['user']):
             return True
         else:
             return False
@@ -64,6 +68,7 @@ def userDetails(username):
         user['nodal'] = user1.nodal
         user['contact'] = user1.contact
         user['address'] = user1.address
+        user['email'] = user1.email
         user['utilname'] = user1.utilname
         user['region'] = user1.region
         user['lastlogin'] = user1.lastlogin
@@ -442,5 +447,21 @@ def add_amount_loa(loaid,amt, request):
     else:
         thisloa.save(update_fields = ['amt_released'])
         return False
-        
+
+def has_numbers(inputString):
+    return any(char.isdigit() for char in inputString)    
+
+def pass_valid(joke):
+    if len(joke) < 6:
+        return False
+    special_characters = "@#$%&*"
+    if not any(c in special_characters for c in joke):
+        return False
+    if not has_numbers(joke):
+        return False
+    if not any(c.isupper() for c in joke):
+        return False
+    if not any(c.islower() for c in joke):
+        return False
+    return True
     

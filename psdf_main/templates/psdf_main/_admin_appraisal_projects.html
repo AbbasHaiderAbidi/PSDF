@@ -25,7 +25,7 @@
                 </div>
                 {% endfor %}<br>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
                     width: 100%;">
                         <thead>
                             <tr>
@@ -37,7 +37,7 @@
                                 <th>Approve</th>
                                 <th>TESG Approval Date</th>
                                 <th>Send back to TESG</th>
-                                <th>Reject</th>
+                                
                             </tr>
                         </thead>
                         <tfoot>
@@ -50,7 +50,7 @@
                                 <th>Approve</th>
                                 <th>TESG Approval Date</th>
                                 <th>Send back to TESG</th>
-                                <th>Reject</th>
+                                
                             </tr>
                         </tfoot>
                         <tbody>
@@ -65,7 +65,7 @@
                                 <td>Not Available</td>
                                 <td>Not Available</td>
                                 <td>Not Available</td>
-                                <td>Not Available</td>
+                                
                             </tr>
                             {% else %} {% for proj in appraisal_projects %}
                             <tr>
@@ -87,9 +87,7 @@
                                     </button></td>
                                 <td>{{proj.tesgaprdate}}</td>
                                 <td class="text-center"><a href='/send_to_tesg/{{proj.id}}' class="btn btn-outline-info">Revert to TESG</a></td>
-                                <td class="text-center"><button type="button" class="btn btn-outline-danger btn-responsive" data-toggle="modal" data-target="#modalforreject{{proj.id}}">
-                                        <i class="fa fa-close"></i> Reject
-                                    </button></td>
+                                
                             </tr>
                             <div class="modal fade" id="modalforAppr{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforAppr{{proj.id}}" aria-hidden="true">
                                 <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
@@ -129,56 +127,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade" id="modalforreject{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforreject{{proj.id}}" aria-hidden="true">
-                                <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title" id=""> Reject project #{{proj.newid}} {{proj.name}}</h3>
-
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-
-
-                                        <div class="modal-body">
-                                            <form method="POST" action="/rejectproject/adminappraisalprojects_{{proj.id}}">
-                                                {% csrf_token %}
-
-                                                <div class="row">
-                                                    <p class="col-md-6 font-weight-bold">Date of rejection:</p>
-                                                    <input type="date" class="form-control bg-gray-200 border-left-danger col-md-6" name="rejectdate{{proj.id}}" id="rejectdate{{proj.id}}" required>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <p class="col-md-6 font-weight-bold">Remark:</p>
-                                                    <input type="text" class="form-control bg-gray-200 border-left-danger col-md-6" name="rremark{{proj.id}}" id="rremark{{proj.id}}" placeholder="Enter Remarks" required>
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <p class="col-md-6 font-weight-bold">Enter Administrator password to proceed:
-                                                    </p>
-                                                    <input type="password" class="form-control bg-gray-200 border-left-danger col-md-6" name="radminpass{{proj.id}}" id="radminpass{{proj.id}}" placeholder="Enter administrator password" required>
-                                                </div><br>
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                    </div>
-
-                                                </div>
-
-
-                                                <div class="modal-footer">
-
-                                                    <button type="button" class="btn btn-outline-secondary btn-lg" data-dismiss="modal">Close</button>&nbsp;&nbsp;
-                                                    <input type="submit" class="btn btn-outline-danger btn-lg" value="Reject project">
-
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
+                            
                             {% endfor %} {% endif %}
                         </tbody>
                     </table>

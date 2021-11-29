@@ -27,7 +27,7 @@
     <li class="nav-item">
         <a class="nav-link" href="/">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard ABC</span></a>
+            <span><strong class="text-uppercase">Dashboard</strong></span></a>
     </li>
 
 
@@ -63,15 +63,19 @@
                     &nbsp; &nbsp; &nbsp;
                     {% if nomon > 0 %}<span class="badge badge-danger badge-counter">{{nomon}}</span> {% endif %}
                 </a>
-                <hr class="sidebar-divider">
+                <hr>
+                <a class="collapse-item" href="{% url 'admin_approve_ext' %}">Extension Requests
+                </a>
+                
+                <hr>
                 <a class="collapse-item" href="{% url 'admin_sanction' %}"><strong>Sanction Order</strong>
                 </a>
-                <hr class="sidebar-divider">
+                
                 <a class="collapse-item" href="{% url 'admin_in_doc_sign' %}"><strong>Document Signing</strong>
                 </a>
 
-                <hr class="sidebar-divider">
-                <h6><a class="collapse-item" href="{% url 'view_all_projs' %}"><strong>View All</strong></a></h6>
+                <hr>
+                <a class="collapse-item text-uppercase" href="{% url 'view_all_projs' %}"><strong>View All projects</strong></a>
             </div>
         </div>
     </li>
@@ -84,19 +88,19 @@
         </a>
         <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{% url 'init_release' %}">Initial payment release
-                </a>
-                <h6 class="collapse-header">Payment Phase: </h6>
+                
+                
                 <a class="collapse-item" href="{% url 'adminloa' %}">Pending LOAs
                 </a>
                 <a class="collapse-item" href="{% url 'admin_pending_projects' %}">View All LOAs &nbsp;&nbsp;&nbsp;</a>
                 <hr class="sidebar-divider">
                 <h6 class="collapse-header">Payment</h6>
-                
+                <a class="collapse-item" href="{% url 'init_release' %}"><strong>Initial payment release</strong>
+                </a>
                 <a class="collapse-item" href="{% url 'admin_pay' %}"><strong>Approve payment</strong>
                 </a>
-                <hr class="sidebar-divider">
-                <h6><a class="collapse-item" href="{% url 'view_all_pays' %}"><strong>View All</strong></a></h6>
+                <hr>
+                <a class="collapse-item text-uppercase" href="{% url 'view_all_pays' %}"><strong>View All payments</strong></a>
             </div>
         </div>
     </li>
@@ -151,9 +155,11 @@
                 <a class="collapse-item" href="/view_TESGs">View All TESG</a>
                 <a class="collapse-item" href="/view_apprs">View All Appraisals</a>
                 <a class="collapse-item" href="/view_monis">View All Monitoring</a>
+                
+                
                 <a class="collapse-item" href="/update_boq/0">Update BOQ</a>
                 <a class="collapse-item" href="login.html">Broadcast message</a>
-                <a class="collapse-item" href="forgot-password.html">Change Password</a>
+                <a class="collapse-item" href="/admin_password_page">Change Password</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>
