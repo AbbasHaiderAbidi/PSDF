@@ -100,6 +100,7 @@ def projectDetails(projid):
         proj['amt_asked'] = proj1.amt_asked
         proj['amt_released'] = proj1.amt_released
         proj['schedule'] = proj1.schedule
+        proj['orischedule'] = proj1.orischedule
         proj['fundcategory'] = proj1.fundcategory
         proj['quantum'] = proj1.quantumOfFunding
         proj['status'] = proj1.status
@@ -465,3 +466,18 @@ def pass_valid(joke):
         return False
     return True
     
+    
+
+def transformext(abc):
+    abc1 = abc.split(']*[')    
+    extensions = []
+    p = 1
+    for a in abc1:
+        lol = a.split('(@)')
+        k = {}
+        k['uid'] = p
+        k['exttime'] = lol[0]
+        k['filename'] = lol[1]
+        extensions.append(k)
+        p = p + 1
+    return extensions

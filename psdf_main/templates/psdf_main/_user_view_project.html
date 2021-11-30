@@ -1,4 +1,4 @@
-{% extends 'psdf_main/includes/layout.html'%}  {% load custom_tags %}{% load static %} {% block body %}
+{% extends 'psdf_main/includes/layout.html'%} {% load custom_tags %}{% load static %} {% block body %}
 
 
 <div class="container-fluid">
@@ -12,7 +12,8 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                <a href="" class="text-xs font-weight-bold text-info text-uppercase mb-1" data-toggle="modal" data-target="#downloads">Download User uploads</a>
+                                <a href="" class="text-xs font-weight-bold text-info text-uppercase mb-1"
+                                    data-toggle="modal" data-target="#downloads">Download User uploads</a>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -29,7 +30,8 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                <a href="" class="text-xs font-weight-bold text-warning text-uppercase mb-1" data-toggle="modal" data-target="#tesgdetails">View TESG Details</a>
+                                <a href="" class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                                    data-toggle="modal" data-target="#tesgdetails">View TESG Details</a>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -45,7 +47,11 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                <a href="/download_doc_sign/{{proj.id}}" class="text-xs font-weight-bold text-primary text-uppercase mb-1">Download Signing Document</a></div>
+                                <button type="button" class="btn-sm btn btn-outline-primary py-1" data-toggle="modal"
+                            data-target="#modalfordates">
+                             Dates and Events
+                        </button>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
@@ -59,8 +65,11 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                <a href="/download_sanction/{{proj.id}}" class="text-xs font-weight-bold text-danger text-uppercase mb-1">Download Sanction Order</a></div>
+                            
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                            data-target="#workflow">
+                            <h6 class="m-0 font-weight-bold">Workflows</h6>
+                        </button>
                         </div>
                         <div class="col-auto">
                             <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
@@ -80,8 +89,8 @@
             <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
                 {{message}}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             {% endfor %}
         </div>
@@ -101,135 +110,379 @@
                     </h5>
                 </div><br>
                 <div class="row">
-                   
-                    <div class="col-md-6 center">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-3">
                         <h6 class="m-0 font-weight-bold text-danger">Project name</h6>
 
                     </div>
-                   
-                   
-                </div>
-                <div class="row">
-                    
-                    <div class="col-md-6 center">
-                        <h4 class="m-0 text-dark">{{proj.name}}
-                        </h4>
-                    </div>
-                    
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-sm-1">
-                    </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">DPR Submission Date</h6>
                     </div>
-                    <div class="col-sm-1">
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">DPR Acceptance Date</h6>
-                    </div>
-                    <div class="col-sm-1">
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">TESG Acceptance</h6>
-                    </div>
-                    <div class="col-sm-1">
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">Appraisal Acceptance</h6>
-                    </div>
-                    <div class="col-sm-1">
+                    <div class="col-md-4">
+                        <h6 class="m-0 font-weight-bold text-danger">User</h6>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-1">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-3">
+                        <h4 class="m-0">{{proj.name}}</h4>
                     </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold">{{proj.dprsubdate}}</h6>
                     </div>
-                    <div class="col-sm-1">
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold">{{proj.dpraprdate}}</h6>
-                    </div>
-                    <div class="col-sm-1">
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold">{{proj.tesgaprdate}}</h6>
-                    </div>
-                    <div class="col-sm-1">
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold">{{proj.appraprdate}}</h6>
-                    </div>
-                    <div class="col-sm-1">
+                    <div class="col-md-4">
+                        <a href="#" class="font-weight-bold btn btn-outline-dark">
+                            <h4 class="m-0">{{proj.userid.username}}</h4>
+                        </a>
                     </div>
                 </div>
                 <hr>
-                <div class="row">
+                <div class="row container-fluid">
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">Date of approval by monitoring committee</h6>
-                    </div>
-                    <div class="col-sm-1">
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">Date of issue of sanction order by MoP</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Funding Category</h6>
                     </div>
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">Date of Document Signing</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Original Schedule</h6>
                     </div>
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">Grant Approved (in ₹)</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Extensions</h6>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                        
                     </div>
                     <div class="col-sm-1">
                     </div>
                 </div>
-                <div class="row">
+                <div class="row container-fluid">
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold">{{proj.moniaprdate}}</h6>
-                    </div>
-                    <div class="col-sm-1">
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold">{{proj.sanction_date}}</h6>
+                        <h6 class="m-0 font-weight-bold">{{proj.fundcategory}}</h6>
                     </div>
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold">{{proj.doc_sign_date}}</h6>
+                        <h6 class="m-0 font-weight-bold">{{proj.orischedule}}</h6>
                     </div>
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold">₹{{proj.amt_approved}}</h6>
+                        <button type="button" class="btn btn-outline-info btn-sm " data-toggle="modal"
+                            data-target="#modalforext">
+                            List all
+                        </button>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-outline-dark btn-sm " data-toggle="modal"
+                            data-target="#modalforval">
+                            Exact Values
+                        </button>
                     </div>
                     <div class="col-sm-1">
                     </div>
                 </div>
-                <hr>
                 <br>
+
+                <div class="modal fade" id="modalforext" tabindex="-1" role="dialog" aria-labelledby="modalforext"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="text-primary text-uppercase"><strong>previous extensions for
+                                        {{ext.name}} ({{ext.newid}})</strong></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {% if not ext.extensions %}
+                                <h5 class="text-danger">No Extension requests were filed, this is the first request</h5>
+                                {% else %}
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4 text-dark">Schedule Requested</div>
+                                    <div class="col-md-4 text-dark">Supporting File</div>
+                                    <div class="col-md-2"></div>
+                                </div>
+                                <hr>
+
+                                {% for ext in ext.extensions %}
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4 text-dark font-weight-bold">{{ext.exttime}} Months</div>
+                                    <div class="col-md-4"><a href="/download_ext_file/{{proj.id}}_{{ext.filename}}"
+                                            class="btn btn-outline-primary btn-block">Download</a></div>
+                                    <div class="col-md-2"></div>
+                                </div>
+                                <hr>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="modalforval" tabindex="-1" role="dialog" aria-labelledby="modalforval"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="text-danger text-uppercase"><strong>Exact costing and payment values
+                                        </strong></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row container-fluid">
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h6 class="m-0 font-weight-bold text-primary">Updated BoQ cost</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h6 class="m-0 font-weight-bold text-primary">Submitted BoQ cost</h6>
+                                    </div>
+
+                                </div>
+                                <div class="row container-fluid">
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h6 class="m-0 font-weight-bold">₹{{ proj.amt_updated }}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h6 class="m-0 font-weight-bold">₹{{proj.amt_asked }}</h6>
+                                    </div>
+                                   
+                                </div><br><hr><br>
+                                <div class="row container-fluid">
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h6 class="m-0 font-weight-bold text-primary">Approved Grant</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h6 class="m-0 font-weight-bold text-primary">Payment Released</h6>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row container-fluid">
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h6 class="m-0 font-weight-bold">₹{{proj.amt_approved}}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h6 class="m-0 font-weight-bold">₹{{ total_payment }}</h6>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row container-fluid">
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                        <h6 class="m-0 font-weight-bold text-primary">Updated BoQ cost</h6>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                        <h6 class="m-0 font-weight-bold text-primary">Submitted BoQ cost</h6>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                        <h6 class="m-0 font-weight-bold text-primary">Approved Grant</h6>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                       
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                </div>
+                <div class="row container-fluid">
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                        <h6 class="m-0 font-weight-bold">₹{% roundoff proj.amt_updated %}</h6>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                        <h6 class="m-0 font-weight-bold">₹{% roundoff proj.amt_asked %}</h6>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                        <h6 class="m-0 font-weight-bold">₹{% roundoff proj.amt_approved %}</h6>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-md-2">
+                        
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                </div>
+
+
+
+                <hr>
+                <div class="modal fade" id="modalfordates" tabindex="-1" role="dialog" aria-labelledby="modalfordates"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="text-danger"><strong>Dates of various milestones while project processing</strong></h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row container-fluid">
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold text-primary">DPR Submission Date</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold text-primary">DPR Acceptance Date</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold text-primary">TESG Acceptance</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold text-primary">Appraisal Acceptance</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                </div>
+                                <div class="row container-fluid">
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold">{{proj.dprsubdate}}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold">{{proj.dpraprdate}}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold">{{proj.tesgaprdate}}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold">{{proj.appraprdate}}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row container-fluid">
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold text-primary">Date of approval by monitoring
+                                            committee</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold text-primary">Date of issue of sanction order by
+                                            MoP</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold text-primary">Date of Document Signing</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold text-primary">Project completion date</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                </div>
+                                <div class="row  container-fluid">
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold">{{proj.moniaprdate}}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold">{{proj.sanction_date}}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold">{{proj.doc_sign_date}}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h6 class="m-0 font-weight-bold">{{proj.compdate}}</h6>
+                                    </div>
+                                    <div class="col-sm-1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="row container-fluid">
                     <div class="col-md-1">
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-outline-primary btn-responsive" data-toggle="modal" data-target="#subBoQ">
+                        <button type="button" class="btn btn-outline-primary btn-responsive" data-toggle="modal"
+                            data-target="#subBoQ">
                             <h6 class="m-0 font-weight-bold">View Submitted BoQ</h6>
                         </button>
 
                     </div>
-                   
+
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#aprBoQ">
+                        <button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal"
+                            data-target="#aprBoQ">
                             <h6 class="m-0 font-weight-bold">View Approved BoQ</h6>
                         </button>
 
@@ -238,7 +491,7 @@
                     </div>
                     <div class="col-md-4">
                         <h6 class="m-0 font-weight-bold text-primary">Total payment released</h6>
-                        <h5 class="font-weight-bold">₹ {{total_payment}}</h5>
+                        <h5 class="font-weight-bold">₹ {% roundoff total_payment %}</h5>
                     </div>
                     <!-- <div class="col-md-1">
                     </div>
@@ -252,67 +505,58 @@
                 <br>
                 <hr>
                 <br>
-                <div class="row">
+                <div class="row container-fluid">
+
                     <div class="col-md-1">
                     </div>
-                    
                     <div class="col-md-2">
-                        <button type="button" class="btn btn-outline-danger btn-lg btn-responsive" data-toggle="modal" data-target="#workflow">
-                            <h6 class="m-0 font-weight-bold">View Workflow</h6>
-                        </button>
+
                     </div>
-                    
-                    <div class="col-md-1">
-                    </div>
+
+
                     <div class="col-md-5">
                         <h6 class="text-uppercase text-danger">Remark</h6>
-                        <h6 class="font-weight-bold">{{proj.remark}}</h6>
+
                     </div>
-                    <div class="col-md-1">
-                    </div>
+
                     <div class="col-md-2">
                         <h6 class="text-danger">Remark Date</h6>
-                        <h6 class="font-weight-bold">{{proj.remark_date}}</h6>
+
                     </div>
-                    
+                    <div class="col-md-2">
+
+                    </div>
                 </div>
+                <div class="row container-fluid">
+
+                    <div class="col-md-3">
+
+                    </div>
+
+
+                    <div class="col-md-5">
+                        <h6 class="font-weight-bold">{{proj.remark}}</h6>
+
+                    </div>
+
+                    <div class="col-md-2">
+                        <h6 class="font-weight-bold">{{proj.remark_date}}</h6>
+
+                    </div>
+                    <div class="col-md-2">
+
+                    </div>
+                </div>
+
+
+
                 <br>
                 <hr>
 
             </div>
         </div>
         <div class="col-md-4">
-
-            
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-danger text-center">
-                        Current Status
-                    </h6>
-                </div>
-                {% if proj.deny == True %}
-                    <div class="card-body alert-danger text-center text-uppercase"><h6 class="font-weight-bold">PROJECT REJECTED</h6></div>
-                    {% elif proj.status == '1' %}
-                    <div class="card-body alert-info text-center text-uppercase"><h6 class="font-weight-bold">Under Techno-Economic clearance</h6></div>
-
-                    {% elif proj.status == '2' %}
-                    <div class="card-body alert-primary text-center text-uppercase"><h6 class="font-weight-bold">under appraisal committee</h6></div>
-
-                    {% elif proj.status == '3' %}
-                    <div class="card-body alert-danger text-center text-uppercase"><h6 class="font-weight-bold">under monitoring comittee</h6></div>
-
-                    {% elif proj.status == '6' %}
-                    <div class="card-body alert-warning text-center text-uppercase"><h6 class="font-weight-bold">Sanction Order released</h6></div>
-                    
-                    {% elif proj.status == '5' %}
-                    <div class="card-body alert-success text-center text-uppercase"><h6 class="font-weight-bold">Document Signing process</h6></div>
-                    
-                    {% elif proj.status == '4' %}
-                    <div class="card-body alert-primary text-center text-uppercase"><h6 class="font-weight-bold">Payment in process</h6></div>
-                    {% endif %}
-                
-            </div>
-            <div class ="card shadow mb-4">
                 <!-- <div class="card-header py-3">
                     <h5 class="m-0 font-weight-bold text-success">
                         Project ID: 
@@ -320,25 +564,115 @@
                 </div> -->
                 <div class="card-body">
                     <div class="card border-bottom-success shadow h-50 py-1">
-                        <a href="/download_data_bank/{{proj.id}}" class="font-weight-bold text-success">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                
-                                <div class="col mr-2">
-                                     <div class="font-weight-bold text-success mb-1 text-uppercase">Download Data Bank</div>
+                        <a href="/download_sanction/{{proj.id}}" class="font-weight-bold text-success">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-success mb-1">Download Sanction Order</div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <i class="fa fa-folder fa-2x text-gray-200"></i>
+                                    </div>
+
                                 </div>
-                                
-                                <div class="col-auto">
-                                    <i class="fa fa-server fa-2x text-gray-400"></i>
-                                </div>
-                            
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card border-bottom-primary shadow h-50 py-1">
+                        <a href="/download_doc_sign/{{proj.id}}" class="font-weight-bold text-primary">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-primary mb-1">Signing Document</div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <i class="fa fa-folder fa-2x text-gray-200"></i>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
-            
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-danger text-center">
+                        Current Status
+                    </h6>
+                </div>
+                {% if proj.deny == True %}
+                <div class="card-body alert-danger text-center text-uppercase">
+                    <h6 class="font-weight-bold">PROJECT REJECTED</h6>
+                </div>
+                {% elif proj.status == '1' %}
+                <div class="card-body alert-info text-center text-uppercase">
+                    <h6 class="font-weight-bold">Under Techno-Economic clearance</h6>
+                </div>
+
+                {% elif proj.status == '2' %}
+                <div class="card-body alert-primary text-center text-uppercase">
+                    <h6 class="font-weight-bold">under appraisal committee</h6>
+                </div>
+
+                {% elif proj.status == '3' %}
+                <div class="card-body alert-danger text-center text-uppercase">
+                    <h6 class="font-weight-bold">under monitoring comittee</h6>
+                </div>
+
+                {% elif proj.status == '4' %}
+                <div class="card-body alert-warning text-center text-uppercase">
+                    <h6 class="font-weight-bold">Sanction Order released</h6>
+                </div>
+
+                {% elif proj.status == '5' %}
+                <div class="card-body alert-success text-center text-uppercase">
+                    <h6 class="font-weight-bold">Document Signing process</h6>
+                </div>
+
+                {% elif proj.status == '6' %}
+                <div class="card-body alert-primary text-center text-uppercase">
+                    <h6 class="font-weight-bold">Payment in process</h6>
+                </div>
+                {% endif %}
+
+            </div>
+            <div class="card shadow mb-4">
+                <!-- <div class="card-header py-3">
+                    <h5 class="m-0 font-weight-bold text-success">
+                        Project ID: 
+                    </h5>
+                </div> -->
+
+                <div class="card-body">
+                    <div class="card border-bottom-primary shadow h-50 py-1">
+                        <a href="/download_data_bank/{{proj.id}}" class="font-weight-bold text-primary">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-primary mb-1 text-uppercase">Download Data
+                                            Bank</div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <i class="fa fa-server fa-2x text-gray-400"></i>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -349,7 +683,7 @@
                 <h3 class="modal-title text-black-50" id="">Submitted BoQ Details</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button>
+                </button>
 
             </div>
             <div class="modal-body">
@@ -375,7 +709,7 @@
                                 <td>{{boq.itemname}}</td>
                                 <td>{{boq.itemdesc}}</td>
                                 <td>{{boq.itemqty}}</td>
-                                <td>₹ {{boq.unitcost}}</td>
+                                <td>₹ {{ boq.unitcost }}</td>
                                 <td>₹ {% multiply boq.itemqty boq.unitcost %}</td>
                             </tr>
                             {% endfor %}
@@ -396,9 +730,9 @@
                 </div>
             </div>
 
-            </div>
         </div>
     </div>
+</div>
 </div>
 
 
@@ -409,7 +743,7 @@
                 <h3 class="modal-title text-black-50" id="">Approved BoQ Details</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button>
+                </button>
 
             </div>
             <div class="modal-body">
@@ -467,23 +801,6 @@
 </div>
 
 
-<div class="modal fade" id="upBoQ" tabindex="-1" role="dialog" aria-labelledby="upBoQ" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title text-black-50" id="">Updated BoQ Details</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-
-            </div>
-            <div class="modal-body">
-
-
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -495,11 +812,12 @@
                 <h3 class="modal-title text-black-50" id="">TESG Details</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button>
+                </button>
 
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-hover" width="100%" cellspacing="0" style="table-layout: fixed; width: 100%;">
+                <table class="table table-bordered table-hover" width="100%" cellspacing="0"
+                    style="table-layout: fixed; width: 100%;">
                     <thead>
                         <tr>
                             <th>TESG no.</th>
@@ -516,12 +834,14 @@
                         <tr>
                             <td>{{tesg.tesgnum.TESG_no}}</td>
                             <td>{{tesg.admin_outcome}}</td>
-                            <td><a href="/downloadTESGrequest/{{tesg.id}}" class="btn btn-outline-info">Download</a></td>
+                            <td><a href="/downloadTESGrequest/{{tesg.id}}" class="btn btn-outline-info">Download</a>
+                            </td>
                             <td>{{tesg.user_response}}</td>
                             {% if tesg.user_reponse == '' %}
                             <td>Awaiting Response</td>
                             {% else %}
-                            <td><a href="/downloadTESGresponse/{{tesg.id}}" class="btn btn-outline-info">Download</a></td>
+                            <td><a href="/downloadTESGresponse/{{tesg.id}}" class="btn btn-outline-info">Download</a>
+                            </td>
 
                             {% endif %}
                             <td>{{tesg.user_res_date}}</td>
@@ -542,7 +862,7 @@
                 <h3 class="modal-title text-black-50" id="">Project Downloads</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button>
+                </button>
 
             </div>
             <div class="modal-body">
@@ -558,15 +878,18 @@
                 <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-3">
-                        <a class="btn btn-outline-info" href="/download_project/DPR_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                        <a class="btn btn-outline-info" href="/download_project/DPR_{{proj.id}}"><i
+                                class="fas fa-download"></i> Download</a>
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-3 font-weight-bold">
-                        <a class="btn btn-outline-danger" href="/download_project/forms_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                        <a class="btn btn-outline-danger" href="/download_project/forms_{{proj.id}}"><i
+                                class="fas fa-download"></i> Download</a>
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-3">
-                        <a class="btn btn-outline-warning" href="/download_project/otherdocs_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                        <a class="btn btn-outline-warning" href="/download_project/otherdocs_{{proj.id}}"><i
+                                class="fas fa-download"></i> Download</a>
                     </div>
                 </div>
                 <br>
@@ -582,7 +905,7 @@
                 <h3 class="modal-title text-black-50" id="">Project Rejected</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button>
+                </button>
 
             </div>
             <div class="modal-body">
@@ -618,7 +941,7 @@
                     <div class="col-md-1">
                     </div>
                     <div class="col-md-3">
-                        
+
                     </div>
                 </div>
                 <br>
@@ -633,10 +956,10 @@
         <div class="modal-content">
             <div class="modal-header alert-danger">
                 <h3 class="modal-title font-weight-bold" id="">Workflow</h3>
-                
+
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button>
+                </button>
 
             </div>
             <div class="modal-body card m-0">

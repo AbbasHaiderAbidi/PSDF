@@ -4,14 +4,11 @@ from .helpers import *
 def loginPage(request):
     
     if adminonline(request):
-        context = full_admin_context(request)
-        return render(request, 'psdf_main/_admin_dashboard.html', context)
+        return redirect('/admin_dashboard')
     elif useronline(request):
-        context = full_user_context(request)
-        return render(request, 'psdf_main/dashboard.html', context)
+        return redirect('/user_dashboard')
     elif auditoronline(request):
-        context = full_auditor_context(request)
-        return render(request, 'psdf_main/_auditor_dashboard.html', context)
+        return redirect('/auditor_dashboard')
     else:
         if request.method == "POST":
             username = request.POST.get('username')
@@ -31,14 +28,13 @@ def loginPage(request):
                         user_m = userDetails(r_username)
                         if user_m['auditor']:
                             request.session['auditor'] = 'auditor'
-                            context = full_auditor_context(request)
-                            return render(request, 'psdf_main/_auditor_dashboard.html', context)
+                            return redirect('/auditor_dashboard')
                         request.session['user'] = user_m['username']
                         if user_m['admin']:
                             request.session['admin'] = "admin"
                             context = full_admin_context(request)
-                            return render(request, 'psdf_main/_admin_dashboard.html', context)
-                        return render(request, 'psdf_main/dashboard.html', context = full_user_context(request))
+                            return redirect('/admin_dashboard')
+                        return redirect('/user_dashboard')
                     else:
                         messages.error(request, 'Invalid username or password. Please try again.')
                         return render(request, 'psdf_main/login.html')
@@ -123,10 +119,5 @@ def admin_password_page(request):
     else:
         return oops(request)
     
-def admin_password_user(request):
-    if adminonline(request):
-        if request.method == 'POST':
-            req = request.POST
-            
-    else:
-        return oops(request)
+def forgot_password(request):
+    return render(request,'psdf_main/forgot_password.html')

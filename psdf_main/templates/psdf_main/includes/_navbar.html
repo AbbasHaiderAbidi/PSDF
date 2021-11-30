@@ -69,7 +69,10 @@
                     &nbsp; &nbsp; &nbsp;
                     {% if nomon > 0 %}<span class="badge badge-danger badge-counter">{{nomon}}</span> {% endif %}
                 </a>
-                <hr class="sidebar-divider">
+                <hr>
+                
+                <a class="collapse-item" href="{% url 'user_sanction' %}"><strong>Sanction Order</strong>
+                </a>
                 <a class="collapse-item" href="{% url 'user_in_doc_sign' %}"><strong>Document Signing</strong>
                 </a>
                 
@@ -109,11 +112,8 @@
                 <h6 class="collapse-header">File new request:</h6>
                 <a class="collapse-item" href="{% url 'apply_ext' %}">Time Extension</a>
                 <div class="collapse-divider"></div>
-                <h6 class="collapse-header">View</h6>
-                <a class="collapse-item" href="cards.html">Completed projects</a>
-                <a class="collapse-item" href="cards.html">Rejected projects</a>
-                <hr class="sidebar-divider">
-                <h6><a class="collapse-item" href="{% url 'user_view_all_projs' %}"><strong>View All</strong></a></h6>
+                <hr>
+                <a class="collapse-item text-uppercase" href="{% url 'user_view_all_projs' %}"><strong>View All</strong></a>
             </div>
         </div>
     </li>
@@ -134,10 +134,10 @@
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">view</h6>
-                <a class="collapse-item" href="login.html">Personal details</a>
+                <!-- <h6 class="collapse-header">view</h6>
+                <a class="collapse-item" href="login.html">Personal details</a> -->
                 <h6 class="collapse-header">Change</h6>
-                <a class="collapse-item" href="forgot-password.html">Change Password</a>
+                <a class="collapse-item" href="{% url 'user_password_page' %}">Change Password</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>

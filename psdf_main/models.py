@@ -44,10 +44,11 @@ class projects(models.Model):
     newid = models.IntegerField(null = True, unique=True)
     dprsubdate = models.DateField(null = True)
     amt_asked = models.IntegerField(null = False)
+    amt_updated = models.IntegerField(null = True)
     amt_approved = models.IntegerField(null = True)
     amt_released = models.IntegerField(default = 0)
-    
     schedule = models.IntegerField(null = True)
+    orischedule = models.IntegerField(null = True)
     fundcategory = models.CharField(max_length=20, null = True)
     projectpath = models.TextField(null = True)
     quantumOfFunding = models.IntegerField(null = True)

@@ -32,6 +32,7 @@
                                 <th>Project Name</th>
                                 <th>Amount</th>
                                 <th>View BoQ</th>
+                                <th>Updated Amount</th>
                                 <th>User</th>
                                 <th colspan="2">Remark</th>
                                 <th>View TESG Chain</th>
@@ -46,6 +47,7 @@
                                 <th>Project Name</th>
                                 <th>Amount</th>
                                 <th>View BoQ</th>
+                                <th>Updated Amount</th>
                                 <th>User</th>
                                 <th colspan="2">Remark</th>
                                 <th>View TESG Chain</th>
@@ -61,7 +63,7 @@
                                 <td>Not Available</td>
                                 <td>Not Available</td>
                                 <td>Not Available</td>
-                                
+                                <td>Not Available</td>
                                 <td>Not Available</td>
                                 <td>Not Available</td>
                                 <td>Not Available</td>
@@ -82,6 +84,7 @@
                                 <td>
                                     <a href="/admin_boq_view/{{proj.id}}_admintesgprojects" class="btn btn-outline-info btn-block">View</a>
                                 </td>
+                                <td>₹ {{proj.amt_updated}}</td>
                                 <td><a href="/view_user/{{proj.userid.id}}" class="text-danger">{{proj.userid.username}}</a></td>
                                 <form action="/add_remark/TESG_projects" method="POST" name="add_remark" id="add_remark">
                                     {% csrf_token %}

@@ -6,9 +6,106 @@ from .helpers import *
 def admin_dashboard(request):
     if adminonline(request):
         context = full_admin_context(request)
+        allproj = projects.objects.filter(deny = False)
+        context['totalprojs'] = allproj.count()
+        totalcost = 0
+        totalgrant = 0
+        totalreleased = 0
+        for proj in allproj:
+            if proj.amt_updated != None:
+                totalcost = totalcost + int(proj.amt_updated)
+            if proj.amt_approved != None:
+                totalgrant = totalgrant + int(proj.amt_approved)
+            if proj.amt_approved != None:
+                totalreleased = totalreleased + int(proj.amt_released)
+        context['totalcost'] = totalcost
+        context['totalgrant'] = totalgrant
+        context['totalreleased'] = totalreleased
+        
+        dprprojs = temp_projects.objects.filter(deny = False)
+        context['dprnoproj'] = dprprojs.count()
+        dprcost = 0
+        for proj in dprprojs:
+            if proj.amountasked != None:
+                dprcost = dprcost + int(proj.amountasked)
+        context['dprsubcost'] = dprcost
+        
+        
+        tesgprojs = projects.objects.filter(deny = False, status = '1')
+        context['tesgnoproj'] = tesgprojs.count()
+        tesgsubcost = 0
+        tesgupcost = 0
+        for proj in tesgprojs:
+            if proj.amt_asked != None:
+                tesgsubcost = tesgsubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                tesgupcost = tesgupcost + int(proj.amt_asked)
+        context['tesgsubcost'] = tesgsubcost
+        context['tesgupcost'] = tesgupcost
+        
+        aprprojs = projects.objects.filter(deny = False, status = '2')
+        context['aprnoproj'] = aprprojs.count()
+        aprsubcost = 0
+        aprupcost = 0
+        for proj in aprprojs:
+            if proj.amt_asked != None:
+                aprsubcost = aprsubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                aprupcost = aprupcost + int(proj.amt_asked)
+        context['aprsubcost'] = aprsubcost
+        context['aprupcost'] = aprupcost
+        
+        moniprojs = projects.objects.filter(deny = False, status = '3')
+        context['moninoproj'] = moniprojs.count()
+        monisubcost = 0
+        moniupcost = 0
+        for proj in moniprojs:
+            if proj.amt_asked != None:
+                monisubcost = monisubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                moniupcost = moniupcost + int(proj.amt_asked)
+        context['monisubcost'] = monisubcost
+        context['moniupcost'] = moniupcost
+        
+        sacprojs = projects.objects.filter(deny = False, status = '4')
+        context['sacnoproj'] = sacprojs.count()
+        sacsubcost = 0
+        sacupcost = 0
+        for proj in sacprojs:
+            if proj.amt_asked != None:
+                sacsubcost = sacsubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                sacupcost = sacupcost + int(proj.amt_asked)
+        context['sacsubcost'] = sacsubcost
+        context['sacupcost'] = sacupcost
+        
+        docprojs = projects.objects.filter(deny = False, status = '5')
+        context['docnoproj'] = docprojs.count()
+        docsubcost = 0
+        docupcost = 0
+        for proj in docprojs:
+            if proj.amt_asked != None:
+                docsubcost = docsubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                docupcost = docupcost + int(proj.amt_asked)
+        context['docsubcost'] = docsubcost
+        context['docupcost'] = docupcost
+        
+        payprojs = projects.objects.filter(deny = False, status = '6')
+        context['paynoproj'] = payprojs.count()
+        
+        payupcost = 0
+        for proj in payprojs:
+            if proj.amt_updated != None:
+                payupcost = payupcost + int(proj.amt_updated)
+            if proj.amt_released != None:
+                paidcost = paidcost = int(proj.amt_released) 
+                
+        context['totalremain'] = payupcost - paidcost
+        
         return render(request, 'psdf_main/_admin_dashboard.html', context)
     else:
-        return redirect('')
+        return oops(request)
 
 
 

@@ -1,5 +1,13 @@
 from .helpers import *
 
+def auditor_dashboard(request):
+    if auditoronline(request):
+        context = full_auditor_context(request)
+        return render(request, 'psdf_main/_auditor_dashboard.html', context)
+    else:
+        return oops(request)
+
+
 def auditor_view_TESGs(request):
     if auditoronline(request):
         context = full_auditor_context(request)

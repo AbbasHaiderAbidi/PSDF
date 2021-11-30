@@ -7,7 +7,11 @@ urlpatterns = [
     path('newdpr/', views.newdpr , name = "newdpr"),
     path('upload_dpr_docs', views.upload_dpr_docs, name = 'upload_dpr_docs'),
     path('logout/', views.logout, name="logout"),
+    path('forgot_password/', views.forgot_password, name="forgot_password"),
     path('admin_dashboard/', views.admin_dashboard, name="admin_dashboard"),
+    path('user_dashboard/', views.user_dashboard, name="user_dashboard"),
+    path('auditor_dashboard/', views.auditor_dashboard, name="auditor_dashboard"),
+    
     path('admin_pending_users/', views.admin_pending_users, name="admin_pending_users"),
     path('admin_pending_projects/', views.admin_pending_projects, name="admin_pending_projects"),
     path('admin_users/', views.admin_users, name="admin_users"),
@@ -38,7 +42,8 @@ urlpatterns = [
     #Control
     path('del_tesg/<str:tesgid>', views.del_tesg, name="del_tesg"),
     path('admin_password_page/', views.admin_password_page, name="admin_password_page"),
-    path('admin_password_user/', views.admin_password_user, name="admin_password_user"),
+    path('user_password_page/', views.user_password_page, name="user_password_page"),
+    
     #TESG
     path('TESG_chain/<str:project_id>', views.TESG_chain, name = "TESG_chain"),
     path('tesgchain_form/', views.tesgchain_form, name = "tesgchain_form"),
@@ -95,6 +100,7 @@ urlpatterns = [
     path('user_in_doc_sign/', views.user_in_doc_sign, name="user_in_doc_sign"),
     path('admin_in_doc_sign/', views.admin_in_doc_sign, name="admin_in_doc_sign"),
     path('download_doc_sign/<str:projid>', views.download_doc_sign, name="download_doc_sign"),
+    path('user_sanction/', views.user_sanction, name="user_sanction"),
     
     #ViewAll
     path('view_all_projs/', views.view_all_projs, name="view_all_projs"),

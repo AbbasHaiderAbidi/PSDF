@@ -1,4 +1,4 @@
-{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+{% extends 'psdf_main/includes/layout.html'%} {% load static %} {% block body %}
 
 
 <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -32,12 +32,12 @@
                                 <th>Project Name</th>
                                 
                                 <th>Cost estimate proposal by entity  (in ₹)</th>
-                                <th>Cost estimate acdepted for PSDF grant  (in ₹)</th>
+                                <th>Cost estimate accepted for PSDF grant  (in ₹)</th>
                                 <th>Date of recommendation by appraisal committee</th>
                                 <th>Date of approval by Monitoring committee</th>                                
                                 <th>Sanction order</th>
                                 <th>Approved Grant</th>
-                                <th class="alert-danger">action</th>
+                                <th>Status</th>
 
                             </tr>
                         </thead>
@@ -47,12 +47,12 @@
                                 <th>Project Name</th>
                                 
                                 <th>Cost estimate proposal by entity  (in ₹)</th>
-                                <th>Cost estimate acdepted for PSDF grant  (in ₹)</th>
+                                <th>Cost estimate accepted for PSDF grant  (in ₹)</th>
                                 <th>Date of recommendation by appraisal committee</th>
                                 <th>Date of approval by Monitoring committee</th>                                
                                 <th>Sanction order</th>
                                 <th>Approved Grant</th>
-                                <th class="alert-danger">action</th>
+                                <th>Status</th>
 
                             </tr>
                         </tfoot>
@@ -69,71 +69,18 @@
                                 <td>Not Available</td>
                                 <td>Not Available</td>
 
+
                             </tr>
                             {% else %} {% for proj in sancs %}
                             <tr>
                                 <td class="font-weight-bolder">{{proj.newid}}</td>
-                                <td><a href="/admin_project_details/{{proj.id}}"  class="font-weight-bold text-danger">{{proj.name}}</a></td>
+                                <td><a href="/user_project_details/{{proj.id}}"  class="font-weight-bold text-danger">{{proj.name}}</a></td>
                                 <td>₹ {{proj.amt_asked}}</td>
                                 <td>₹ {{proj.amt_updated}}</td>
                                 <td>{{proj.appraprdate}}</td>
                                 <td>{{proj.moniaprdate}}</td>
                                {% if proj.sancti0on_date == '' or proj.sanction_date == None or proj.sanction_date == Null %}
-                                <form action="{% url 'admin_sanction' %}" method="POST" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <td class="alert-warning">
-                                        <input type="hidden" value="{{proj.id}}" name="projid" id="projid">
-                                        <input type="file" class="form-control-file btn btn-sm btn-outline-primary btn-block center" name="reciept{{proj.id}}" id="reciept{{proj.id}}">
-                                    </td>
-                                <td class="alert-warning">
-                                    <input type="number" class="form-control" placeholder="Enter Amount in ₹" name="grant" id = "grant">
-                                </td>
-                                <td class="container-fluid">
-                                    <button type="button" class="btn btn-outline-success btn-responsive btn-block" data-toggle="modal" data-target="#modalforAppr">
-                                        <i class="fa fa-check-square-o"></i> Submit </button>
-                                        </td>
-                               
-                                
-
-
-                                    <div class="modal fade" id="modalforAppr" tabindex="-1" role="dialog" aria-labelledby="modalforAppr" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id=""> <strong>Confirmation
-                                                           </strong></h3>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                        <div class="col-md-2"></div>
-                                                        <p><i>NOTE: </i> Kindly make sure that all requirements are fulfilled before proceeding, this action cannot be undone.</p>
-                                                    </div>
-                                                    <hr>
-                                                    
-                                                        <br>
-        
-                                                        <div class="row">
-                                                            <p class="col-md-6 font-weight-bold">Enter your password to proceed:
-                                                            </p>
-                                                            <input type="password" class="form-control bg-gray-200 border-left-success col-md-6" name="adminpass" id="adminpass" placeholder="Enter administrator password" required>
-                                                        </div><br>
-                                                        <div class="row">
-                                                            <div class="col-md-8">
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Close</button>&nbsp;&nbsp;
-                                                            <input type="submit" class="btn btn-lg btn-outline-success" value="Submit">
-                                                        </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </form>
+                                <td colspan="3" class="alert-warning">Pending</td>
                                 {% else  %}
                                 <td><a href="/doownload_sanction/{{proj.id}}" class="btn btn-info btn-block">Download</a></td>
                                 <td><strong>₹ {{proj.amt_approved}}</strong></td>

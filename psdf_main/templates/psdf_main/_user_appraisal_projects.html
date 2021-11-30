@@ -68,7 +68,7 @@
                             {% else %} {% for proj in appraisal_projects %}
                             <tr>
                                 <td class="font-weight-bolder">{{proj.newid}}</td>
-                                <td><a href="/view_project/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
+                                <td><a href="/user_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
                                 <td>{{proj.amt_asked}}</td>
 
                                 <td>{{proj.fundcategory}}</td>

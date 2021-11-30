@@ -35,6 +35,7 @@
                                 <th>Project Name</th>
                                 <th>Previous Extensions</th>
                                 <th>Original Schedule</th>
+                                <th>Schedule</th>
                                 <th>Requested Extension</th>
                                 <th>Supporting document</th>
                                 
@@ -51,9 +52,9 @@
                                 <th>Project Name</th>
                                 <th>Previous Extensions</th>
                                 <th>Original Schedule</th>
+                                <th>Schedule</th>
                                 <th>Requested Extension</th>
                                 <th>Supporting document</th>
-                                
                                 <th>Approve</th>
                                 <th>Reject</th>
                             </tr>
@@ -66,19 +67,13 @@
 
                             <tr>
                                 <td>Not Available</td>
-
-                                <td>Not Available</td>
-
-                                <td>Not Available</td>
-
-
-                                <td>Not Available</td>
-
                                 <td>Not Available</td>
                                 <td>Not Available</td>
-
                                 <td>Not Available</td>
-
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
+                                <td>Not Available</td>
                                 <td>Not Available</td>
 
 
@@ -91,6 +86,7 @@
                                 <td><button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#modalforext{{ext.id}}">
                                     <i class="fa fa-eye"></i> View
                                 </button></td>
+                                <td>{{ext.orischedule}}</td>
                                 <td>{{ext.schedule}}</td>
                                 <td>{{ext.reqext}}</td>
                                 <td><a class="btn btn-outline-primary" href="/download_ext_file/{{ext.id}}_{{ext.filename}}"><i class="fas fa-download"></i> Download </a></td>

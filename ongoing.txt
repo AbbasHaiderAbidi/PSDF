@@ -4,7 +4,6 @@
 
 
 broadcast message
-user view all projects
-dasboard
-user password change
+
+
 walkthrough

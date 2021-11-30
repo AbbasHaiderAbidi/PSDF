@@ -34,3 +34,12 @@ def user_view_all_pays(request):
         return render(request,'psdf_main/_user_view_pays.html',context)
     else:
         return oops(request)
+    
+
+def user_sanction(request):
+    if useronline(request):
+        context = full_user_context(request)
+        context['sancs'] = projects.objects.filter(Q(status = '4')| Q(status = '5'), deny=False, userid = getuser(request))
+        return render(request,'psdf_main/_user_sanction.html',context)
+    else:
+        return oops(request)

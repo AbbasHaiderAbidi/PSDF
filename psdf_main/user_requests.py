@@ -2,19 +2,6 @@
 # from django.db.models.fields import NullBooleanField
 from .helpers import *
 
-def transformext(abc):
-    abc1 = abc.split(']*[')    
-    extensions = []
-    p = 1
-    for a in abc1:
-        lol = a.split('(@)')
-        k = {}
-        k['uid'] = p
-        k['exttime'] = lol[0]
-        k['filename'] = lol[1]
-        extensions.append(k)
-        p = p + 1
-    return extensions
 
 def apply_ext(request):
     # proj = projects.objects.get(id = '1')
@@ -39,6 +26,7 @@ def apply_ext(request):
             kill['newid'] = k.newid
             kill['name'] = k.name
             kill['schedule'] = k.schedule
+            kill['orischedule'] = k.orischedule
             if not (k.ext == None or k.ext == ''):
                 kill['extensions'] = transformext(k.ext)
             else:
@@ -51,6 +39,7 @@ def apply_ext(request):
             kill['newid'] = k.newid
             kill['name'] = k.name
             kill['schedule'] = k.schedule
+            kill['orischedule'] = k.orischedule
             try:
                 kill['filename'] = str(k.extF).split("(@)")[1]
                 kill['extension'] = str(k.extF).split("(@)")[0]
@@ -183,6 +172,7 @@ def admin_approve_ext(request):
             kill['newid'] = k.newid
             kill['name'] = k.name
             kill['schedule'] = k.schedule
+            kill['orischedule'] = k.orischedule
             if not (k.ext == None or k.ext == ''):
                 kill['extensions'] = transformext(k.ext)
             else:

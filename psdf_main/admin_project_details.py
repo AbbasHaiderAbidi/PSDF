@@ -8,6 +8,17 @@ def admin_project_details(request, projid):
         context = full_admin_context(request)
         
         context['proj'] = projects.objects.get(id = projid)
+        kill = {}
+        kill['id'] = context['proj'].id
+        kill['newid'] = context['proj'].newid
+        kill['name'] = context['proj'].name
+        kill['schedule'] = context['proj'].schedule
+        kill['orischedule'] = context['proj'].orischedule
+        if not (context['proj'].ext == None or context['proj'].ext == ''):
+            kill['extensions'] = transformext(context['proj'].ext)
+        else:
+            kill['extensions'] = ''
+        context['ext'] = kill
         context['proj'].workflow = context['proj'].workflow.split(']*[')[1:]
         context['sub_boq'] = boqdata.objects.filter(project = context['proj'], boqtype = '1')
         context['sub_boq_total'] = boq_grandtotal(context['sub_boq'])

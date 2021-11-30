@@ -159,7 +159,7 @@ def user_ack_pay(request):
                 messages.error(request, 'Enter valid reference number')
                 return redirect('/user_ack_pay')
             
-            if not str(refno).casefold() == str(thispay.ref_no).casefold():
+            if str(refno) != str(thispay.ref_no):
                 messages.error(request, 'Reference number mismatch.')
                 return redirect('/user_ack_pay')
             else:

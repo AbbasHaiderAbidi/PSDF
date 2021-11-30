@@ -46,6 +46,7 @@ def admin_sanction(request):
                         filename = 'Sanction_Order'+ext
                         if handle_uploaded_file(filepathnew+filename, reciept):
                             project.amt_approved = amt_approved
+                            project.status = '5'
                             project.sanction_date = datetime.now().date()
                             project.save(update_fields = ['amt_approved','sanction_date'])
                             messages.success(request,"Sanction order uploaded for project ID: "+str(project.newid))
@@ -64,7 +65,7 @@ def admin_sanction(request):
             else:
                 messages.error(request, "ERROR! No file selected.")
                 return redirect('/admin_sanction')
-        context['sancs'] = projects.objects.filter(status = '4', deny=False)
+        context['sancs'] = projects.objects.filter(Q(status = '4')| Q(status = '5'), deny=False)
         return render(request, 'psdf_main/_admin_sanction.html',context)
             
     else:
@@ -99,9 +100,9 @@ def init_release(request):
             projid = req.get('projectid')
             thisproject = projects.objects.get(id = projid)
             context['thisproject'] = thisproject
-            context['apr_projects'] = projects.objects.filter(status = '5', deny=False)#,  amt_released = 0)
+            context['apr_projects'] = projects.objects.filter(status = '6', deny=False)#,  amt_released = 0)
             return render(request, 'psdf_main/_admin_init_payment.html', context)
-        context['apr_projects'] = projects.objects.filter(status = '5', deny=False)
+        context['apr_projects'] = projects.objects.filter(status = '6', deny=False)
         return render(request, 'psdf_main/_admin_init_payment.html', context)
     else:
         return oops(request)
@@ -181,10 +182,10 @@ def init_record(request):
 
             add_amount(inpay.project.id, inpay.amount, request)
             proj = projects.objects.get(id = inpay.project.id)
-            proj.status = '6' #init payment entry is there
+            proj.status = '7' #init payment entry is there
             proj.save(update_fields = ['status'])
             
-            messages.success(request, "Success! Payment of ₹"+amt+ " recorded.")
+            messages.success(request, "Success! Initial Payment of ₹"+amt+ " recorded.")
             workflow(inpay.project.id,"Initial payment of ₹"+inpay.amount+" released on "+str(inpay.release_date))
             # notification(inpay.project.userid.id, "Payment of ₹"+str(inpay.amount)+" for project ID "+str(inpay.project.newid)+" processed.")
             return redirect('/init_release')

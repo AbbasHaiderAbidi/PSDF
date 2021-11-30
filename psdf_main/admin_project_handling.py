@@ -22,8 +22,10 @@ def acceptdpr(request, projid):
             newproject.dprsubdate = temp_proj.dprsubdate
             newproject.amt_asked = temp_proj.amountasked
             newproject.schedule = temp_proj.schedule
+            newproject.orischedule = temp_proj.schedule
             newproject.fundcategory = fundcategory
             newproject.quantumOfFunding = quantum
+            newproject.amt_updated = temp_proj.amountasked
             newproject.amt_approved = (float(quantum)/100)*float(temp_proj.amountasked)
             newproject.userid = temp_proj.userid
             newproject.tesglist = ''
@@ -187,12 +189,14 @@ def update_boq(request, projectid):
                 messages.warning(request, 'Project does not exist.')
                 return redirect('/update_boq/0')
             boqs = []
+            newtotal = 0
             for i in range(1,1000):
                 if not (req['itemname'+str(i)] == ''):
                     itemqty = req['itemqty'+str(i)]
                     itemprice = req['itemprice'+str(i)]
                     itemno = req['itemno'+str(i)]
-                    if isnum(itemqty) and isfloat(itemprice) and isnum(itemno):
+                    if isfloat(itemqty) and isnum(itemprice) and isnum(itemno):
+                        newtotal = newtotal + float(itemqty) * int(itemprice)
                         boqs.append({'itemno':req['itemno'+str(i)],'itemname':req['itemname'+str(i)],'itemdesc': req['itemdesc'+str(i)], 'itemqty': itemqty, 'itemprice': itemprice})
                     else:
                         messages.warning(request, 'BoQ item quantity and Price must be a decimal number')
@@ -211,7 +215,10 @@ def update_boq(request, projectid):
                 apr_boq.save()
                 
             boq_project.workflow = str(boq_project.workflow) + ']*[' + 'BoQ updated on ' + str(datetime.now().date())
-            boq_project.save(update_fields=['workflow'])
+            boq_project.amt_updated = newtotal
+            boq_project.save(update_fields=['workflow','amt_updated'])
+            
+            
             notification(boq_project.userid.id, 'BoQ submitted for project ID: '+str(boq_project.newid)+' ' + boq_project.name + ' has been updated by PSDF Sectt.' )
             messages.success(request, 'BoQ successfully updated and intimated to user.')
             return redirect('/update_boq/0')

@@ -24,20 +24,21 @@ def admin_in_doc_sign(request):
                 messages.error(request, "Invalid Project")
                 return redirect('/admin_in_doc_sign')
             thisproj.approved = True
-            thisproj.status = '5'
+            thisproj.status = '6'
             thisproj.amt_released = 0
             appr_boq = boqdata.objects.filter(project = thisproj, boqtype = '3')
-            appr_boq_tot = boq_grandtotal(appr_boq)
+            # appr_boq_tot = boq_grandtotal(appr_boq)
 
             ###################
             ##APPROVED AMOUNT##
             ###################
 
-            thisproj.amt_approved = float(float(appr_boq_tot)*float(thisproj.quantumOfFunding))
+            thisproj.amt_approved = float(float(thisproj.amt_updated)*float(thisproj.quantumOfFunding))
 
             ###################
             ##APPROVED AMOUNT##
             ###################
+            
             thisproj.doc_sign_date = datetime.now().date()
             thisproj.workflow = str(thisproj.workflow) + ']*[' + 'Project approved by admin on '+ str(datetime.now().date())
             thisproj.save(update_fields=['approved', 'status', 'amt_approved', 'doc_sign_date','workflow','amt_released'])

@@ -2,6 +2,112 @@ from .helpers import *
 
 
 
+def user_dashboard(request):
+    if useronline(request):
+        context = full_user_context(request)
+        thisuser = getuser(request)
+        allproj = projects.objects.filter(deny = False)
+        context['totalprojs'] = allproj.count()
+        totalcost = 0
+        totalgrant = 0
+        totalreleased = 0
+        for proj in allproj:
+            if proj.amt_updated != None:
+                totalcost = totalcost + int(proj.amt_updated)
+            if proj.amt_approved != None:
+                totalgrant = totalgrant + int(proj.amt_approved)
+            if proj.amt_approved != None:
+                totalreleased = totalreleased + int(proj.amt_released)
+        context['totalcost'] = totalcost
+        context['totalgrant'] = totalgrant
+        context['totalreleased'] = totalreleased
+        
+        dprprojs = temp_projects.objects.filter(deny = False, userid = thisuser)
+        context['dprnoproj'] = dprprojs.count()
+        dprcost = 0
+        for proj in dprprojs:
+            if proj.amountasked != None:
+                dprcost = dprcost + int(proj.amountasked)
+        context['dprsubcost'] = dprcost
+        
+        
+        tesgprojs = projects.objects.filter(deny = False, status = '1', userid = thisuser)
+        context['tesgnoproj'] = tesgprojs.count()
+        tesgsubcost = 0
+        tesgupcost = 0
+        for proj in tesgprojs:
+            if proj.amt_asked != None:
+                tesgsubcost = tesgsubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                tesgupcost = tesgupcost + int(proj.amt_asked)
+        context['tesgsubcost'] = tesgsubcost
+        context['tesgupcost'] = tesgupcost
+        
+        aprprojs = projects.objects.filter(deny = False, status = '2', userid = thisuser)
+        context['aprnoproj'] = aprprojs.count()
+        aprsubcost = 0
+        aprupcost = 0
+        for proj in aprprojs:
+            if proj.amt_asked != None:
+                aprsubcost = aprsubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                aprupcost = aprupcost + int(proj.amt_asked)
+        context['aprsubcost'] = aprsubcost
+        context['aprupcost'] = aprupcost
+        
+        moniprojs = projects.objects.filter(deny = False, status = '3', userid = thisuser)
+        context['moninoproj'] = moniprojs.count()
+        monisubcost = 0
+        moniupcost = 0
+        for proj in moniprojs:
+            if proj.amt_asked != None:
+                monisubcost = monisubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                moniupcost = moniupcost + int(proj.amt_asked)
+        context['monisubcost'] = monisubcost
+        context['moniupcost'] = moniupcost
+        
+        sacprojs = projects.objects.filter(deny = False, status = '4', userid = thisuser)
+        context['sacnoproj'] = sacprojs.count()
+        sacsubcost = 0
+        sacupcost = 0
+        for proj in sacprojs:
+            if proj.amt_asked != None:
+                sacsubcost = sacsubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                sacupcost = sacupcost + int(proj.amt_asked)
+        context['sacsubcost'] = sacsubcost
+        context['sacupcost'] = sacupcost
+        
+        docprojs = projects.objects.filter(deny = False, status = '5', userid = thisuser)
+        context['docnoproj'] = docprojs.count()
+        docsubcost = 0
+        docupcost = 0
+        for proj in docprojs:
+            if proj.amt_asked != None:
+                docsubcost = docsubcost + int(proj.amt_asked)
+            if proj.amt_updated != None:
+                docupcost = docupcost + int(proj.amt_asked)
+        context['docsubcost'] = docsubcost
+        context['docupcost'] = docupcost
+        
+        payprojs = projects.objects.filter(deny = False, status = '6', userid = thisuser)
+        context['paynoproj'] = payprojs.count()
+        
+        payupcost = 0
+        for proj in payprojs:
+            if proj.amt_updated != None:
+                payupcost = payupcost + int(proj.amt_updated)
+            if proj.amt_released != None:
+                paidcost = paidcost = int(proj.amt_released) 
+                
+        context['totalremain'] = payupcost - paidcost
+        
+        return render(request, 'psdf_main/_user_dashboard.html', context)
+    else:
+        return oops(request)
+
+    
 def newdpr(request):
     # form = NewDPR_form()
     if useronline(request) and not adminonline(request):
@@ -198,8 +304,6 @@ def notificationread(request, userid):
             
             messages.success(request, 'Notifications now marked as read.')
             return redirect('/')
-            context  = full_user_context(request)
-            return render(request, 'psdf_main/dashboard.html', context)
     else:
         return oops(request)
 
@@ -249,10 +353,10 @@ def user_view_all_projs(request):
         context = full_user_context(request)
         userid = context['user']['id']
         userobj = users.objects.get(id = userid)
-        context['all_projs'] = projects.objects.filter(deny = False, userid = userobj)
-        context['all_rprojs'] = projects.objects.filter(deny = True, userid = userobj)
-        context['all_rpprojs'] = temp_projects.objects.filter(deny = True, userid = userobj)
-        context['all_temps'] = temp_projects.objects.filter(userid = userobj)
+        context['all_projs'] = projects.objects.filter(userid = userobj)
+        # context['all_rprojs'] = projects.objects.filter(deny = True, userid = userobj)
+        # context['all_rpprojs'] = temp_projects.objects.filter(deny = True, userid = userobj)
+        # context['all_temps'] = temp_projects.objects.filter(userid = userobj)
         context['npending'] = temp_projects.objects.filter(deny = False, userid = userobj).count()
         context['ntesg'] = projects.objects.filter(status = '1', deny = False, userid = userobj).count()
         context['nappr'] = projects.objects.filter(status = '2', deny = False, userid = userobj).count()
@@ -269,6 +373,17 @@ def user_project_details(request, projid):
 
         context = full_user_context(request)
         context['proj'] = projects.objects.get(id = projid)
+        kill = {}
+        kill['id'] = context['proj'].id
+        kill['newid'] = context['proj'].newid
+        kill['name'] = context['proj'].name
+        kill['schedule'] = context['proj'].schedule
+        kill['orischedule'] = context['proj'].orischedule
+        if not (context['proj'].ext == None or context['proj'].ext == ''):
+            kill['extensions'] = transformext(context['proj'].ext)
+        else:
+            kill['extensions'] = ''
+        context['ext'] = kill
         context['proj'].workflow = context['proj'].workflow.split(']*[')[1:]
         context['sub_boq'] = boqdata.objects.filter(project = context['proj'], boqtype = '1')
         context['sub_boq_total'] = boq_grandtotal(context['sub_boq'])
@@ -288,3 +403,29 @@ def user_project_details(request, projid):
     else:
         return oops(request)
     
+def user_password_page(request):
+    if useronline(request) and not adminonline(request):
+        context = full_user_context(request)
+        if request.method == 'POST':
+            req = request.POST
+            adminpass = req.get('userpass')
+            adminnewpass = req.get('usernewpass')
+            radminnewpass = req.get('rusernewpass')
+            if adminnewpass != radminnewpass:
+                messages.error(request,'Both password fields must match')
+                return redirect('/user_password_page')
+            thisuser = users.objects.get(id = getuser(request).id)
+            if not check_password(adminpass, thisuser.password):
+                messages.error(request,'Invalid user password')
+                return redirect('/user_password_page')
+            if not pass_valid(adminnewpass):
+                messages.error(request,'Password must be of atleast 6 chracters, with atleast 1 uppercase letter, 1 lowercase letter, 1 speacial character (i.e. @ # $ & ! *), and atleast 1 number.')
+                return redirect('/user_password_page')
+            adminnewpass1 = make_password(adminnewpass)
+            thisuser.password = adminnewpass1
+            thisuser.save(update_fields = ['password'])
+            messages.success(request,'User password updated.')
+            return redirect('/user_password_page')
+        return render(request,'psdf_main/_user_password_change.html',context)
+    else:
+        return oops(request)

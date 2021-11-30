@@ -151,7 +151,7 @@
                                             {% for pay in all_pays %}
                                             <tr>
                                                 <td>{{pay.project.newid}}</td>
-                                                <td><a href="/admin_project_details/{{pay.project.id}}" class="font-weight-bold text-danger">{{pay.project.name}}</a></td>
+                                                <td><a href="/user_project_details/{{pay.project.id}}" class="font-weight-bold text-danger">{{pay.project.name}}</a></td>
                                                 <td class="wrap-text" style="white-space: pre-wrap;">₹ {% roundoff pay.loa.amt %}</td>
                                                 <td><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#view_loa{{pay.id}}">LOA Details</button></td>
                                                 <td>{{pay.release_date}}</td>
@@ -362,7 +362,7 @@
                                             {% else %} {% for pay in all_init_pays %}
                                             <tr>
                                                 <td>{{pay.project.newid}}</td>
-                                                <td><a href="/admin_project_details/{{pay.project.id}}" class="font-weight-bold text-danger">{{pay.project.name}}</a></td>
+                                                <td><a href="/user_project_details/{{pay.project.id}}" class="font-weight-bold text-danger">{{pay.project.name}}</a></td>
                                                 <!-- <td><a href="/download_sanction/{{pay.project.id}}" class="btn btn-sm btn-outline-danger">Sanction Order</a></td> -->
                                                 <td><a href="/download_doc_sign/{{pay.project.id}}" class="btn btn-sm btn-outline-warning">Download</a></td>
                                                 <td>{{pay.release_date}}</td>

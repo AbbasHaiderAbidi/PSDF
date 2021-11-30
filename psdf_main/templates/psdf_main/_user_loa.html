@@ -73,7 +73,7 @@
                             {% else %} {% for proj in loaprojs %}
                             <tr>
                                 <td class="font-weight-bolder">{{proj.project.newid}}</td>
-                                <td><a href="/view_project/{{proj.id}}" class="font-weight-bold text-danger">{{proj.project.name}}</a></td>
+                                <td><a href="/user_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.project.name}}</a></td>
                                 <td>{{proj.subdate}}</td>
                                 {% if proj.approved == False or proj.approved == '' or proj.approved == none %}
                                 <form action="{% url 'updateloa' %}" method="POST" enctype="multipart/form-data">
