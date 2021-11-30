@@ -80,7 +80,7 @@ def auditor_download_project(request, projid):
 
     if auditoronline(request):
         if projid:
-            filelist = {'DPR':'DPR', 'forms':'forms','otherdocs':'otherdocs'}
+            filelist = {'DPR':'DPR', 'forms':'forms','otherdocs':'otherdocs','Submitted_BOQ':'Submitted_BOQ'}
             proj_path = projects.objects.get(id = proid)
             if proj_path :
                 proj_path = proj_path.projectpath

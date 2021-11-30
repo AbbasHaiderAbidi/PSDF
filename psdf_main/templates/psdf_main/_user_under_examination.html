@@ -8,20 +8,12 @@
     <div class="col-md-2">
 
     </div>
-    <div class="col-md-6">
-        {% for message in messages %}
-        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
-            {{message}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-        {% endfor %}
-    </div>
+    
 </div>
 
 <hr>
 <br>
+
 
 
 <div class="col-lg-12">
@@ -90,7 +82,8 @@
                         {% else %} {% for proj in projectobj %}
                         <tr>
                             <td><a href="#" class="nav-link font-weight-bolder text-danger ">{{proj.proname}}</a></td>
-                            <td>{{proj.amountasked}}</td>
+                            <td>
+                                ₹{{proj.amountasked}}</td>
                             <td>{{proj.schedule}}</td>
                             <td>{{proj.dprsubdate}}</td>
                             <td class="text-center">
@@ -150,8 +143,8 @@
                                                     <input type="file" class="custom-file-input " name="forms" id="forms">
                                                 </div>
                                                 <div class="col-md-1"></div>
-                                                <div class="col-md-3 font-weight-bold"><label class=" btn btn-outline-success" for="supportdoc" id="supportdoc-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Supporting Docs</span></label>
-                                                    <input type="file" class="custom-file-input " name="supportdoc" id="supportdoc">
+                                                <div class="col-md-3 font-weight-bold"><label class=" btn btn-outline-success" for="otherdocs" id="otherdocs-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Supporting Docs</span></label>
+                                                    <input type="file" class="custom-file-input " name="otherdocs" id="otherdocs">
                                                 </div>
                                             </div>
                                             <hr>

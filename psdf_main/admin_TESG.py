@@ -52,7 +52,7 @@ def tesgchain_form(request):
                 alreadyactive = True
             
             if alreadyactive:
-                messages.error(request, 'Already a TESG chain is active, please wait.')
+                messages.error(request, 'Already a TESG chain is active, please wait for response')
                 return redirect('/TESG_chain/'+projid)
             if TESG_master.objects.filter(tesgnum = TESG_admin.objects.filter(TESG_no = tesgnum)[:1].get()):
                 messages.error(request, 'TESG entry already made.')
@@ -77,6 +77,7 @@ def tesgchain_form(request):
             tesg.admin_filepath = fullpath
             tesg.save()
             messages.error(request, 'Outcome of TESG '+tesgnum+' have been intimated to the user.')
+            workflow(str(tesg.project.id),'TESG no.'+str(tesgnum)+' outcomes have been initmated to entity.')
             notification(str(tesg.project.userid.id), 'TESG #'+tesgnum+' updated for project ID : '+str(tesg.project.newid))
             return redirect('/TESG_chain/'+projid)
     else:

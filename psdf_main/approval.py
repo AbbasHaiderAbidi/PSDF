@@ -60,14 +60,14 @@ def user_in_doc_sign(request):
             except:
                 messages.error(request, "Invalid Project")
                 return redirect('/user_in_doc_sign')
-            if projectofuser(request, request.session['user'], projid):
+            if projectofuser(request, projid):
                 if 'docsign' in request.FILES:
                     docsign = request.FILES['docsign']
                     try:
                         extension = str(docsign.name.split(".")[-1])
                     except:
                         extension = ''
-                    thisproj = projects.objects.get(id = projid)
+                    thisproj = projects.objects.get(id = projid, userid = getuser())
                     doc_path = thisproj.projectpath + "/Signed_Document/"
                     srmdir(doc_path)
                     smkdir(doc_path)
@@ -96,7 +96,7 @@ def download_doc_sign(request, projid):
     # abc.status = '4'
     # abc.approved = False
     # abc.save(update_fields=['status','approved'])
-    if adminonline(request) or (useronline(request) and projectofuser(request, request.session['user'], projid)):
+    if proj_of_user(request,projid):
         thisproj = projects.objects.get(id = projid)
         if not (thisproj.doc_path == None or thisproj.doc_path == ''):
             if os.path.exists(thisproj.doc_path):

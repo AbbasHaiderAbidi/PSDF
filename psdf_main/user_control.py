@@ -6,7 +6,7 @@ def user_dashboard(request):
     if useronline(request):
         context = full_user_context(request)
         thisuser = getuser(request)
-        allproj = projects.objects.filter(deny = False)
+        allproj = projects.objects.filter(deny = False, userid = thisuser)
         context['totalprojs'] = allproj.count()
         totalcost = 0
         totalgrant = 0
@@ -39,7 +39,7 @@ def user_dashboard(request):
             if proj.amt_asked != None:
                 tesgsubcost = tesgsubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                tesgupcost = tesgupcost + int(proj.amt_asked)
+                tesgupcost = tesgupcost + int(proj.amt_updated)
         context['tesgsubcost'] = tesgsubcost
         context['tesgupcost'] = tesgupcost
         
@@ -51,7 +51,7 @@ def user_dashboard(request):
             if proj.amt_asked != None:
                 aprsubcost = aprsubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                aprupcost = aprupcost + int(proj.amt_asked)
+                aprupcost = aprupcost + int(proj.amt_updated)
         context['aprsubcost'] = aprsubcost
         context['aprupcost'] = aprupcost
         
@@ -63,7 +63,7 @@ def user_dashboard(request):
             if proj.amt_asked != None:
                 monisubcost = monisubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                moniupcost = moniupcost + int(proj.amt_asked)
+                moniupcost = moniupcost + int(proj.amt_updated)
         context['monisubcost'] = monisubcost
         context['moniupcost'] = moniupcost
         
@@ -75,7 +75,7 @@ def user_dashboard(request):
             if proj.amt_asked != None:
                 sacsubcost = sacsubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                sacupcost = sacupcost + int(proj.amt_asked)
+                sacupcost = sacupcost + int(proj.amt_updated)
         context['sacsubcost'] = sacsubcost
         context['sacupcost'] = sacupcost
         
@@ -87,7 +87,7 @@ def user_dashboard(request):
             if proj.amt_asked != None:
                 docsubcost = docsubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                docupcost = docupcost + int(proj.amt_asked)
+                docupcost = docupcost + int(proj.amt_updated)
         context['docsubcost'] = docsubcost
         context['docupcost'] = docupcost
         
@@ -95,11 +95,12 @@ def user_dashboard(request):
         context['paynoproj'] = payprojs.count()
         
         payupcost = 0
+        paidcost = 0
         for proj in payprojs:
             if proj.amt_updated != None:
                 payupcost = payupcost + int(proj.amt_updated)
             if proj.amt_released != None:
-                paidcost = paidcost = int(proj.amt_released) 
+                paidcost = paidcost + int(proj.amt_released) 
                 
         context['totalremain'] = payupcost - paidcost
         
@@ -169,7 +170,7 @@ def newdpr(request):
                                     messages.error(request, "Error in Row no. "+str(i)+" UNIT PRICE column of BOQ")
                                     return render(request, 'psdf_main/_user_new_dpr.html', context)
                                 total_cost = total_cost + float(float(boq.cell(row = i, column = 4).value)*int(boq.cell(row = i, column = 5).value))
-                    if not int(total_cost) == int(amount):
+                    if not float(total_cost) == float(amount):
                         messages.error(request, "BOQ total amount should be equal to entered amount")
                         return render(request, 'psdf_main/_user_new_dpr.html', context)
                     boqlist = []
@@ -192,6 +193,7 @@ def newdpr(request):
                                 boqlist.append({'itemname':itemname, 'itemno':itemno, 'itemdesc': itemdesc, 'itemqty':itemqty, 'itemprice': itemprice, 'itemcost': itemcost})
                     
                     ## CHECK FOR AMOUNT EQUALITY
+                    boq = request.FILES['boq']
                     dpr = request.FILES['dpr']
                     a1 = request.FILES['a1']
                     if 'otherdoc' in request.FILES:
@@ -214,6 +216,10 @@ def newdpr(request):
                                 a1_filename = secure_filename("forms."+a1.name.split('.')[-1])
                             except:
                                 a1_filename = secure_filename("forms")
+                            try:
+                                boq_filename = secure_filename("Submitted_BOQ."+boq.name.split('.')[-1])
+                            except:
+                                boq_filename = secure_filename("Submitted_BOQ")
                                 
                             if 'otherdoc' in request.FILES:
                                 otherdoc_filename = secure_filename("otherdocs")
@@ -226,6 +232,10 @@ def newdpr(request):
                             else:
                                 return oops(request)
                             if handle_uploaded_file(os.path.join(newdprpath,a1_filename),a1):
+                                pass
+                            else:
+                                return oops(request)
+                            if handle_uploaded_file(os.path.join(newdprpath,boq_filename),boq):
                                 pass
                             else:
                                 return oops(request)
@@ -326,7 +336,7 @@ def user_boq_view(request, projid):
             context = full_user_context(request)
             if backpage == 'underexamination':
                 # project = temp_projectDetails(proj.id)
-                context['proj'] = temp_projects.objects.filter(id = proj.id)
+                context['proj'] = temp_projects.objects.filter(id = proj.id, userid = getuser(request))
                 context['proj'].submitted_boq = get_boq_details(proj.submitted_boq)
                 
                 context['backpage'] = backpages[backpage]

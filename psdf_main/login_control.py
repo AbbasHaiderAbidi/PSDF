@@ -13,7 +13,7 @@ def loginPage(request):
         if request.method == "POST":
             username = request.POST.get('username')
             password = request.POST.get('password')
-            context = {}
+            
             user = users.objects.filter(username = username)[:1]
             if not user:
                 messages.error(request, 'Invalid username or password. Please try again.')
@@ -32,7 +32,6 @@ def loginPage(request):
                         request.session['user'] = user_m['username']
                         if user_m['admin']:
                             request.session['admin'] = "admin"
-                            context = full_admin_context(request)
                             return redirect('/admin_dashboard')
                         return redirect('/user_dashboard')
                     else:
@@ -68,7 +67,7 @@ def registeruser(request):
                 messages.warning(request, 'User : ' +username + ' pending for verification. ')
                 return redirect('/')
     context ={'form':form}
-    
+    # context['available'] = '3'
     return render(request, 'psdf_main/userRegister.html', context)
 
 
@@ -121,3 +120,20 @@ def admin_password_page(request):
     
 def forgot_password(request):
     return render(request,'psdf_main/forgot_password.html')
+
+def newusername(request,username):
+    if not(useronline(request) or auditoronline(request) or adminonline(request)):
+        username1 = str(username)[1:]
+        if username1 == '' or username1 == ' ' or len(username1)<5:
+            messages.error(request,'Not a valid username')
+            return redirect('/registeruser')
+        if users.objects.filter(username = username1):
+            messages.error(request,'Not Available')
+            return redirect('/registeruser')
+        else:
+            messages.error(request,'Available')
+            return redirect('/registeruser')
+    else:
+        return redirect('/')
+    
+

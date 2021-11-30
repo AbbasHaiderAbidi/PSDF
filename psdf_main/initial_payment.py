@@ -72,7 +72,7 @@ def admin_sanction(request):
         return oops(request)
     
 def download_sanction(request, projid):
-    if adminonline(request) or (useronline(request) and projectofuser(request, request.session['user'], projid)):
+    if proj_of_user(request, projid):
         try:
             proj = projects.objects.get(id = projid)
         except:

@@ -57,7 +57,7 @@ def upload_dpr_docs(request):
                         messages.error(request, "Some error has occurred")
                         return redirect('/under_examination')
                 if 'otherdocs' in files.keys():
-                    otherdocs = request.FILES['otherdoc']
+                    otherdocs = request.FILES['otherdocs']
                     try:
                         extension = otherdocs.name.split('.')[-1]
                     except:

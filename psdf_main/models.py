@@ -123,7 +123,7 @@ class boqdata(models.Model):
     itemno = models.IntegerField(null = True)
     itemname = models.TextField(null=True)
     itemdesc = models.TextField(null=True)
-    itemqty = models.IntegerField(null = True)
+    itemqty = models.FloatField(null = True)
     unitcost = models.FloatField(null = True)
 
 class loadata(models.Model):

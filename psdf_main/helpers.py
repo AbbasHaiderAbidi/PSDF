@@ -42,7 +42,7 @@ def getuser(request):
     except:
         return oops(request)
 
-def projectofuser(request, username,projid):
+def projectofuser(request,projid):
     if projects.objects.get(id = projid).userid == getuser(request):
         return True
     else:
@@ -175,7 +175,7 @@ def boq_grandtotal(givenboq):
         
         Gtotal = Gtotal + float(boq.itemqty)*float(boq.unitcost)
     
-    return Gtotal
+    return round(Gtotal)
 
 # def temp_projectDetails(projid):
 #     proj = {}

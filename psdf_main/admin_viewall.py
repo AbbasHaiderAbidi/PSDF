@@ -8,11 +8,7 @@ def view_user(request, userid):
         context['THIS_USER'] = users.objects.get(id = userid)
         context['THIS_PROJECTS'] = projects.objects.filter(userid = userid)
         context['THIS_temp_PROJECTS'] = temp_projects.objects.filter(userid = userid)
-        context['numpending'] = temp_projects.objects.filter(userid = userid).count()
-        context['numaccept'] = projects.objects.filter(userid = context['THIS_USER']).count()
-        context['numapprove'] = projects.objects.filter(userid = userid, status = '5').count()
-        context['numreject'] = projects.objects.filter(userid = userid, deny = True).count() + temp_projects.objects.filter(userid = userid, deny = True).count()
-        
+       
         return render(request, 'psdf_main/_admin_view_user.html', context)
     else:
         return oops(request)

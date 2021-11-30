@@ -2,6 +2,9 @@ from .helpers import *
 
 
 def appraisal_projects(request):
+    # pro = projects.objects.filter(status = '3')[:1].get()
+    # pro.status ='2'
+    # pro.save(update_fields=['status'])
     if adminonline(request):
         context = full_admin_context(request)
         return render(request, 'psdf_main/_admin_appraisal_projects.html', context)
@@ -10,13 +13,17 @@ def appraisal_projects(request):
     
 def approve_appraisal(request, projectid):
     if adminonline(request):
-        context = full_admin_context(request)
+        # context = full_admin_context(request)
         if request.method == 'POST':
             req = request.POST
             adminpass = req['adminpass']
-            # if not Appraisal_admin.objects.filter(projid = projectid)[:1].get():
-            #     messages.success(request, 'Aborted! No entry regarding appraisal exists.')
-            #     return redirect('/appraisal_projects/')
+            try:
+                if not Appraisal_admin.objects.filter(project = projects.objects.get(id = projectid))[:1].get():
+                    messages.success(request, 'Aborted! No entry regarding appraisal exists.')
+                    return redirect('/appraisal_projects/')
+            except:
+                messages.success(request, 'Aborted! No entry regarding appraisal exists.')
+                return redirect('/appraisal_projects/')
             if check_password(adminpass,users.objects.get(id = getadmin_id()).password):
                 project = projects.objects.get(id = projectid)
                 project.status = '3'

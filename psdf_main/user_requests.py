@@ -13,12 +13,12 @@ def apply_ext(request):
             req = request.POST
             projid = req.get('projectid')
             try:
-                context['project'] = projects.objects.get(id = projid)
+                context['project'] = projects.objects.get(id = projid, userid = getuser(request))
             except:
                 messages.error(request,"No such project exists")
                 return redirect('/apply_ext')
-        context['pendingext'] = projects.objects.filter(ext__isnull = False, deny=False)
-        context['pendingextp'] = projects.objects.filter(extF__isnull = False, deny=False)
+        context['pendingext'] = projects.objects.filter(ext__isnull = False, deny=False, userid = getuser(request))
+        context['pendingextp'] = projects.objects.filter(extF__isnull = False, deny=False, userid = getuser(request))
         extlist =[]
         for k in context['pendingext']:
             kill = {}
@@ -161,7 +161,7 @@ def admin_approve_ext(request):
             workflow(thisproj.id,"Extension of "+str(exte)+" months for project ID: "+str(thisproj.newid)+" approved by PSDF sectt.")
             notification(thisproj.userid.id,"Extension of "+str(exte)+" months for project: "+str(thisproj.newid)+" approved by PSDF sectt.")
             messages.success(request, 'Extension Request Approved')
-        context['pendingext'] = projects.objects.filter(extF__isnull = False, deny=False)
+        context['pendingext'] = projects.objects.filter(extF__isnull = False, deny=False, userid = getuser(request))
         extlist =[]
         for k in context['pendingext']:
             kill = {}
@@ -214,7 +214,7 @@ def admin_reject_ext(request):
             thisproj.save(update_fields = ['extF','remark', 'remark_date'])
             workflow(thisproj.id,"Extension of "+str(exte)+" months for project: "+str(thisproj.newid)+" REJECTED by PSDF sectt. ")
             notification(thisproj.userid.id,"Extension of "+str(exte)+" months for project: "+str(thisproj.newid)+" REJECTED by PSDF sectt. (See project remark)")
-            context['pendingext'] = projects.objects.filter(extF__isnull = False, deny=False)
+            context['pendingext'] = projects.objects.filter(extF__isnull = False, deny=False, userid = getuser(request))
             extlist =[]
             for k in context['pendingext']:
                 kill = {}

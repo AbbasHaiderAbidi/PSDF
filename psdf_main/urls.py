@@ -11,7 +11,7 @@ urlpatterns = [
     path('admin_dashboard/', views.admin_dashboard, name="admin_dashboard"),
     path('user_dashboard/', views.user_dashboard, name="user_dashboard"),
     path('auditor_dashboard/', views.auditor_dashboard, name="auditor_dashboard"),
-    
+    path('newusername/<str:username>', views.newusername, name="newusername"),
     path('admin_pending_users/', views.admin_pending_users, name="admin_pending_users"),
     path('admin_pending_projects/', views.admin_pending_projects, name="admin_pending_projects"),
     path('admin_users/', views.admin_users, name="admin_users"),

@@ -5,6 +5,7 @@ from .helpers import *
 
 def admin_dashboard(request):
     if adminonline(request):
+        
         context = full_admin_context(request)
         allproj = projects.objects.filter(deny = False)
         context['totalprojs'] = allproj.count()
@@ -39,7 +40,7 @@ def admin_dashboard(request):
             if proj.amt_asked != None:
                 tesgsubcost = tesgsubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                tesgupcost = tesgupcost + int(proj.amt_asked)
+                tesgupcost = tesgupcost + int(proj.amt_updated)
         context['tesgsubcost'] = tesgsubcost
         context['tesgupcost'] = tesgupcost
         
@@ -51,7 +52,7 @@ def admin_dashboard(request):
             if proj.amt_asked != None:
                 aprsubcost = aprsubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                aprupcost = aprupcost + int(proj.amt_asked)
+                aprupcost = aprupcost + int(proj.amt_updated)
         context['aprsubcost'] = aprsubcost
         context['aprupcost'] = aprupcost
         
@@ -63,7 +64,7 @@ def admin_dashboard(request):
             if proj.amt_asked != None:
                 monisubcost = monisubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                moniupcost = moniupcost + int(proj.amt_asked)
+                moniupcost = moniupcost + int(proj.amt_updated)
         context['monisubcost'] = monisubcost
         context['moniupcost'] = moniupcost
         
@@ -75,7 +76,7 @@ def admin_dashboard(request):
             if proj.amt_asked != None:
                 sacsubcost = sacsubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                sacupcost = sacupcost + int(proj.amt_asked)
+                sacupcost = sacupcost + int(proj.amt_updated)
         context['sacsubcost'] = sacsubcost
         context['sacupcost'] = sacupcost
         
@@ -87,7 +88,7 @@ def admin_dashboard(request):
             if proj.amt_asked != None:
                 docsubcost = docsubcost + int(proj.amt_asked)
             if proj.amt_updated != None:
-                docupcost = docupcost + int(proj.amt_asked)
+                docupcost = docupcost + int(proj.amt_updated)
         context['docsubcost'] = docsubcost
         context['docupcost'] = docupcost
         

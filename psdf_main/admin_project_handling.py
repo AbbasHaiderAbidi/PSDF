@@ -16,6 +16,9 @@ def acceptdpr(request, projid):
             if not check_password(adminpass,checkingpass):
                 messages.error(request, 'Invalid admin password, acceptance of project: '+temp_proj.proname+' ABORTED.')
                 return redirect('/admin_pending_projects')
+            if projects.objects.filter(newid = newid):
+                messages.error(request, 'Project must be accepted with a unique ID')
+                return redirect('/admin_pending_projects')
             newproject = projects()
             newproject.newid = newid
             newproject.name = temp_proj.proname
@@ -26,7 +29,7 @@ def acceptdpr(request, projid):
             newproject.fundcategory = fundcategory
             newproject.quantumOfFunding = quantum
             newproject.amt_updated = temp_proj.amountasked
-            newproject.amt_approved = (float(quantum)/100)*float(temp_proj.amountasked)
+            newproject.amt_approved = 0
             newproject.userid = temp_proj.userid
             newproject.tesglist = ''
             if not remark == '':
@@ -55,6 +58,7 @@ def acceptdpr(request, projid):
                     os.replace(f,os.path.join(newpath , f.split('/')[-1]))
                 newentry.projectpath = newpath
                 newentry.save(update_fields=['projectpath'])
+                workflow(newentry.id,"DPR accepted on: "+str(datetime.now().date()))
                 temp_projects.objects.get(id=temp_proj.id).delete()
                 srmdir(temp_proj.projectpath)
                 
@@ -126,10 +130,9 @@ def download_project(request, projid):
     except:
         return oops(request)
 
-
-    if (adminonline(request) or (useronline(request) and (projects.objects.get(id = proid).userid.username == request.session['user']))):
+    if proj_of_user(request,proid):
         if projid:
-            filelist = {'DPR':'DPR', 'forms':'forms','otherdocs':'otherdocs'}
+            filelist = {'DPR':'DPR', 'forms':'forms','otherdocs':'otherdocs','Submitted_BOQ':'Submitted_BOQ'}
             proj_path = projects.objects.get(id = proid)
             if proj_path :
                 proj_path = proj_path.projectpath
@@ -195,11 +198,14 @@ def update_boq(request, projectid):
                     itemqty = req['itemqty'+str(i)]
                     itemprice = req['itemprice'+str(i)]
                     itemno = req['itemno'+str(i)]
-                    if isfloat(itemqty) and isnum(itemprice) and isnum(itemno):
-                        newtotal = newtotal + float(itemqty) * int(itemprice)
+                    print(itemqty)
+                    print(itemprice)
+                    print(itemno)
+                    if isfloat(itemqty) and isfloat(itemprice) and isnum(itemno):
+                        newtotal = newtotal + float(itemqty) * float(itemprice)
                         boqs.append({'itemno':req['itemno'+str(i)],'itemname':req['itemname'+str(i)],'itemdesc': req['itemdesc'+str(i)], 'itemqty': itemqty, 'itemprice': itemprice})
                     else:
-                        messages.warning(request, 'BoQ item quantity and Price must be a decimal number')
+                        messages.warning(request, 'BoQ item quantity and Price must be a Float and item number must be Integer')
                         return redirect('/update_boq/0')
                 
             boqdata.objects.filter(project = boq_project, boqtype = '2').delete()
