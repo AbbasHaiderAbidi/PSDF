@@ -4,6 +4,7 @@ from .helpers import *
 
 
 def admin_dashboard(request):
+    
     if adminonline(request):
         
         context = full_admin_context(request)
@@ -96,11 +97,12 @@ def admin_dashboard(request):
         context['paynoproj'] = payprojs.count()
         
         payupcost = 0
+        paidcost = 0
         for proj in payprojs:
             if proj.amt_updated != None:
                 payupcost = payupcost + int(proj.amt_updated)
             if proj.amt_released != None:
-                paidcost = paidcost = int(proj.amt_released) 
+                paidcost = paidcost + int(proj.amt_released) 
                 
         context['totalremain'] = payupcost - paidcost
         
@@ -119,14 +121,14 @@ def admin_pending_projects(request):
         for proj in context['projectobj']:
             proj.submitted_boq = get_boq_details(proj.submitted_boq)
             proj.submitted_boq_Gtotal = get_Gtotal_list(proj.submitted_boq)
-            
+            proj.GrandTotal = get_grand_total(proj.submitted_boq)
         return render(request, 'psdf_main/_admin_pending_projects.html', context)
 
 
 
 def control_panel(request):
     if adminonline(request):
-        user = userDetails(request.session['user'])
+        # user = userDetails(request.session['user'])
         nopendingusers = pen_users_num(request)
         if not nopendingusers:
             nopendingusers = 0
@@ -143,11 +145,11 @@ def uploadformat(request):
             req = request.POST
             if not 'adminpassF' in req.keys():
                 messages.error(request, 'Enter Administrator password.')
-                return control_panel(request)
+                return redirect('/admin_control_panel')
             adminpassF = req['adminpassF']
             if not check_password(adminpassF,userDetails(request.session['user'])['password']):
                 messages.error(request, 'Invalid Administrator password.')
-                return control_panel(request)
+                return redirect('/admin_control_panel')
             if request.FILES:
                 files = request.FILES
                 formatpath = os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Formats/')
@@ -160,6 +162,13 @@ def uploadformat(request):
                     except:
                         ext = ''
                     name = filelist[naam] + ext
+                    try:
+                        alreadyfile = glob.glob(os.path.join(formatpath,filelist[naam])+'*')[0]
+                    
+                        if os.path.exists(alreadyfile):
+                            sremove(alreadyfile)
+                    except:
+                        pass
                     if handle_uploaded_file(os.path.join(formatpath,name),files[naam]):
                         messages.success(request, 'Supporting Documents updated.')
                     else:
@@ -173,6 +182,13 @@ def uploadformat(request):
                     except:
                         ext = ''
                     name = filelist[naam] + ext
+                    try:
+                        alreadyfile = glob.glob(os.path.join(formatpath,filelist[naam])+'*')[0]
+                    
+                        if os.path.exists(alreadyfile):
+                            sremove(alreadyfile)
+                    except:
+                        pass
                     if handle_uploaded_file(os.path.join(formatpath,name),files[naam]):
                     # formatpath = os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Formats/')
                     
@@ -187,6 +203,13 @@ def uploadformat(request):
                     except:
                         ext = ''
                     name = filelist[naam] + ext
+                    try:
+                        alreadyfile = glob.glob(os.path.join(formatpath,filelist[naam])+'*')[0]
+                    
+                        if os.path.exists(alreadyfile):
+                            sremove(alreadyfile)
+                    except:
+                        pass
                     if handle_uploaded_file(os.path.join(formatpath,name),files[naam]):
                     # formatpath = os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Formats/')
                         messages.success(request, 'Sample 1 updated.')
@@ -200,6 +223,15 @@ def uploadformat(request):
                     except:
                         ext = ''
                     name = filelist[naam] + ext
+                    
+                    try:
+                        alreadyfile = glob.glob(os.path.join(formatpath,filelist[naam])+'*')[0]
+                    
+                        if os.path.exists(alreadyfile):
+                            sremove(alreadyfile)
+                            
+                    except:
+                        pass
                     if handle_uploaded_file(os.path.join(formatpath,name),files[naam]):
                     # formatpath = os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Formats/')                    
                         messages.success(request, 'Sample 2 updated.')
@@ -213,6 +245,13 @@ def uploadformat(request):
                     except:
                         ext = ''
                     name = filelist[naam] + ext
+                    try:
+                        alreadyfile = glob.glob(os.path.join(formatpath,filelist[naam])+'*')[0]
+                    
+                        if os.path.exists(alreadyfile):
+                            sremove(alreadyfile)
+                    except:
+                        pass
                     if handle_uploaded_file(os.path.join(formatpath,name),files[naam]):
                     # formatpath = os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Formats/')
                         messages.success(request, 'Sample 3 updated.')
@@ -226,6 +265,13 @@ def uploadformat(request):
                     except:
                         ext = ''
                     name = filelist[naam] + ext
+                    try:
+                        alreadyfile = glob.glob(os.path.join(formatpath,filelist[naam])+'*')[0]
+                    
+                        if os.path.exists(alreadyfile):
+                            sremove(alreadyfile)
+                    except:
+                        pass
                     if handle_uploaded_file(os.path.join(formatpath,name),files[naam]):
                     # formatpath = os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Formats/')
                     
@@ -233,95 +279,95 @@ def uploadformat(request):
                     else:
                         return oops(request)
                     
-                return control_panel(request)
+                return redirect('/admin_control_panel')
             else:
-                return control_panel(request)
+                return redirect('/admin_control_panel')
     else:
         return oops(request)
 
 def TESG_upload(request):
-    if adminonline(request):
-        if request.method == 'POST':
-            req = request.POST
-            if not 'adminpassT' in req.keys():
-                messages.error(request, 'Enter Administrator password.')
-                return control_panel(request)
-            adminpassF = req['adminpassT']
-            if not check_password(adminpassF,userDetails(request.session['user'])['password']):
-                messages.error(request, 'Invalid Administrator password.')
-                return control_panel(request)
+    # if adminonline(request):
+    #     if request.method == 'POST':
+    #         req = request.POST
+    #         if not 'adminpassT' in req.keys():
+    #             messages.error(request, 'Enter Administrator password.')
+    #             return redirect('/admin_control_panel')
+    #         adminpassF = req['adminpassT']
+    #         if not check_password(adminpassF,userDetails(request.session['user'])['password']):
+    #             messages.error(request, 'Invalid Administrator password.')
+    #             return redirect('/admin_control_panel')
             
-            if request.FILES:
-                tesgnum = req['tesgnum']
-                tesgdate = req['tesgdate']
-                projids = req['projids']
-                tesgpath = ''
-                allTESG = TESG_admin.objects.values_list('TESG_no')
-                projids = projids.replace(" ","")
-                allproj = projects.objects.all()
-                files = request.FILES
-                allids = []
-                if projids == '':
-                    messages.error(request,"Please enter comma seperated Project IDs")
-                    return control_panel(request)
+    #         if request.FILES:
+    #             tesgnum = req['tesgnum']
+    #             tesgdate = req['tesgdate']
+    #             projids = req['projids']
+    #             tesgpath = ''
+    #             allTESG = TESG_admin.objects.values_list('TESG_no')
+    #             projids = projids.replace(" ","")
+    #             allproj = projects.objects.all()
+    #             files = request.FILES
+    #             allids = []
+    #             if projids == '':
+    #                 messages.error(request,"Please enter comma seperated Project IDs")
+    #                 return redirect('/admin_control_panel')
 
-                for proj in allproj:
-                    allids.append(str(proj.newid))
+    #             for proj in allproj:
+    #                 allids.append(str(proj.newid))
                 
-                givenids = projids.split(",")
+    #             givenids = projids.split(",")
                 
-                for givenid in givenids:
-                    if not givenid in allids:
-                        messages.error(request,"The Project for ID: "+givenid+" does not exists")
-                        return control_panel(request)
+    #             for givenid in givenids:
+    #                 if not givenid in allids:
+    #                     messages.error(request,"The Project for ID: "+givenid+" does not exists")
+    #                     return redirect('/admin_control_panel')
 
-                for TESGnum in allTESG:
-                    if int(tesgnum) in TESGnum:
-                        messages.error(request, 'ERROR! TESG number '+ tesgnum +' entry already exists')
-                        return control_panel(request)
+    #             for TESGnum in allTESG:
+    #                 if int(tesgnum) in TESGnum:
+    #                     messages.error(request, 'ERROR! TESG number '+ tesgnum +' entry already exists')
+    #                     return redirect('/admin_control_panel')
 
-                if 'momupload' in files.keys():
-                    mompload = files['momupload']
-                    try:
-                        ext = '.' + mompload.name.split('.')[1]
-                    except:
-                        ext = ''
-                    naam = 'TESG_'+tesgnum + str(ext)
-                    tesgpath =os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/TESG/')
-                    if smkdir(tesgpath):
-                        tesgpath = os.path.join(tesgpath, naam)
-                        handle_uploaded_file(tesgpath,files['momupload'])
-                    else:
-                        return oops(request)
-                else:
-                    messages.error(request, "No MoM file uploaded")
-                    return control_panel(request)
+    #             if 'momupload' in files.keys():
+    #                 mompload = files['momupload']
+    #                 try:
+    #                     ext = '.' + mompload.name.split('.')[1]
+    #                 except:
+    #                     ext = ''
+    #                 naam = 'TESG_'+tesgnum + str(ext)
+    #                 tesgpath =os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/TESG/')
+    #                 if smkdir(tesgpath):
+    #                     tesgpath = os.path.join(tesgpath, naam)
+    #                     handle_uploaded_file(tesgpath,files['momupload'])
+    #                 else:
+    #                     return oops(request)
+    #             else:
+    #                 messages.error(request, "No MoM file uploaded")
+    #                 return redirect('/admin_control_panel')
 
 
 
-                TESG_admin1 = TESG_admin()
-                TESG_admin1.TESG_no = tesgnum
-                TESG_admin1.filepath = tesgpath
-                TESG_admin1.TESG_date = tesgdate
-                TESG_admin1.projects = projids
-                TESG_admin1.save()
-                tesgprojs = projids.split(',')
-                print(tesgprojs)
-                allprojs = projects.objects.all()
-                for proj in allprojs:
-                    if str(proj.newid) in tesgprojs:
-                        projectid = projects.objects.get(id = proj.id)
-                        if projectid.tesg_list:
-                            projectid.tesg_list = str(projectid.tesg_list) +',' + str(tesgnum)
-                        else:
-                            projectid.tesg_list = str(tesgnum)
-                        projectid.save(update_fields=['tesg_list'])
-                messages.success(request, 'New TESG number: '+tesgnum+' added.')
-                return control_panel(request)
-        else:
-            return oops(request)
-    else:
-        return oops(request)
+    #             TESG_admin1 = TESG_admin()
+    #             TESG_admin1.TESG_no = tesgnum
+    #             TESG_admin1.filepath = tesgpath
+    #             TESG_admin1.TESG_date = tesgdate
+    #             TESG_admin1.projects = projids
+    #             TESG_admin1.save()
+    #             tesgprojs = projids.split(',')
+    #             print(tesgprojs)
+    #             allprojs = projects.objects.all()
+    #             for proj in allprojs:
+    #                 if str(proj.newid) in tesgprojs:
+    #                     projectid = projects.objects.get(id = proj.id)
+    #                     if projectid.tesg_list:
+    #                         projectid.tesg_list = str(projectid.tesg_list) +',' + str(tesgnum)
+    #                     else:
+    #                         projectid.tesg_list = str(tesgnum)
+    #                     projectid.save(update_fields=['tesg_list'])
+    #             messages.success(request, 'New TESG number: '+tesgnum+' added.')
+    #             return redirect('/admin_control_panel')
+    #     else:
+    #         return oops(request)
+    # else:
+    #     return oops(request)
     
 
     if adminonline(request):
@@ -329,11 +375,11 @@ def TESG_upload(request):
             req = request.POST
             if not 'adminpassT' in req.keys():
                 messages.error(request, 'Enter Administrator password.')
-                return control_panel(request)
+                return redirect('/admin_control_panel')
             adminpassF = req['adminpassT']
             if not check_password(adminpassF,userDetails(request.session['user'])['password']):
                 messages.error(request, 'Invalid Administrator password.')
-                return control_panel(request)
+                return redirect('/admin_control_panel')
             
             if request.FILES:
                 tesgnum = req['tesgnum']
@@ -345,7 +391,7 @@ def TESG_upload(request):
                 for TESGnum in allTESG:
                     if int(tesgnum) in TESGnum:
                         messages.error(request, 'TESG upload error: TESG number '+ tesgnum +' entry already exists')
-                        return control_panel(request)
+                        return redirect('/admin_control_panel')
                 projids = projids.replace(" ","")
                 projids = projids.split(',')
                 allprojects = projects.objects.all()
@@ -355,7 +401,7 @@ def TESG_upload(request):
                 for projid in projids:
                     if not(projid in newids):
                         messages.error(request, 'TESG upload error: Project ID '+ projid +' does not exists.')
-                        return control_panel(request)
+                        return redirect('/admin_control_panel')
                 if 'momupload' in files.keys():
                     mompload = files['momupload']
                     try:
@@ -372,17 +418,18 @@ def TESG_upload(request):
                             if os.path.exists(alreadyfile):
                                 sremove(alreadyfile)
                             
+                            
                         except:
                             pass
                         if handle_uploaded_file(tesgpath,files['momupload']):
-                            messages.success(request, 'TESG upload successful, MoM for TESG '+tesgnum+' uploaded.')
+                            messages.success(request, 'TESG upload successful, report for TESG '+tesgnum+' uploaded.')
                         else:
                             return oops(request)
                     else:
                         return oops(request)
                 else:
-                    messages.error(request, 'TESG upload error: Please upload MoM file.')
-                    return control_panel(request)
+                    messages.error(request, 'TESG upload error: Please upload report file.')
+                    return redirect('/admin_control_panel')
                 TESG_admin1 = TESG_admin()
                 TESG_admin1.TESG_no = tesgnum
                 TESG_admin1.filepath = tesgpath
@@ -400,10 +447,10 @@ def TESG_upload(request):
                             projectid.tesg_list = str(tesgnum)
                         projectid.save(update_fields=['tesg_list'])
                 messages.success(request, 'New TESG number: '+tesgnum+' added.')
-                return control_panel(request)
+                return redirect('/admin_control_panel')
             else:
                 messages.error(request, 'ERROR! Please upload MoM file.')
-                return control_panel(request)
+                return redirect('/admin_control_panel')
         else:
             return oops(request)
     else:
@@ -417,11 +464,11 @@ def APPR_upload(request):
             req = request.POST
             if not 'adminpassA' in req.keys():
                 messages.error(request, 'Enter Administrator password.')
-                return control_panel(request)
+                return redirect('/admin_control_panel')
             adminpassF = req['adminpassA']
             if not check_password(adminpassF,userDetails(request.session['user'])['password']):
                 messages.error(request, 'Invalid Administrator password.')
-                return control_panel(request)
+                return redirect('/admin_control_panel')
             apprdate = req.get('apprdate')
             projid1 = req.get('projid')
             apprid = req.get('apprid')
@@ -430,7 +477,7 @@ def APPR_upload(request):
                 projid = str(oro.id)
             except:
                 messages.error(request, 'No project with project ID ' +str(projid1)+ ' exists.')
-                return control_panel(request)
+                return  redirect('/admin_control_panel')
             
             
             apprpath = ''
@@ -443,11 +490,11 @@ def APPR_upload(request):
                     except:
                         ext = ''
                     naam = 'Appraisal_'+ projid + '_' + apprdate + str(ext)
-                    apprpath =os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Appraisal/')
+                    apprpath = os.path.join(oro.projectpath, 'Appraisal/')
                     if smkdir(apprpath):
                         apprpath = os.path.join(apprpath, naam)
                         if handle_uploaded_file(apprpath,files['momupload']):
-                            messages.success(request, 'MoM entry added ')
+                            messages.success(request, 'Outcome file uploaded')
                         else:
                             return oops(request)
                     else:
@@ -464,10 +511,13 @@ def APPR_upload(request):
                 appr.apprdate = apprdate
                 appr.userid = oro.userid
                 appr.save()
+                oro.aproutdate = datetime.now().date()
+                oro.save(update_fields = ['aproutdate'])
                 messages.success(request, 'Appraisal committee entry added for project '+ appr.project.name)
-                return control_panel(request)
+                return redirect('/admin_control_panel')
             else:
-                pass
+                messages.success(request, 'Please select the outcome file of the project')
+                return redirect('/admin_control_panel')
         else:
             return oops(request)
     else:
@@ -479,56 +529,71 @@ def MONI_upload(request):
     if adminonline(request):
         if request.method == 'POST':
             req = request.POST
-        if not 'adminpassM' in req.keys():
-            messages.error(request, 'Enter Administrator password.')
-            return control_panel(request)
-        adminpassF = req['adminpassM']
-        if not check_password(adminpassF,userDetails(request.session['user'])['password']):
-            messages.error(request, 'Invalid Administrator password.')
-            return control_panel(request)
-        apprdate = req.get('monidate')
-        projid = req.get('projid')
-        moniid = req.get('moniid')
-        apprpath = ''
-        try:
-            oro = projects.objects.filter(newid = projid)[:1].get()
-            projid = str(oro.id)
-        except:
-            messages.error(request, 'No project with project ID ' +projid+ ' exists.')
-            return control_panel(request)
-        if request.FILES:
-            files = request.FILES
-            if 'momupload' in files.keys():
-                mompload = files['momupload']
-                try:
-                    ext = '.' + mompload.name.split('.')[-1]
-                except:
-                    ext = ''
-                naam = 'Monitoring_'+ projid + '_' + apprdate + str(ext)
-                apprpath =os.path.join(os.path.join(BASE_DIR, 'Data_Bank'), 'Admin/Monitoring/')
-                if smkdir(apprpath):
-                    apprpath = os.path.join(apprpath, naam)
-                    if handle_uploaded_file(apprpath,files['momupload']):
-                        messages.success(request, 'MoM entry added ')
+            if not 'adminpassM' in req.keys():
+                messages.error(request, 'Enter Administrator password.')
+                return  redirect('/admin_control_panel')
+            adminpassF = req['adminpassM']
+            if not check_password(adminpassF,userDetails(request.session['user'])['password']):
+                messages.error(request, 'Invalid Administrator password.')
+                return  redirect('/admin_control_panel')
+            apprdate = req.get('monidate')
+            projid = req.get('projid')
+            moniid = req.get('moniid')
+            apprpath = ''
+            projectpath = ''
+            try:
+                oro = projects.objects.filter(newid = projid)[:1].get()
+                projid = str(oro.id)
+                print(str(projid)+" ye hai id")
+                projectpath = oro.projectpath
+                # print(project)
+            except:
+                messages.error(request, 'No project with project ID ' +projid+ ' exists.')
+                return  redirect('/admin_control_panel')
+            if request.FILES:
+                files = request.FILES
+                if 'momupload' in files.keys():
+                    mompload = files['momupload']
+                    try:
+                        ext = '.' + mompload.name.split('.')[-1]
+                    except:
+                        ext = ''
+                    naam = 'Monitoring_'+ projid + '_' + apprdate + str(ext)
+                    apprpath = os.path.join(projectpath , 'Monitoring/')
+                    print(apprpath)
+                    if smkdir(apprpath):
+                        apprpath = os.path.join(apprpath, naam)
+                        if handle_uploaded_file(apprpath,files['momupload']):
+                            messages.success(request, 'Outcomes uploaded.')
+                        else:
+                            return oops(request)
                     else:
                         return oops(request)
                 else:
-                    return oops(request)
-            allthere = Monitoring_admin.objects.filter(project = oro)
-            for there in allthere:
-                sremove(there.monipath)    
-            allthere.delete()
-            moni = Monitoring_admin()
-            moni.project = oro
-            moni.moniid = moniid
-            moni.userid = oro.userid
-            moni.monipath = apprpath
-            moni.monidate = apprdate
-            moni.save()
-            messages.success(request, 'Monitoring committee entry added for project '+ moni.project.name)
-            return control_panel(request)
+                    messages.error(request, 'Invalid File selected')
+                    return redirect('/admin_control_panel')
+                oror = projects.objects.get(id = projid)
+                allthere = Monitoring_admin.objects.filter(project = oror)
+                for there in allthere:
+                    sremove(there.monipath)    
+                allthere.delete()
+                
+                moni = Monitoring_admin()
+                moni.project = oror
+                moni.moniid = moniid
+                moni.userid = oror.userid
+                moni.monipath = apprpath
+                moni.monidate = apprdate
+                moni.save()
+                oror.monioutdate = datetime.now().date()
+                oror.save(update_fields = ['monioutdate'])
+                messages.success(request, 'Monitoring committee entry added for project '+ moni.project.name)
+                return redirect('/admin_control_panel')
+            else:
+                messages.success(request, 'Please select the outcome file of the project')
+                return redirect('/admin_control_panel')
         else:
-            pass
+            return oops(request)    
     else:
         return oops(request)
 

@@ -30,7 +30,13 @@
             <span><strong class="text-uppercase">Dashboard</strong></span></a>
     </li>
 
-
+    
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'view_all_projs' %}">
+            <i class="fas fa-fw fa-project-diagram"></i>
+            <span><strong class="text-uppercase">All Projects</strong></span></a>
+    </li>
+    
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -74,8 +80,7 @@
                 <a class="collapse-item" href="{% url 'admin_in_doc_sign' %}"><strong>Document Signing</strong>
                 </a>
 
-                <hr>
-                <a class="collapse-item text-uppercase" href="{% url 'view_all_projs' %}"><strong>View All projects</strong></a>
+                
             </div>
         </div>
     </li>
@@ -92,7 +97,7 @@
                 
                 <a class="collapse-item" href="{% url 'adminloa' %}">Pending LOAs
                 </a>
-                <a class="collapse-item" href="{% url 'admin_pending_projects' %}">View All LOAs &nbsp;&nbsp;&nbsp;</a>
+                
                 <hr class="sidebar-divider">
                 <h6 class="collapse-header">Payment</h6>
                 <a class="collapse-item" href="{% url 'init_release' %}"><strong>Initial payment release</strong>
@@ -153,6 +158,8 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="/view_TESGs">View All TESG</a>
+                <a class="collapse-item" href="{% url 'view_loas' %}">View All LOAs &nbsp;&nbsp;&nbsp;</a>
+                <a class="collapse-item" href="{% url 'view_exts' %}">View All Extensions &nbsp;&nbsp;&nbsp;</a>
                 <a class="collapse-item" href="/view_apprs">View All Appraisals</a>
                 <a class="collapse-item" href="/view_monis">View All Monitoring</a>
                 

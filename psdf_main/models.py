@@ -66,10 +66,11 @@ class projects(models.Model):
     tesg_list = models.TextField(null=True)
     dpraprdate = models.DateField(null = True, auto_now_add=True)
     tesgaprdate = models.DateField(null = True)
+    aproutdate = models.DateField(null = True)
     appraprdate = models.DateField(null = True)
+    monioutdate = models.DateField(null = True)
     moniaprdate = models.DateField(null = True)
     workflow = models.TextField(null=True)
-    
     sanction_date = models.DateField(null=True)
     doc_path = models.TextField(null=True)
     doc_sign_date = models.DateField(null=True)

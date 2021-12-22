@@ -88,6 +88,21 @@ def userDetails(username):
         user['activate'] = user1.activate
     return user
 
+def get_grand_total(abc):
+    item_Gtotal = {}
+    total = 0
+    
+    for boq in abc:
+        if boq['itemname'] in item_Gtotal.keys():
+            item_Gtotal[boq['itemname']] = item_Gtotal[boq['itemname']] + boq['itemcost']
+        else:
+            item_Gtotal[boq['itemname']] = boq['itemcost']
+    for key, value in item_Gtotal.items():
+        total = total + value
+       
+    return total
+
+    
 def projectDetails(projid):
     proj = {}
     proj1 = projects.objects.get(id = projid)
@@ -151,20 +166,22 @@ def get_Gtotal_list(abc):
         if boq['itemname'] in item_Gtotal.keys():
             item_Gtotal[boq['itemname']] = item_Gtotal[boq['itemname']] + boq['itemcost']
         else:
-                item_Gtotal[boq['itemname']] = boq['itemcost']
+            item_Gtotal[boq['itemname']] = boq['itemcost']
     for key, value in item_Gtotal.items():
+        
         Gtotal_list.append({'itemname':key, 'grandtotal':value})
     return Gtotal_list
 
+
+
 def get_Gtotal(abc):
     item_Gtotal = {}
-    
     totalval = 0
     for boq in abc:
         if boq['itemname'] in item_Gtotal.keys():
             item_Gtotal[boq['itemname']] = item_Gtotal[boq['itemname']] + boq['itemcost']
         else:
-                item_Gtotal[boq['itemname']] = boq['itemcost']
+            item_Gtotal[boq['itemname']] = boq['itemcost']
     for key, value in item_Gtotal.items():
         totalval = totalval + value
     return totalval

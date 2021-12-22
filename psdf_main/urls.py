@@ -32,7 +32,8 @@ urlpatterns = [
     path('rejectdpr/<str:projid>', views.rejectdpr, name="rejectdpr"),
     path('notificationread/<str:userid>', views.notificationread, name="notificationread"),
     path('add_remark/<str:thispage>',views.add_remark,name='add_remark'),
-
+    path('add_remark_proj/',views.add_remark_proj,name='add_remark_proj'),
+    path('closeproject/',views.closeproject,name='closeproject'),
     #pending_projects
     path('under_examination/', views.under_examination, name="under_examination"),
 
@@ -73,6 +74,7 @@ urlpatterns = [
     path('APPR_upload/', views.APPR_upload, name="APPR_upload"),
     path('view_apprs/', views.view_apprs, name="view_apprs"),
     path('download_appr_mom/<str:apprid>', views.download_appr_mom, name = 'download_appr_mom'),
+    path('udownload_appr_mom/<str:apprid>', views.udownload_appr_mom, name = 'udownload_appr_mom'),
     path('del_appr_mom/<str:aprid>', views.del_appr_mom, name = 'del_appr_mom'),
     
     #requests
@@ -92,6 +94,7 @@ urlpatterns = [
     path('MONI_upload/', views.MONI_upload, name="MONI_upload"),
     path('view_monis/', views.view_monis, name="view_monis"),
     path('download_moni_mom/<str:moniid>', views.download_moni_mom, name = 'download_moni_mom'),
+    path('udownload_moni_mom/<str:moniid>', views.udownload_moni_mom, name = 'udownload_moni_mom'),
     path('approve_monitoring/<str:projectid>', views.approve_monitoring, name = "approve_monitoring"),
     path('del_moni_mom/<str:aprid>', views.del_moni_mom, name = 'del_moni_mom'),
 
@@ -115,6 +118,10 @@ urlpatterns = [
     path('user_boq_view/<str:projid>', views.user_boq_view, name = "user_boq_view"),
     path('user_back/<str:backpage>', views.user_back, name = "user_back"),
     path('download_data_bank/<str:projid>', views.download_data_bank, name = "download_data_bank"),
+    path('view_loas/', views.view_loas, name="view_loas"),
+    path('view_exts/', views.view_exts, name="view_exts"),
+    path('add_loa_remark/', views.add_loa_remark, name="add_loa_remark"),
+    
     
     #Auditor
     path('auditor_view_TESGs/', views.auditor_view_TESGs, name="auditor_view_TESGs"),

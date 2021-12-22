@@ -157,7 +157,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Projects completed payment </div>
+                                                Projects closed </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">{% if ncomp %} {{ncomp}}
                                                 {% else %} None {% endif %}</div>
                                         </div>
@@ -256,26 +256,30 @@
                                         <td>₹{{proj.amt_asked}}</td>
                                         <td>₹{{proj.amt_approved}}</td>
                                         <td colspan="2" class="text-danger">{{proj.remark}}</td>
-
                                         {% if proj.deny == True %}
-                    <td class="alert-danger"><h6 class="font-weight-bold">PROJECT REJECTED</h6></td>
+                                        <td class="alert-danger"><h6 class="font-weight-bold">PROJECT REJECTED</h6></td>
+                                        {% elif proj.completed == True %}
+                    <td class="alert-success"><h6 class="font-weight-bold">PROJECT COMPLETED</h6></td>
                     {% elif proj.status == '1' %}
                     <td><h6 class="font-weight-bold text-primary">Under Techno-Economic clearance</h6></td>
 
                     {% elif proj.status == '2' %}
-                    <td><h6 class="font-weight-bold text-primary">under appraisal committee</h6></td>
+                    <td><h6 class="font-weight-bold text-primary">Under appraisal committee</h6></td>
 
                     {% elif proj.status == '3' %}
-                    <td><h6 class="font-weight-bold text-primary">under monitoring comittee</h6></td>
+                    <td><h6 class="font-weight-bold text-primary">Under monitoring comittee</h6></td>
 
-                    {% elif proj.status == '5' %}
-                    <td><a href=""><h6 class="font-weight-bold text-primary">Sanction Order released</h6></a></td>
-                    
                     {% elif proj.status == '4' %}
-                    <td><h6 class="font-weight-bold text-primary">Document Signing process</h6></td>
+                    <td><a href=""><h6 class="font-weight-bold text-primary">Awaiting Sanction Order</h6></a></td>
+                    
+                    {% elif proj.status == '5' %}
+                    <td><h6 class="font-weight-bold text-primary">Document Signing in progress</h6></td>
                     
                     {% elif proj.status == '6' %}
-                    <td class="alert-success"><h6 class="font-weight-bold">Payment in process</h6></td>
+                    <td class="alert-success"><h6 class="font-weight-bold">Awaiting Initial Payment</h6></td>
+                    
+                    {% elif proj.status == '7' %}
+                    <td class="alert-success"><h6 class="font-weight-bold">Payment in progress</h6></td>
                     {% endif %}
                 
                                     </tr>

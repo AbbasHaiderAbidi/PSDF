@@ -34,6 +34,7 @@ def approve_appraisal(request, projectid):
                 messages.success(request, 'Project : '+ project.name + ' has been approved Appraisal Committee.')
                 proji = projects.objects.get(id = projectid)
                 notification(proji.userid.id, 'Project ID: '+str(proji.newid)+', name: '+str(proji.name)+' has been approved by Appraisal committee')
+                workflow(proji.id, "Project approved by Appraisal Committee on "+str(datetime.now().date()))
             else:
                 messages.success(request, 'Aborted! Invalid administrator password.')
             

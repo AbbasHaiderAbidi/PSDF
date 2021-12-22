@@ -67,7 +67,7 @@ def user_in_doc_sign(request):
                         extension = str(docsign.name.split(".")[-1])
                     except:
                         extension = ''
-                    thisproj = projects.objects.get(id = projid, userid = getuser())
+                    thisproj = projects.objects.get(id = projid, userid = getuser(request))
                     doc_path = thisproj.projectpath + "/Signed_Document/"
                     srmdir(doc_path)
                     smkdir(doc_path)
@@ -79,7 +79,7 @@ def user_in_doc_sign(request):
                     thisproj.doc_path = doc_path_file
                     thisproj.approved = False
                     thisproj.workflow = str(thisproj.workflow) + ']*[' + 'Project document submitted by entity on '+ str(datetime.now().date())
-                    thisproj.status = '4'
+                    thisproj.status = '5'
                     thisproj.save(update_fields=['doc_path','approved', 'status', 'workflow'])
                     notification(getadmin_id(),'Signing Document submitted by ' + str(thisproj.userid.utilname) +' for project ID : '+ str(thisproj.newid))
                 
@@ -108,10 +108,6 @@ def download_doc_sign(request, projid):
                 return oops(request)
         else:
             messages.error(request, "Document has not been uploaded")
-            if adminonline(request):
-                return redirect('/admin_in_doc_sign')
-            if useronline(request):
-                return redirect('/user_in_doc_sign')
             return oops(request)
     else:
             return oops(request)

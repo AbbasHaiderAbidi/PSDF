@@ -32,7 +32,7 @@
                 <h6 class="m-0 font-weight-bold text-info">View Instructions</h6>
             </a>
             <!-- Card Content - Collapse -->
-            <div class="collapse" id="format">
+            <div class="collapse show" id="format">
                 <div class="card-body">
                     <div class="row">
                         lorem ipsum dolor
@@ -43,7 +43,12 @@
     </div>
 
 </div>
+{% if not projs and not loas and not thisloa%}
+<br>
+<br>
+<h3 class="font-weight-bold text-danger center">No open LOA is pending for payment</h3>
 
+{% endif %}
 {% if projs and not loas and not thisloa%}
 <div class="row">
     <div class="col-lg-4 center">

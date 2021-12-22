@@ -4,13 +4,13 @@
 
 
 <div class="row">
-    <div class="col-md-4 d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">TESG Chain of Project : {{proj.name}} ({{proj.newid}})</h1>
+    <div class="col-md-7 d-sm-flex align-items-center justify-content-between mb-4">
+        <h4 class="mb-0 text-gray-800">TESG Chain of Project : <div class="text-danger">{{proj.name}} <strong>[{{proj.newid}}]</strong></div></h4>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
 
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         {% for message in messages %}
         <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
             {{message}}
@@ -31,7 +31,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title text-black-50" id=""> <strong>New TESG for {{proj.name}} ({{proj.newid}})</strong></h3>
+                <h3 class="modal-title text-black-50" id=""> <strong>New TESG</strong></h3>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

@@ -1,177 +1,193 @@
-{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% block body %}
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load static %} {% load custom_tags %} {% block body %}
+
+<div class="row">
+    <div class="col-md-12 pull-right">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<br>
 
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-4">
-            <h1 class="h3 mb-2 text-gray-800">All Projects</h1>
-        </div>
-        <div class="col-md-2">
 
-        </div>
-        <div class="col-md-6">
-            {% for message in messages %}
-            <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
-                {{message}}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    <br>
+    <!-- <div class="col-lg-12"> -->
 
-    <div class="row">
+        <div class="card shadow mb-4">
+            <!-- <div class="card-header py-3"> -->
+            <h5 class="m-0 font-weight-bold text-success">
+                <a href="#projtable" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                    aria-expanded="True" aria-controls="collapseCardExample">
+                    <h6 class="m-0 font-weight-bold text-dark text-uppercase">summary</h6>
+                </a>
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
+            </h5>
+            <div class="collapse show" id="projtable">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Projects pending for examination</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if npending %} {{npending}} {% else %} None {% endif %}</div>
+                    <div class="row">
+
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Projects pending for examination</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if npending %}
+                                                {{npending}} {% else %} None {% endif %}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-auto">
-                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Projects under TESG</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if ntesg %} {{ntesg}}
+                                                {% else %} None {% endif %}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Projects under Appraisal committee</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if nappr %} {{nappr}}
+                                                {% else %} None {% endif %}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                Projects under Monitoring committee </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if nmoni %} {{nmoni}}
+                                                {% else %} None {% endif %}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                Projects Rejected</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if nreject %}
+                                                {{nreject}} {% else %} None {% endif %}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Projects whose sanction order is released</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if nsanc %} {{nsanc}}
+                                                {% else %} None {% endif %}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Projects under payment phase</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if npays %} {{npays}}
+                                                {% else %} None {% endif %}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-bottom-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Projects closed </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if ncomp %} {{ncomp}}
+                                                {% else %} None {% endif %}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Projects under TESG</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if ntesg %} {{ntesg}} {% else %} None {% endif %}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Projects under Appraisal committee</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if nappr %} {{nappr}} {% else %} None {% endif %}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Projects under Monitoring committee </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if nmoni %} {{nmoni}} {% else %} None {% endif %}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="row">
-
-        <!-- Earnings (Monthly) Card Example -->
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Projects Rejected</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if nreject %} {{nreject}} {% else %} None {% endif %}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Projects in Document Signing</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if ndocs %} {{ndocs}} {% else %} None {% endif %}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Projects ongoing payment</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if npays %} {{npays}} {% else %} None {% endif %}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        
-
-
-
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Projects completed payment </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{% if ncomp %} {{ncomp}} {% else %} None {% endif %}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
+    <!-- </div> -->
     <div class="row">
 
         <div class="col-lg-12">
@@ -179,8 +195,9 @@
             <div class="card shadow mb-4">
                 <!-- <div class="card-header py-3"> -->
                 <h5 class="m-0 font-weight-bold text-success">
-                    <a href="#projtable" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="True" aria-controls="collapseCardExample">
-                        <h6 class="m-0 font-weight-bold text-success">List of all Projects in Approval phase</h6>
+                    <a href="#projtable" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                        aria-expanded="Ture" aria-controls="collapseCardExample">
+                        <h6 class="m-0 font-weight-bold text-success">List of all Projects</h6>
                     </a>
 
                 </h5>
@@ -188,74 +205,125 @@
 
 
                 <div class="collapse" id="projtable"><br>
-                    <input type="text" id="temp_proj_search1" class="form-control input-text pull-center border-left-info" onkeyup="get_temp_proj('temp_proj_search1','dataTable')" placeholder="Search projects by ID" title="Search" style="margin:auto; width: 30%;">
+                    <input type="text" id="temp_proj_search1"
+                        class="form-control input-text pull-center border-left-info"
+                        onkeyup="get_temp_proj('temp_proj_search1','dataTable')" placeholder="Search projects by ID"
+                        title="Search" style="margin:auto; width: 30%;">
                     <div class="card-body">
                         {% for message in messages %}
-                        <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
+                        <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert"
+                            style="margin: auto;">
                             {{message}}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         {% endfor %}<br>
                         <div class="table-responsive">
-                            <table class="table table-bordered  table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0"
+                                style="table-layout: fixed;
                         width: 100%;">
-                                <thead class="alert-dark">
+                                <thead>
                                     <tr>
                                         <th>Project ID</th>
-                                        <th>Project Name</th>
-                                        <th>User</th>
-                                        <th>Entity</th>
-                                        <th>DPR Submission date</th>
+                                        <th colspan="2">Project Name</th>
+                                        <th>DPR submission Date</th>
+                                        
+                                        <th>Submitted cost</th>
+                                        <th>Approved Grant</th>
+                                        <th colspan="2" class="text-center alert-warning">Remark</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tfoot class="alert-dark">
+                                <tfoot>
                                     <tr>
                                         <th>Project ID</th>
-                                        <th>Project Name</th>
-                                        <th>User</th>
-                                        <th>Entity</th>
-                                        <th>DPR Submission date</th>
+                                        <th colspan="2">Project Name</th>
+                                        <th>DPR submission Date</th>
+                                        
+                                        <th>Submitted cost</th>
+                                        <th>Approved Grant</th>
+                                        <th colspan="2" class="text-center alert-warning">Current Remark</th>
                                         <th>Status</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    {% if not all_aprojs %}
+                                    {% if not all_projs %}
                                     <tr>
                                         <td>Not Available</td>
+                                        <td colspan="2">Not Available</td>
                                         <td>Not Available</td>
                                         <td>Not Available</td>
                                         <td>Not Available</td>
-                                        <td>Not Available</td>
+                                        <td colspan="2">Not Available</td>
                                         <td>Not Available</td>
 
                                     </tr>
-                                    {% else %} {% for proj in all_aprojs %}
+                                    {% else %} {% for proj in all_projs %}
                                     <tr>
-                                        <td class="font-weight-bolder">{{proj.newid}}</td>
-                                        <td><a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
-                                        <td>{{proj.userid.username}}</td>
-                                        <td>{{proj.userid.region}}</td>
+                                        <td><a href="/admin_project_details/{{proj.id}}"
+                                            class="font-weight-bold text-danger">{{proj.newid}}</a></td>
+                                        <td colspan="2">{{proj.name}}</td>
                                         <td>{{proj.dprsubdate}}</td>
-                                        {% if proj.status == '1' %}
-                                        <td>
-                                            <h5 class="font-weight-bold">Under TESG</h5>
-                                        </td>
-                                        {% elif proj.status == '2' %}
-                                        <td>
-                                            <h5 class="font-weight-bold">Under Appraisal</h5>
-                                        </td>
-                                        {% elif proj.status == '3' %}
-                                        <td>
-                                            <h5 class="font-weight-bold">Under Monitoring</h5>
-                                        </td>
-                                        {% elif proj.status == '4' %}
-                                        <td>
-                                            <h5 class="font-weight-bold">Under Final approval</h5>
-                                        </td>
-                                        {% endif %}
+                                        <td>₹{{proj.amt_asked}}</td>
+                                        <td>₹{{proj.amt_approved}}</td>
+                                        <form action="/add_remark/view_all_projs" method="POST" name="add_remark" id="add_remark">
+                                            {% csrf_token %}
+                                            <td colspan = "2">
+                                                <input type="hidden" id="projid" name="projid" value="{{proj.id}}">
+                                                <input type="text" class="form-control" name="remark" id="remark" value="{{proj.remark}}"><br>
+                                                <input type="submit" class="btn btn-sm btn-outline-danger" value="update">
+                                                <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modalforRemark{{proj.id}}">
+                                                    <i class="fa fa-eye"></i> View
+                                                </button>
+                                            </td>
+                                        </form>
+                                        <div class="modal fade" id="modalforRemark{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforRemark{{proj.id}}" aria-hidden="true">
+                                            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" class="text-uppercase"> <strong>Remark for {{proj.newid}} - {{proj.name}} </strong></h5>
+            
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                    </div>
+            
+            
+                                                    <div class="modal-body">
+            
+                                                        <h6>{{proj.remark}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+            
+                                        </div>        
+                                        {% if proj.deny == True %}
+                                        <td class="alert-danger"><h6 class="font-weight-bold">PROJECT REJECTED</h6></td>
+                                        {% elif proj.completed == True %}
+                    <td class="alert-success"><h6 class="font-weight-bold">PROJECT COMPLETED</h6></td>
+                    {% elif proj.status == '1' %}
+                    <td><h6 class="font-weight-bold text-primary">Under Techno-Economic clearance</h6></td>
+
+                    {% elif proj.status == '2' %}
+                    <td><h6 class="font-weight-bold text-primary">Under appraisal committee</h6></td>
+
+                    {% elif proj.status == '3' %}
+                    <td><h6 class="font-weight-bold text-primary">Under monitoring comittee</h6></td>
+
+                    {% elif proj.status == '4' %}
+                    <td><a href=""><h6 class="font-weight-bold text-primary">Awaiting Sanction Order</h6></a></td>
+                    
+                    {% elif proj.status == '5' %}
+                    <td><h6 class="font-weight-bold text-primary">Document Signing in progress</h6></td>
+                    
+                    {% elif proj.status == '6' %}
+                    <td class="alert-success"><h6 class="font-weight-bold">Awaiting Initial Payment</h6></td>
+                    
+                    {% elif proj.status == '7' %}
+                    <td class="alert-success"><h6 class="font-weight-bold">Payment in progress</h6></td>
+                    {% endif %}
+                
                                     </tr>
                                     {% endfor %} {% endif %}
                                 </tbody>
@@ -269,199 +337,7 @@
         </div>
 
     </div>
-    <div class="row">
 
-        <div class="col-lg-12">
-
-            <div class="card shadow mb-4">
-                <!-- <div class="card-header py-3"> -->
-                <h5 class="m-0 font-weight-bold text-success">
-                    <a href="#rejectproj" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="True" aria-controls="collapseCardExample">
-                        <h6 class="m-0 font-weight-bold text-danger">List of all Rejected projects</h6>
-                    </a>
-
-                </h5>
-                <!-- </div> -->
-
-
-                <div class="collapse" id="rejectproj"><br>
-                    <input type="text" id="temp_proj_search" class="form-control input-text pull-center border-left-info" onkeyup="get_temp_proj('temp_proj_search','rdataTable')" placeholder="Search projects by ID" title="Search" style="margin:auto; width: 30%;">
-                    <div class="card-body">
-                        {% for message in messages %}
-                        <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
-                            {{message}}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        {% endfor %}<br>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover" id="rdataTable" width="100%" cellspacing="0" style="table-layout: fixed;
-                        width: 100%;">
-                                <thead class="alert-dark">
-                                    <tr>
-                                        <th>Project ID</th>
-                                        <th>Project Name</th>
-                                        <th>User</th>
-                                        <th>Entity</th>
-                                        <th>Rejected during</th>
-                                        <th>Date of Rejection</th>
-                                        <th>Remark</th>
-                                    </tr>
-                                </thead>
-                                <tfoot class="alert-dark">
-                                    <tr>
-                                        <th>Project ID</th>
-                                        <th>Project Name</th>
-                                        <th>User</th>
-                                        <th>Entity</th>
-                                        <th>Rejected during</th>
-                                        <th>Date of Rejection</th>
-                                        <th>Remark</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    {% if not all_rprojs and not all_rpprojs %}
-                                    <tr>
-                                        <td>Not Available</td>
-                                        <td>Not Available</td>
-                                        <td>Not Available</td>
-                                        <td>Not Available</td>
-                                        <td>Not Available</td>
-                                        <td>Not Available</td>
-                                    </tr>
-                                    {% else %} {% for proj in all_rprojs %}
-                                    <tr>
-                                        <td class="font-weight-bolder">{{proj.newid}}</td>
-                                        <td><a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
-                                        <td>{{proj.userid.username}}</td>
-                                        <td>{{proj.userid.region}}</td>
-
-                                        {% if proj.status == '1' %}
-                                        <td>
-                                            <h5 class="font-weight-bold">Under TESG</h5>
-                                        </td>
-                                        {% elif proj.status == '2' %}
-                                        <td>
-                                            <h5 class="font-weight-bold">Under Appraisal</h5>
-                                        </td>
-                                        {% elif proj.status == '3' %}
-                                        <td>
-                                            <h5 class="font-weight-bold">Under Monitoring</h5>
-                                        </td>
-                                        {% elif proj.status == '4' %}
-                                        <td>
-                                            <h5 class="font-weight-bold">Under Final approval</h5>
-                                        </td>
-                                        {% endif %}
-                                        <td>{{proj.denydate}}</td>
-                                        <td>{{proj.remark}}</td>
-
-                                    </tr>
-                                    {% endfor %} {% for proj in all_rpprojs %}
-                                    <tr>
-                                        <td class="font-weight-bolder">Temp</td>
-                                        <td><a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.proname}}</a></td>
-                                        <td>{{proj.userid.username}}</td>
-                                        <td>{{proj.userid.region}}</td>
-
-
-                                        <td>
-                                            <h5 class="font-weight-bold">DPR Rejected</h5>
-                                        </td>
-
-                                        <td>{{proj.dprdenydate}}</td>
-                                        <td>{{proj.remark}}</td>
-
-                                    </tr>
-                                    {% endfor %} {% endif %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-    <div class="row">
-
-        <div class="col-lg-12">
-
-            <div class="card shadow mb-4">
-                <!-- <div class="card-header py-3"> -->
-                <h5 class="m-0 font-weight-bold text-warning">
-                    <a href="#pending" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="True" aria-controls="collapseCardExample">
-                        <h6 class="m-0 font-weight-bold text-warning">List of all projects pending for examination</h6>
-                    </a>
-
-                </h5>
-                <!-- </div> -->
-
-
-                <div class="collapse" id="pending"><br>
-                    <input type="text" id="temp_proj_search2" class="form-control input-text pull-center border-left-info" onkeyup="get_temp_proj('temp_proj_search2','pendingTable')" placeholder="Search projects by ID" title="Search" style="margin:auto; width: 30%;">
-                    <div class="card-body">
-                        {% for message in messages %}
-                        <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert" style="margin: auto;">
-                            {{message}}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        {% endfor %}<br>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover" id="pendingTable" width="100%" cellspacing="0" style="table-layout: fixed;
-                        width: 100%;">
-                                <thead class="alert-dark">
-                                    <tr>
-                                        <th>Project Name</th>
-                                        <th>User</th>
-                                        <th>Entity</th>
-                                        <th>DPR Submission date</th>
-
-                                    </tr>
-                                </thead>
-                                <tfoot class="alert-dark">
-                                    <tr>
-                                        <th>Project Name</th>
-                                        <th>User</th>
-                                        <th>Entity</th>
-                                        <th>DPR Submission date</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    {% if not all_temps %}
-                                    <tr>
-                                        <td>Not Available</td>
-                                        <td>Not Available</td>
-                                        <td>Not Available</td>
-                                        <td>Not Available</td>
-
-                                    </tr>
-                                    {% else %} {% for proj in all_temps %}
-                                    <tr>
-
-                                        <td><a href="/admin_temp_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.proname}}</a></td>
-                                        <td>{{proj.userid.username}}</td>
-                                        <td>{{proj.userid.region}}</td>
-                                        <td>{{proj.dprsubdate}}</td>
-
-                                    </tr>
-                                    {% endfor %} {% endif %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
     <script>
         function get_temp_proj(btnID, rpc) {
             var input, filter, table, tr, td, i, txtValue;

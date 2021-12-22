@@ -7,6 +7,9 @@ def multiply(qty, unit_price):
     return round(qty * unit_price)
 
 
+@register.simple_tag
+def substract(a, b):
+    return round(a - b)
     
 
 @register.simple_tag

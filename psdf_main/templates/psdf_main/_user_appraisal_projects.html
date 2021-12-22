@@ -32,7 +32,7 @@
                                 <th>Project ID</th>
                                 <th>Project Name</th>
                                 <th>Amount</th>
-                                <th>Category of Funding</th>
+                                <th>Status</th>
                                 <th>View BoQ</th>
                                 <th>Project acceptance date</th>
                                 <th>TESG approval date</th>
@@ -45,7 +45,7 @@
                                 <th>Project ID</th>
                                 <th>Project Name</th>
                                 <th>Amount</th>
-                                <th>Category of Funding</th>
+                                <th>Status</th>
                                 <th>View BoQ</th>
                                 <th>Project acceptance date</th>
                                 <th>TESG approval date</th>
@@ -71,7 +71,11 @@
                                 <td><a href="/user_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
                                 <td>{{proj.amt_asked}}</td>
 
-                                <td>{{proj.fundcategory}}</td>
+                                {%if proj.aproutdate %}
+                                <td><a href="/udownload_appr_mom/{{proj.id}}" class="btn btn-sm btn-outline-primary">Download</a></td>
+                                {% else %}
+                                <td class="alert-warning">Pending</td>
+                                {% endif %}
                                 <td>
                                     <a class="btn btn-outline-warning btn-responsive" href="/user_boq_view/{{proj.id}}_userappraisalprojects">
                                         <i class="fas fa-eye"></i> View BoQ

@@ -1,0 +1,148 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load custom_tags %} {% load static %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4">
+        <h1 class="h3 mb-2 text-gray-800">Time extension</h1>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-6">
+        {% for message in messages %}
+        <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<br>
+
+
+<div class="row">
+
+
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true"
+                aria-controls="collapseCardExample">
+                <h6 class="m-0 font-weight-bold text-info">Approved time extension applications</h6>
+            </a>
+
+            <div class="collapse show" id="format">
+                <div class="card-body">
+                    <div class="row">
+
+
+                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0"
+                            style="table-layout: fixed;
+                            width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Project ID</th>
+                                    <th>Project name</th>
+                                    <th>Original Schedule</th>
+                                    <th>Extension</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+
+                                <tr>
+                                    <th>Project ID</th>
+                                    <th>Project name</th>
+                                    <th>Original Schedule</th>
+                                    <th>Extension</th>
+
+                                </tr>
+
+                            </tfoot>
+
+                            <tbody>
+                                {% if not extlist %}
+                                <tr>
+                                    <td>Not Available</td>
+                                    <td>Not Available</td>
+                                    <td>Not Available</td>
+                                    <td>Not Available</td>
+
+                                </tr>
+                                {% else %}
+                                {% for proj in extlist %}
+
+                                <tr>
+                                    <td><a href="/admin_project_details/{{proj.id}}"
+                                        class="font-weight-bold text-danger">{{proj.newid}}</a></td>
+                                    <td>{{proj.name}}</td>
+                                    <td>{{proj.orischedule}}</td>
+                                    <td><button type="button" class="btn btn-outline-success btn-responsive"
+                                            data-toggle="modal" data-target="#modalforext{{proj.id}}">
+                                            <i class="fa fa-eye"></i> View
+                                        </button></td>
+                                </tr>
+                                <div class="modal fade" id="modalforext{{proj.id}}" tabindex="-1" role="dialog"
+                                    aria-labelledby="modalforext{{proj.id}}" aria-hidden="true">
+                                    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="text-danger"><strong>Extensions for
+                                                        {{proj.name}} ({{proj.newid}})</strong></h3>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-4 text-dark">Schedule Requested</div>
+                                                    <div class="col-md-4 text-dark">Supporting File</div>
+                                                    <div class="col-md-2"></div>
+                                                </div>
+                                                <hr>
+                                                {% for ext in proj.extensions %}
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-4 text-dark font-weight-bold">{{ext.exttime}}
+                                                        Months</div>
+                                                    <div class="col-md-4"><a
+                                                            href="/download_ext_file/{{proj.id}}_{{ext.filename}}"
+                                                            class="btn btn-outline-primary btn-block">Download</a></div>
+                                                    <div class="col-md-2"></div>
+                                                </div>
+                                                <hr>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    function autosubmit() {
+        var projectid = document.getElementById('projectid')
+        var projform = document.getElementById('projform')
+        if (projectid.value != '0') {
+            projform.submit();
+        }
+
+    }
+</script>
+
+{% endblock %}

@@ -30,14 +30,32 @@ def del_tesg(request, tesgid):
             messages.error(request, "Cannot delete a valid TESG entry")
             return view_TESGs(request)
         else:
-            try:
-                todel = TESG_admin.objects.get(id = tesgid)
-                sremove(todel.filepath)
-                todel.delete()
+            # try:
+            todel = TESG_admin.objects.get(id = tesgid)
+            thistesg = str(todel.TESG_no)
+            sremove(todel.filepath)
+            todel.delete()
+            
+            for proj in projects.objects.all():
+                tesg_list = str(proj.tesg_list).split(',')
+                # print(tesg_list)
+                if thistesg in tesg_list:
+                    tesg_list.remove(thistesg)
+                # print(tesg_list)
+                new_tesg_list = ''
+                for item in tesg_list:
+                    if new_tesg_list == '':
+                        new_tesg_list = item
+                    else:
+                        new_tesg_list = new_tesg_list + ',' + item
+                proj.tesg_list = new_tesg_list
+                # print(proj.tesg_list)
+                proj.save(update_fields = ['tesg_list'])
+                
                 messages.success(request, "TESG entry deleted")
-                return view_TESGs(request)
-            except:
-                return oops(request)
+                return redirect('/view_TESGs')
+            # except:
+            #     return oops(request)
     else:
         return oops(request)
 
@@ -64,24 +82,18 @@ def view_all_projs(request):
     # proj.save(update_fields=['status'])
     if adminonline(request):
         context = full_admin_context(request)
-        context['all_aprojs'] = projects.objects.filter((Q(status = '1')| Q(status = '2')| Q(status = '3')| Q(status = '4')| Q(status = '5')| Q(status = '6')| Q(status = '7')),deny = False)
-        
-        context['all_rprojs'] = projects.objects.filter(deny = True)
-        context['all_docprojs'] = projects.objects.filter(status = '5')
-        context['all_pays'] = projects.objects.filter(status = '6')
-        context['all_rpprojs'] = temp_projects.objects.filter(deny = True)
-        context['all_temps'] = temp_projects.objects.filter(deny = False)
-        context['all_comp'] = projects.objects.filter(status = '9', deny = False)
-        
-        context['npays'] = context['all_pays'].count()
-        context['ncomp'] = context['all_comp'].count()
-        context['ndocs'] = context['all_docprojs'].count()
-        context['npending'] = context['all_temps'].count()
+        context['all_projs'] = projects.objects.all()
+        # context['all_rprojs'] = projects.objects.filter(deny = True, userid = userobj)
+        # context['all_rpprojs'] = temp_projects.objects.filter(deny = True, userid = userobj)
+        # context['all_temps'] = temp_projects.objects.filter(userid = userobj)
+        context['npending'] = temp_projects.objects.filter(deny = False).count()
         context['ntesg'] = projects.objects.filter(status = '1', deny = False).count()
         context['nappr'] = projects.objects.filter(status = '2', deny = False).count()
         context['nmoni'] = projects.objects.filter(status = '3', deny = False).count()
         context['nfinal'] = projects.objects.filter(status = '4', deny = False).count()
-        context['nreject'] = context['all_rprojs'].count() + context['all_rpprojs'].count()
+        context['npays'] = projects.objects.filter((Q(status='7')|Q(status = '6')), deny = False).count()
+        context['nreject'] = projects.objects.filter(deny = True).count() + temp_projects.objects.filter(deny = True).count()
+        
         return render(request, 'psdf_main/_admin_view_all_projects.html', context)
     else:
         return oops(request)
@@ -204,6 +216,84 @@ def download_data_bank(request, projid):
             return handle_download_file(datapath+'.zip', request)
         except:
             return oops(request)
+    else:
+        return oops(request)
+
+def view_exts(request):
+    if adminonline(request):
+        context = full_admin_context(request)
+        context['pendingext'] = projects.objects.filter(ext__isnull = False, deny=False)
+        # context['pendingextp'] = projects.objects.filter(extF__isnull = False, deny=False)
+        extlist =[]
+        for k in context['pendingext']:
+            kill = {}
+            kill['id'] = k.id
+            kill['newid'] = k.newid
+            kill['name'] = k.name
+            kill['schedule'] = k.schedule
+            kill['orischedule'] = k.orischedule
+            if not (k.ext == None or k.ext == ''):
+                kill['extensions'] = transformext(k.ext)
+            else:
+                kill['extensions'] = ''
+            extlist.append(kill)
+        # extlistp = []
+        # for k in context['pendingextp']:
+        #     kill = {}
+        #     kill['id'] = k.id
+        #     kill['newid'] = k.newid
+        #     kill['name'] = k.name
+        #     kill['schedule'] = k.schedule
+        #     kill['orischedule'] = k.orischedule
+        #     try:
+        #         kill['filename'] = str(k.extF).split("(@)")[1]
+        #         kill['extension'] = str(k.extF).split("(@)")[0]
+        #     except:
+        #         kill['filename'] = ''
+        #         kill['extension'] = ''
+        #     extlistp.append(kill)
+        context['extlist'] = extlist
+        # context['pextlist'] = extlistp
+        context['projectlist'] = projects.objects.filter(userid = getuser(request), deny=False)
+        return render(request,'psdf_main/_admin_view_exts.html',context)
+    else:
+        return oops(request)
+    
+    
+def view_loas(request):
+    if adminonline(request):
+        context = full_admin_context(request)
+        context['loadata'] = loadata.objects.all()
+        if request.method == 'POST':
+            req = request.POST
+            adminpass = req.get('adminpass')
+            loaid = req.get('loaid')
+            if not check_password(adminpass,getuser(request).password):
+                messages.error(request, 'Invalid Administrator password.')
+                return redirect('/view_loas')
+            thisloa = loadata.objects.get(id = loaid)
+            thisloa.compdate = datetime.now().date()
+            thisloa.completed = True
+            thisloa.save(update_fields = ['compdate','completed'])
+            messages.success(request,'LOA has been closed.')
+            notification(thisloa.user.id,'LOA of amount ₹'+str(thisloa.amt)+' submitted on date '+str(thisloa.subdate)+' has been closed with a difference of ₹'+str(int(thisloa.amt)-int(thisloa.amt_released)))
+            workflow(thisloa.project.id,'LOA of amount ₹'+str(thisloa.amt)+' submitted on date '+str(thisloa.subdate)+' has been closed with a difference of ₹'+str(int(thisloa.amt)-int(thisloa.amt_released)))
+        return render(request,'psdf_main/_admin_view_loas.html',context)
+        
+    else:
+        return oops(request)
         
         
-        
+def add_loa_remark(request):
+    if adminonline(request):
+        if request.method == 'POST':
+            req = request.POST
+            loaid = req.get('loaid')
+            remark = req.get('remark')
+            thisloa = loadata.objects.get(id = loaid)
+            thisloa.remark = remark
+            thisloa.save(update_fields = ['remark'])
+            messages.success(request,'Remark field updated.')
+            return redirect('/view_loas')
+    else:
+        return oops(request)

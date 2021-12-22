@@ -29,7 +29,7 @@
 
                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
                     width: 100%;">
-                        <thead class="alert-primary">
+                        <thead>
                             <tr>
                                 <th>Project ID</th>
                                 <th>Project Name</th>
@@ -44,7 +44,7 @@
                                 
                             </tr>
                         </thead>
-                        <tfoot class="alert-primary">
+                        <tfoot>
 
                             <tr>
                                 
@@ -81,7 +81,7 @@
 
                             {% else %} {% for ext in extlist %}
                             <tr>
-                                <td class="font-weight-bold">{{ext.newid}}</td>
+                                <td><a href="/admin_project_details/{{ext.id}}" class="font-weight-bold text-danger">{{ext.newid}}</a></td>
                                 <td class="font-weight-bold">{{ext.name}}</td>
                                 <td><button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#modalforext{{ext.id}}">
                                     <i class="fa fa-eye"></i> View
@@ -91,7 +91,7 @@
                                 <td>{{ext.reqext}}</td>
                                 <td><a class="btn btn-outline-primary" href="/download_ext_file/{{ext.id}}_{{ext.filename}}"><i class="fas fa-download"></i> Download </a></td>
                                 <td><button type="button" class="btn btn-outline-success btn-responsive" data-toggle="modal" data-target="#modalforapr{{ext.id}}">
-                                    <i class="fa fa-eye"></i> Approve
+                                    <i class="fa fa-check"></i> Approve
                                 </button></td>
                                 <td><button type="button" class="btn btn-outline-danger btn-responsive" data-toggle="modal" data-target="#modalforrej{{ext.id}}">
                                     <i class="fa fa-eye"></i> Reject

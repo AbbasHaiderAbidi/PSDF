@@ -62,7 +62,6 @@ def approve_admin_pay(request):
             except :
                 messages.error(request, "No such LOA exists")
                 return redirect('/admin_pay')
-
             if not check_password(adminpass,userDetails(request.session['user'])['password']):
                 messages.error(request, 'Invalid Administrator password.')
                 return redirect('/admin_pay')
@@ -117,6 +116,9 @@ def approve_admin_pay(request):
                             else:
                                 newpay.remark = remark
                             newpay.save()
+                            thisproject = projects.objects.get(id = thisloa.project.id)
+                            thisproject.status = '7'
+                            thisproject.save(update_fields = ['status'])
                             messages.success(request, "Payment of "+str(newpay.amount)+' approved on date: '+str(newpay.release_date))
                             return redirect('/admin_pay')
                         else:

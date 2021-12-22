@@ -82,8 +82,9 @@
                                 <form action="{% url 'admin_sanction' %}" method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <td class="alert-warning">
+
                                         <input type="hidden" value="{{proj.id}}" name="projid" id="projid">
-                                        <input type="file" class="form-control-file btn btn-sm btn-outline-primary btn-block center" name="reciept{{proj.id}}" id="reciept{{proj.id}}">
+                                        <input type="file" class="form-control-file btn btn-sm btn-outline-primary btn-block center" name="reciept" id="reciept">
                                     </td>
                                 <td class="alert-warning">
                                     <input type="number" class="form-control" placeholder="Enter Amount in ₹" name="grant" id = "grant">

@@ -141,43 +141,30 @@
                 </div><br>
 
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Uploads</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Upload the following documents</h6>
                 </div>
                 <div class="card-body"><br>
 
                     <div class="row">
                         <div class="col-md-6">Upload the zip file containing all A1 to A6 forms duly filled.</div>
                         <div class="col-md-6">
-                            <label class=" btn btn-primary" for="a1" id="a1-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Upload form A1 to A6 in zip format</span></label>
-                            <input type="file" class="custom-file-input " name="a1" id="a1">
-
-
-                            </span>
-
-                            </a>
+                            <input type="file" class="form-control-file btn btn-outline-primary"  name="a1" id="a1">
                         </div>
                     </div>
 
 
-
+<br>
                     <div class="row">
                         <div class="col-md-6">Upload DPR</div>
                         <div class="col-md-6">
-                            <label class=" btn btn-primary" for="dpr" id="dpr-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Upload DPR</span></label>
-                            <input type="file" class="custom-file-input " name="dpr" id="dpr">
-
-
-                            </span>
-
-                            </a>
+                            <input type="file" class="form-control-file btn btn-outline-primary"  name="dpr" id="dpr">
                         </div>
                     </div>
-
+<br>
                     <div class="row">
                         <div class="col-md-6">Upload any other supporting documents</div>
                         <div class="col-md-6">
-                            <label class=" btn btn-primary" for="otherdoc" id="otherdoc-label"><i class="fa fa-upload"></i> &nbsp;<span class="text">Upload other supporting documents</span></label>
-                            <input type="file" class="custom-file-input " name="otherdoc" id="otherdoc">
+                            <input type="file" class="form-control-file btn btn-outline-primary"  name="otherdoc" id="otherdoc">
 
                         </div>
                     </div>
@@ -190,10 +177,10 @@
             <!-- Card Header - Accordion -->
 
             <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
-                <h6 class="m-0 font-weight-bold text-warning">Upload BOQ</h6>
+                <h6 class="m-0 font-weight-bold text-warning">Upload BOQ  &nbsp;<span class="badge badge-danger badge-counter">Required</span></h6>
             </a>
             <!-- Card Content - Collapse -->
-            <div class="collapse show" id="collapseCardExample">
+            <div class="collapse" id="collapseCardExample">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">Upload BOQ (only excel files allowed)</div>
@@ -221,6 +208,8 @@
                         <label for="confirmbox">&nbsp;&nbsp;
                             <input id="field_terms" type="checkbox" required name="terms" id="terms">
                             &nbsp; &nbsp; I confirm that the details given by me are of best of my knowledge.
+                            <br><br>
+                            <p><i>Please ensure that all the documents are uploaded, and the total amount of BoQ filled is equal to the amount entered.</i></p>
                         </label>
                     </div><br>
                     <hr>
@@ -229,42 +218,15 @@
                     <div class="row">
                         <div class="col-lg-8" style="margin: auto;">
                             <div class="row">
-                                <div class="col-md-5">
-
-                                    <button type="button" class="btn btn-outline-danger btn-wrap-text" data-toggle="modal" data-target="#exampleModal">
-  Clear Data
-</button>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Please confirm to clear the data filled in the Boq and DPR Fields.
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button class="btn btn-outline-danger btn-wrap-text" onclick="check_n_submit('clear')">Clear Data</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="col-md-2"></div>
-                                <!-- <div class="col-md-4">
-                                    <button class="btn btn-outline-info btn-wrap-text" onclick="check_n_submit('save')">Save as draft</button></div> -->
-                                <div class="col-md-0"></div>
-                                <div class="col-md-5">
-                                    <button type="button" class="btn btn-lg btn-outline-success btn-wrap-text" data-toggle="modal" data-target="#confirmsub">
+                                
+                                
+                                
+                                
+                                
+                                    <button type="button" class="btn btn-lg btn-block btn-outline-success btn-wrap-text" data-toggle="modal" data-target="#confirmsub">
                                         <strong>Submit</strong>
-                                </button>
+                                
+                                
                                 </div>
 
                                 <div class="modal fade" id="confirmsub" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

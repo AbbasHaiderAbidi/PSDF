@@ -170,16 +170,19 @@
                                             <div class="col-md-6">
 
                                                 <div class="row">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
                                                         <a class="btn btn-outline-success" href="/download_temp_project/DPR_{{proj.id}}"><i class="fas fa-download"></i> DPR</a>
                                                     </div>
 
-                                                    <div class="col-md-4">
-                                                        <a class="btn btn-outline-danger" href="/download_temp_project/forms_{{proj.id}}"><i class="fas fa-download"></i> Forms</a>
+                                                    <div class="col-md-3">
+                                                        <a class="btn btn-outline-primary" href="/download_temp_project/forms_{{proj.id}}"><i class="fas fa-download"></i> Forms</a>
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
                                                         <a class="btn btn-outline-info" href="/download_temp_project/otherdocs_{{proj.id}}"><i class="fas fa-download"></i> Other Docs</a>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <a class="btn btn-outline-danger" href="/download_temp_project/SubmittedBOQ_{{proj.id}}"><i class="fas fa-download"></i>BOQ</a>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -236,6 +239,7 @@
 
                                         <div class="font-weight-bold">Total Cost: &nbsp;&nbsp;&nbsp; </div>
                                         <div id="{{proj.id}}totalcost1" class="font-weight-bold text-primary"><button class="btn btn-sm btn-outline-success" id="{{proj.id}}totalcostbtn" onclick="dototal('{{proj.id}}totalcost')">get Grand Total</button></div>
+                                        
 
                                     </div>
                                 </div>
@@ -349,25 +353,29 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-1"></div>
+                        
                         <div class="col-md-3 font-weight-bold">Download DPR :</div>
-                        <div class="col-md-1"></div>
+                        
                         <div class="col-md-3 font-weight-bold">Download Forms by user :</div>
-                        <div class="col-md-1"></div>
+                        
                         <div class="col-md-3 font-weight-bold">Download Supporting Docs:</div>
+                        <div class="col-md-3 font-weight-bold">Download BOQ:</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-1"></div>
+                        
                         <div class="col-md-3">
                             <a class="btn btn-outline-info" href="/download_temp_project/DPR_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
                         </div>
-                        <div class="col-md-1"></div>
+                        
                         <div class="col-md-3 font-weight-bold">
-                            <a class="btn btn-outline-danger" href="/download_temp_project/forms_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                            <a class="btn btn-outline-primary" href="/download_temp_project/forms_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
                         </div>
-                        <div class="col-md-1"></div>
+                        
                         <div class="col-md-3">
                             <a class="btn btn-outline-warning" href="/download_temp_project/otherdocs_{{proj.id}}"><i class="fas fa-download"></i> Download</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a class="btn btn-outline-danger" href="/download_temp_project/SubmittedBOQ_{{proj.id}}"><i class="fas fa-download"></i> Submitted BOQ</a>
                         </div>
                     </div>
 

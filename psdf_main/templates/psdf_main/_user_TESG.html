@@ -4,13 +4,13 @@
 
 
 <div class="row">
-    <div class="col-md-4 d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">TESG Chain of Project : {{proj.name}} ({{proj.newid}})</h1>
+    <div class="col-md-7 d-sm-flex align-items-center justify-content-between mb-4">
+        <h4 class="mb-0 text-gray-800">TESG Chain of Project : <div class="text-danger">{{proj.name}}<strong> [{{proj.newid}}]</strong></div></h4>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
 
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         {% for message in messages %}
         <div class="alert alert-info alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
             {{message}}
@@ -132,11 +132,11 @@
                         </div>
                         {% else %} {% if current_tesg.user_response %}
                         <td><button type="button" class="btn btn-outline-danger btn-responsive" data-toggle="modal" data-target="#modalutesg{{tesg.tesgnum.TESG_no}}">
-    <i class="fa fa-eye"></i> &nbsp; Update TESG response
+    <i class="fa fa-refresh"></i> &nbsp; Update TESG response
 </button></td>
                         {% else %}
                         <td><button type="button" class="btn btn-outline-primary btn-responsive" data-toggle="modal" data-target="#modalutesg{{tesg.tesgnum.TESG_no}}">
-    <i class="fa fa-eye"></i> &nbsp; New TESG response
+    <i class="fa fa-plus"></i> &nbsp; New TESG response
 </button></td>
                         {% endif %}
 
@@ -162,7 +162,11 @@
 
                                             <div class="row">
                                                 <p class="text-primary col-md-4 font-weight-bold">Enter TESG Response: </p>
+                                                {% if current_tesg.user_response == None %}
+                                                <textarea id="tesg_response" name="tesg_response" rows="4" cols="4" class="form-control col-md-8 border-bottom-danger" placeholder="Enter TESG outcomes..."></textarea>
+                                                {% else %}
                                                 <textarea id="tesg_response" name="tesg_response" rows="4" cols="4" class="form-control col-md-8 border-bottom-danger" placeholder="Enter TESG outcomes...">{{current_tesg.user_response}}</textarea>
+                                                {% endif %}
                                             </div><br>
 
                                             <div class="row">

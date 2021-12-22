@@ -47,10 +47,10 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                <button type="button" class="btn-sm btn btn-outline-primary py-1" data-toggle="modal"
-                            data-target="#modalfordates">
-                             Dates and Events
-                        </button>
+                                
+                                <a href="/udownload_appr_mom/{{proj.id}}"
+                                    class="text-xs font-weight-bold text-primary text-uppercase mb-1">Download Appraisal
+                                    Outcomes</a>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -65,11 +65,11 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
-                            data-target="#workflow">
-                            <h6 class="m-0 font-weight-bold">Workflows</h6>
-                        </button>
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                <a href="/udownload_moni_mom/{{proj.id}}"
+                                    class="text-xs font-weight-bold text-danger text-uppercase mb-1">Download Monitoring
+                                    Outcomes</a>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fa fa-newspaper-o fa-2x text-gray-300"></i>
@@ -79,6 +79,7 @@
             </div>
         </div>
     </div>
+    
     <div class="row">
 
         <div class="col-md-2">
@@ -110,31 +111,25 @@
                     </h5>
                 </div><br>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-1">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-10">
                         <h6 class="m-0 font-weight-bold text-danger">Project name</h6>
 
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                     </div>
-                    <div class="col-md-4">
-                        <h6 class="m-0 font-weight-bold text-danger">User</h6>
-                    </div>
+                    
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-1">
                     </div>
-                    <div class="col-md-3">
-                        <h4 class="m-0">{{proj.name}}</h4>
+                    <div class="col-md-10">
+                        <h5 class="m-0">{{proj.name}}</h5>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                     </div>
-                    <div class="col-md-4">
-                        <a href="#" class="font-weight-bold btn btn-outline-dark">
-                            <h4 class="m-0">{{proj.userid.username}}</h4>
-                        </a>
-                    </div>
+                   
                 </div>
                 <hr>
                 <div class="row container-fluid">
@@ -146,7 +141,7 @@
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold text-primary">Original Schedule</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Current Schedule</h6>
                     </div>
                     <div class="col-sm-1">
                     </div>
@@ -156,7 +151,10 @@
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        
+                        <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                            data-target="#workflow">
+                            <h6 class="m-0 font-weight-bold">Workflows</h6>
+                        </button>
                     </div>
                     <div class="col-sm-1">
                     </div>
@@ -170,7 +168,7 @@
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        <h6 class="m-0 font-weight-bold">{{proj.orischedule}}</h6>
+                        <h6 class="m-0 font-weight-bold">{{proj.schedule}} Months</h6>
                     </div>
                     <div class="col-sm-1">
                     </div>
@@ -198,13 +196,20 @@
                     <div class="modal-dialog modal-md modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="text-primary text-uppercase"><strong>previous extensions for
-                                        {{ext.name}} ({{ext.newid}})</strong></h5>
+                                <h5 class="text-primary text-uppercase"><strong>previous extensions</strong></h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-6 text-primary "><h6>Submitted Schedule</h6></div>
+                                    <div class="col-md-4 text-danger font-weight-bold">{{proj.orischedule}} Months</div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                                <hr>
+                                <br>
                                 {% if not ext.extensions %}
                                 <h5 class="text-danger">No Extension requests were filed, this is the first request</h5>
                                 {% else %}
@@ -320,7 +325,7 @@
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                       
+                        <h6 class="m-0 font-weight-bold text-primary">Dates and Events</h6>
                     </div>
                     <div class="col-sm-1">
                     </div>
@@ -344,7 +349,10 @@
                     <div class="col-sm-1">
                     </div>
                     <div class="col-md-2">
-                        
+                        <button type="button" class="btn-sm btn btn-outline-warning py-1" data-toggle="modal"
+                            data-target="#modalfordates">
+                            <i class="fa fa-eye"></i> View
+                        </button>
                     </div>
                     <div class="col-sm-1">
                     </div>
@@ -364,105 +372,78 @@
                                 </button>
                             </div>
                             <div class="modal-body">
+                                <br>
                                 <div class="row container-fluid">
-                                    <div class="col-sm-1">
+                                    
+                                    <div class="col-md-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">DPR Submission</h6>
                                     </div>
-                                    <div class="col-md-2">
-                                        <h6 class="m-0 font-weight-bold text-primary">DPR Submission Date</h6>
+                                    
+                                    <div class="col-md-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">DPR Acceptance</h6>
                                     </div>
-                                    <div class="col-sm-1">
+                                    
+                                    <div class="col-md-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">TESG Approval</h6>
                                     </div>
-                                    <div class="col-md-2">
-                                        <h6 class="m-0 font-weight-bold text-primary">DPR Acceptance Date</h6>
+                                    
+                                    <div class="col-md-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Appraisal approval</h6>
                                     </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h6 class="m-0 font-weight-bold text-primary">TESG Acceptance</h6>
-                                    </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h6 class="m-0 font-weight-bold text-primary">Appraisal Acceptance</h6>
-                                    </div>
-                                    <div class="col-sm-1">
-                                    </div>
+                                    
                                 </div>
                                 <div class="row container-fluid">
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
+                                
+                                    <div class="col-md-3">
                                         <h6 class="m-0 font-weight-bold">{{proj.dprsubdate}}</h6>
                                     </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
+                                
+                                    <div class="col-md-3">
                                         <h6 class="m-0 font-weight-bold">{{proj.dpraprdate}}</h6>
                                     </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
+                                
+                                    <div class="col-md-3">
                                         <h6 class="m-0 font-weight-bold">{{proj.tesgaprdate}}</h6>
                                     </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
+                                
+                                    <div class="col-md-3">
                                         <h6 class="m-0 font-weight-bold">{{proj.appraprdate}}</h6>
                                     </div>
-                                    <div class="col-sm-1">
-                                    </div>
+                                
                                 </div>
                                 <hr>
                                 <div class="row container-fluid">
-                                    <div class="col-sm-1">
+                                    
+                                    <div class="col-md-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Monitoring approval</h6>
                                     </div>
-                                    <div class="col-md-2">
-                                        <h6 class="m-0 font-weight-bold text-primary">Date of approval by monitoring
-                                            committee</h6>
+                                    <div class="col-md-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Issue of sanction order </h6>
                                     </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h6 class="m-0 font-weight-bold text-primary">Date of issue of sanction order by
-                                            MoP</h6>
-                                    </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <h6 class="m-0 font-weight-bold text-primary">Date of Document Signing</h6>
                                     </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h6 class="m-0 font-weight-bold text-primary">Project completion date</h6>
-                                    </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-md-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Project completion</h6>
                                     </div>
                                 </div>
                                 <div class="row  container-fluid">
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
+                                    
+                                    <div class="col-md-3">
                                         <h6 class="m-0 font-weight-bold">{{proj.moniaprdate}}</h6>
                                     </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <h6 class="m-0 font-weight-bold">{{proj.sanction_date}}</h6>
                                     </div>
-                                    <div class="col-sm-1">
-                                    </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <h6 class="m-0 font-weight-bold">{{proj.doc_sign_date}}</h6>
                                     </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-md-3">
+                                        <h6 class="m-0 font-weight-bold">{{proj.completedate}}</h6>
                                     </div>
-                                    <div class="col-md-2">
-                                        <h6 class="m-0 font-weight-bold">{{proj.compdate}}</h6>
-                                    </div>
-                                    <div class="col-sm-1">
-                                    </div>
+                                    
                                 </div>
+                                <br>
                             </div>
                         </div>
                     </div>
@@ -507,43 +488,32 @@
                 <br>
                 <div class="row container-fluid">
 
-                    <div class="col-md-1">
-                    </div>
-                    <div class="col-md-2">
-
-                    </div>
-
-
-                    <div class="col-md-5">
+                    
+                    
+                    <div class="col-md-9">
                         <h6 class="text-uppercase text-danger">Remark</h6>
 
                     </div>
-
+                    <div class="col-md-1">
+                    </div>
                     <div class="col-md-2">
                         <h6 class="text-danger">Remark Date</h6>
 
                     </div>
-                    <div class="col-md-2">
-
-                    </div>
+                
                 </div>
                 <div class="row container-fluid">
 
-                    <div class="col-md-3">
-
-                    </div>
 
 
-                    <div class="col-md-5">
+                    <div class="col-md-9">
                         <h6 class="font-weight-bold">{{proj.remark}}</h6>
 
                     </div>
-
-                    <div class="col-md-2">
-                        <h6 class="font-weight-bold">{{proj.remark_date}}</h6>
-
+                    <div class="col-md-1">
                     </div>
                     <div class="col-md-2">
+                        <h6 class="font-weight-bold">{{proj.remark_date}}</h6>
 
                     </div>
                 </div>
@@ -609,7 +579,11 @@
                 </div>
                 {% if proj.deny == True %}
                 <div class="card-body alert-danger text-center text-uppercase">
-                    <h6 class="font-weight-bold">PROJECT REJECTED</h6>
+                    <h6 class="font-weight-bold">PROJECT REJECTED&nbsp;<a data-toggle="modal" data-target="#reject" class="btn btn-outline-danger btn-sm">Details</a></h6>
+                </div>
+                {% elif proj.completed == True %}
+                <div class="card-body alert-success text-center text-uppercase">
+                    <h6 class="font-weight-bold">PROJECT COMPLETED</h6>
                 </div>
                 {% elif proj.status == '1' %}
                 <div class="card-body alert-info text-center text-uppercase">
@@ -628,18 +602,23 @@
 
                 {% elif proj.status == '4' %}
                 <div class="card-body alert-warning text-center text-uppercase">
-                    <h6 class="font-weight-bold">Sanction Order released</h6>
+                    <h6 class="font-weight-bold">Awaiting Sanction order</h6>
                 </div>
 
                 {% elif proj.status == '5' %}
                 <div class="card-body alert-success text-center text-uppercase">
-                    <h6 class="font-weight-bold">Document Signing process</h6>
+                    <h6 class="font-weight-bold">Document Signing in progress</h6>
                 </div>
 
                 {% elif proj.status == '6' %}
                 <div class="card-body alert-primary text-center text-uppercase">
-                    <h6 class="font-weight-bold">Payment in process</h6>
+                    <h6 class="font-weight-bold">Awaiting initial payment</h6>
                 </div>
+                {% elif proj.status == '7' %}
+                <div class="card-body alert-primary text-center text-uppercase">
+                    <h6 class="font-weight-bold">Payment in progress </h6>
+                </div>
+                
                 {% endif %}
 
             </div>
@@ -668,7 +647,7 @@
                                 </div>
                             </div>
                         </a>
-                    </div>
+                    </div><br>
                     
                 </div>
             </div>
@@ -805,6 +784,7 @@
 
 
 
+
 <div class="modal fade" id="tesgdetails" tabindex="-1" role="dialog" aria-labelledby="tesgdetails" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -898,17 +878,18 @@
                         <a class="btn btn-outline-warning" href="/download_project/Submitted_BOQ_{{proj.id}}"><i
                                 class="fas fa-download"></i> Download</a>
                     </div>
-                </div><br>
+                </div>
+                <br>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="reject" tabindex="-1" role="dialog" aria-labelledby="reject" aria-hidden="true">
+<div class="modal fade" id="closing" tabindex="-1" role="dialog" aria-labelledby="closing" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title text-black-50" id="">Project Rejected</h3>
+                <h3 class="modal-title text-black-50" id="">Project Closed</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -920,34 +901,29 @@
                     <div class="col-md-1">
                     </div>
                     <div class="col-md-3">
-                        <h6 class="m-0 font-weight-bold text-danger">Rejection Date:</h6>
+                        <h6 class="m-0 font-weight-bold text-success">Closing Date:</h6>
                     </div>
                     <div class="col-md-1">
                     </div>
-                    <div class="col-md-3">
-                        <h6 class="m-0 font-weight-bold text-danger">Remark</h6>
+                    <div class="col-md-6">
+                        <h6 class="m-0 font-weight-bold text-success">Remark</h6>
                     </div>
                     <div class="col-md-1">
                     </div>
-                    <div class="col-md-3">
-                        <h6 class="m-0 font-weight-bold text-danger">Rejected During</h6>
-                    </div>
+                    
                 </div>
                 <div class="row">
                     <div class="col-md-1">
                     </div>
                     <div class="col-md-3">
-                        <h5 class="m-0">{{proj.denydate}}</h5>
+                        <h5 class="m-0">{{proj.completedate}}</h5>
                     </div>
                     <div class="col-md-1">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <h5 class="m-0">{{proj.remark}}</h5>
                     </div>
                     <div class="col-md-1">
-                    </div>
-                    <div class="col-md-3">
-
                     </div>
                 </div>
                 <br>

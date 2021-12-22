@@ -25,7 +25,9 @@ def admin_sanction(request):
             # if not isfloat(amt_approved):
             #     messages.error(request, "Grant amount must be a number")
             #     return redirect('/admin_sanction')
-            
+            if int(amt_approved) > int(project.amt_updated):
+                messages.error(request, "Final approved amount must be less than or equal estimated approved cost.")
+                return redirect('/admin_sanction')
             if request.FILES:
                 if 'reciept' in request.FILES:
                     reciept = request.FILES['reciept']
@@ -92,7 +94,9 @@ def download_sanction(request, projid):
         return oops(request)
 
 def init_release(request):
-    # init_payment.objects.all().delete()
+    thisproj = projects.objects.filter(newid = '801')[:1].get()
+    thisproj.status = '7'
+    thisproj.save(update_fields = ['status'])
     if adminonline(request):
         context = full_admin_context(request)
         if request.method == 'POST':
@@ -223,6 +227,9 @@ def user_init_payment(request):
                 thispay.save(update_fields = ['ack','recv_date'])
                 notification(getadmin_id(), "Payment of ₹"+str(thispay.amount)+" for project ID "+str(thispay.project.newid)+" acknowledged by entity.")
                 workflow(thispay.project.id,"Initial payment of ₹"+str(thispay.amount)+" acknowledged on "+str(thispay.release_date)+" by entity.")
+                proj = projects.objects.get(id = thispay.project.id)
+                proj.status = '6'
+                proj.save(update_fields = ['status'])
         context['init_pays'] = init_payment.objects.filter(user = getuser(request))
         return render(request, 'psdf_main/_user_init_payment.html', context)
     else:

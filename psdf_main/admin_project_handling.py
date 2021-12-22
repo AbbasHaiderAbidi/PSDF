@@ -87,11 +87,11 @@ def rejectdpr(request, projid):
             temp_proj = temp_projects.objects.get(id = projid)
             checkingpass = users.objects.filter(username = request.session['user'])[:1].get().password
             if not check_password(radminpass,checkingpass):
-                messages.error(request, 'Invalid admin password, acceptance of project: '+temp_proj.proname+' ABORTED.')
+                messages.error(request, 'Invalid admin password, rejection of project: '+temp_proj.proname+' ABORTED.')
                 return redirect('/admin_pending_projects')
             temp_proj.deny = True
             temp_proj.remark = rremark
-            
+            temp_proj.dprdenydate = datetime.now().date()
             temp_proj.save(update_fields=['dprdenydate','deny','remark'])
             messages.success(request, 'Project : '+ temp_proj.proname + ' has been rejected.')
             return redirect('/admin_pending_projects')
@@ -109,7 +109,7 @@ def download_temp_project(request, projid):
     
     if (adminonline(request) or (useronline(request) and (temp_projects.objects.get(id = proid).userid.username == request.session['user']))):
         if projid:
-            filelist = {'DPR':'DPR', 'forms':'forms','otherdocs':'otherdocs'}
+            filelist = {'DPR':'DPR', 'forms':'forms','otherdocs':'otherdocs','SubmittedBOQ' : 'Submitted_BOQ'}
             proj_path = temp_projects.objects.get(id = proid)
             
             if proj_path :
@@ -264,7 +264,43 @@ def add_remark(request,thispage):
             
             proj.remark_date = datetime.now().date()
             proj.save(update_fields = ['remark','remark_date'])
-            messages.success(request,'Remark Updated.')
+            notification(proj.userid.id,'Remark : ['+str(remark)+'] added to project ID '+str(proj.newid))
+            workflow(proj.id,'Remark : ['+str(remark)+'] added to project ID '+str(proj.newid))
+            messages.success(request,'Remark updated for project ID '+str(proj.newid))
             return redirect('/'+str(thispage))
+    else:
+        return oops(request)
+    
+
+def add_remark_proj(request):
+    if adminonline(request):
+        if request.method == 'POST':
+            req = request.POST
+            remark = sanitize(req.get('remark'))
+            projid = req.get('projid')
+            try:
+                proj = projects.objects.get(id = projid)
+            except:
+                return oops(request)
+            proj.remark = remark
+            
+            proj.remark_date = datetime.now().date()
+            proj.save(update_fields = ['remark','remark_date'])
+            notification(proj.userid.id,'Remark : '+str(remark)+' added to project ID '+str(proj.newid))
+            workflow(proj.id,'Remark : '+str(remark)+' added to project ID '+str(proj.newid))
+            messages.success(request,'Remark updated for project ID '+str(proj.newid))
+            return redirect('/admin_project_details/'+str(projid))
+    else:
+        return oops(request)
+    
+def closeproject(request):
+    if adminonline(request):
+        context = full_admin_context(request)
+        if request.method == 'POST':
+            req = request.POST
+            remark = req.get('remark')
+            adminpass = req.get('adminpass')
+            closedate = req.get('closedate')
+        
     else:
         return oops(request)

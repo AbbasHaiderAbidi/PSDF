@@ -1,0 +1,236 @@
+{% extends 'psdf_main/includes/admin_layout.html'%} {% load custom_tags %} {% load static %} {% block body %}
+
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">All LOAs submitted</h1>
+</div>
+
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <input type="text" id="temp_proj_search"
+                        class="form-control input-text pull-right border-left-warning"
+                        onkeyup="get_temp_proj('temp_proj_search','dataTable')" placeholder="Search projects by ID"
+                        title="Search" style="margin:auto; width: 30%;">
+                </h6>
+            </div>
+            <div class="card-body">
+                {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show col-md-8 text-center" role="alert"
+                    style="margin: auto;">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}<br>
+                <div class="table-responsive">
+
+
+                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0" style="table-layout: fixed;
+                    width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Project ID</th>
+                                <th>LOA amount</th>
+                                <th>LOA amount released</th>
+                                <th>Submission date</th>
+                                <th>Acknowledgement date</th>
+                                <th>Closing date</th>
+                                <th colspan="2">Remark</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+
+                            <tr>
+                                <th>Project ID</th>
+                                <th>LOA amount</th>
+                                <th>LOA amount released</th>
+                                <th>Submission date</th>
+                                <th>Acknowledgement date</th>
+                                <th>Closing date</th>
+                                <th colspan="2">Remark</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </tfoot>
+
+                        <tbody>
+
+                            {% if not loadata %}
+
+                            <tr>
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
+
+                                <td>Not Available</td>
+
+                                <td colspan="2">Not Available</td>
+
+
+
+
+
+                            </tr>
+
+                            {% else %}
+                            {% for loa in loadata %}
+                            <tr>
+                                <td><a href="/admin_project_details/{{loa.project.id}}"
+                                        class="font-weight-bold text-danger">{{loa.project.newid}}</a></td>
+                                <td>₹{% roundoff loa.amt %}</td>
+                                <td>₹{% roundoff loa.amt_released %}</td>
+                                <td>{{loa.subdate}}</td>
+                                <td>{{loa.ackdate}}</td>
+                                <td>{{loa.compdate}}</td>
+                                <form action="{% url 'add_loa_remark' %}" method="POST" name="add_remark" id="add_remark">
+                                    {% csrf_token %}
+                                    <td colspan="2">
+                                        <input type="hidden" id="loaid" name="loaid" value="{{loa.id}}">
+                                        <input type="text" class="form-control" name="remark" id="remark"
+                                            value="{{loa.remark}}"><br>
+                                        <input type="submit" class="btn btn-sm btn-outline-danger" value="update">
+                                        <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal"
+                                            data-target="#modalforRemark{{loa.id}}">
+                                            <i class="fa fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </form>
+                                <div class="modal fade" id="modalforRemark{{loa.id}}" tabindex="-1" role="dialog"
+                                    aria-labelledby="modalforRemark{{loa.id}}" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" class="text-uppercase"> <strong>Remark for LOA
+                                                    </strong></h5>
+
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+
+                                            <div class="modal-body">
+
+                                                <h6>{{loa.remark}}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {% if loa.completed %}
+                                <td class="alert-success">CLOSED</td>
+                                {% else %}
+                                <td><button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal"
+                                        data-target="#modalforapp{{loa.id}}">
+                                        <i class="fa fa-check"></i> Close
+                                    </button></td>
+                                <div class="modal fade" id="modalforapp{{loa.id}}" tabindex="-1" role="dialog"
+                                    aria-labelledby="modalforapp{{loa.id}}" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" class="text-uppercase"> <strong>Closing
+                                                        LOA</strong></h5>
+
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+
+                                            <div class="modal-body">
+
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-2 text-primary font-weight-bold">Submitted LOA
+                                                        Cost</div>
+                                                    <div class="col-md-1"></div>
+                                                    <div class="col-md-2 text-primary font-weight-bold">Payment released
+                                                    </div>
+                                                    <div class="col-md-1"></div>
+                                                    <div class="col-md-2 text-danger font-weight-bold">Remaining amount
+                                                    </div>
+                                                    <div class="col-md-2"></div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-2 text-dark font-weight-bold">₹{{loa.amt}}</div>
+                                                    <div class="col-md-1"></div>
+                                                    <div class="col-md-2 text-dark font-weight-bold">₹{{loa.amt_released}}
+                                                    </div>
+                                                    <div class="col-md-1"></div>
+                                                    <div class="col-md-2 text-dark font-weight-bold">₹{% substract loa.amt loa.amt_released %}</div>
+                                                    
+                                                    <div class="col-md-2"></div>
+                                                </div><br>
+                                                <form method="POST" action="{% url 'view_loas' %}">
+                                                    {% csrf_token %}
+                                                    <div class="row">
+                                                        <p class="col-md-6 font-weight-bold">Enter Administrator password to proceed:</p>
+                                                        <input type="password" class="form-control bg-gray-100 border-left-danger col-md-6" name="adminpass" id="adminpass" placeholder="Enter administrator password" required>
+                                                    </div><br>
+                                                    <br><hr>
+                                                    <input type="submit" class="btn btn-outline-success pull-right align-right" value="Close LOA">
+                                                    </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {% endif %}
+
+                            </tr>
+                            {% endfor %} {% endif %}
+                        </tbody>
+
+                    </table><br>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function get_temp_proj(btnID, rpc) {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById(btnID);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(rpc);
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

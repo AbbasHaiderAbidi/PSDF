@@ -161,7 +161,11 @@ def admin_approve_ext(request):
             workflow(thisproj.id,"Extension of "+str(exte)+" months for project ID: "+str(thisproj.newid)+" approved by PSDF sectt.")
             notification(thisproj.userid.id,"Extension of "+str(exte)+" months for project: "+str(thisproj.newid)+" approved by PSDF sectt.")
             messages.success(request, 'Extension Request Approved')
-        context['pendingext'] = projects.objects.filter(extF__isnull = False, deny=False, userid = getuser(request))
+        context['pendingext'] = projects.objects.filter(extF__isnull = False, deny=False)
+        # abc = projects.objects.filter(newid = '209')[:1].get()
+        
+        # print(abc.extF)
+        print(context['pendingext'])
         extlist =[]
         for k in context['pendingext']:
             kill = {}
@@ -180,7 +184,7 @@ def admin_approve_ext(request):
             extlist.append(kill)
             
         context['extlist'] = extlist
-        
+        print(extlist)
         return render(request,'psdf_main/_admin_approve_extension.html',context)
     else:
         return oops(request)

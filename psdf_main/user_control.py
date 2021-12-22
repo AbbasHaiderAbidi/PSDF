@@ -91,14 +91,14 @@ def user_dashboard(request):
         context['docsubcost'] = docsubcost
         context['docupcost'] = docupcost
         
-        payprojs = projects.objects.filter(deny = False, status = '6', userid = thisuser)
+        payprojs = projects.objects.filter(deny = False, status = '7', userid = thisuser)
         context['paynoproj'] = payprojs.count()
         
         payupcost = 0
         paidcost = 0
         for proj in payprojs:
-            if proj.amt_updated != None:
-                payupcost = payupcost + int(proj.amt_updated)
+            if proj.amt_approved != None:
+                payupcost = payupcost + int(proj.amt_approved)
             if proj.amt_released != None:
                 paidcost = paidcost + int(proj.amt_released) 
                 
@@ -121,12 +121,14 @@ def newdpr(request):
                     amount = sanitize(req['amount'])
                     schedle = sanitize(req['schedule'])
                     proname = sanitize(req['proname'])
-                    if not ('boq' in request.FILES):
-                        messages.warning(request, 'No BoQ file selected')
-                        return render(request, 'psdf_main/_user_new_dpr.html', context)
-                    if not ('dpr' in request.FILES and 'a1' in request.FILES):
-                        messages.warning(request, 'Please select files to upload')
-                        return render(request, 'psdf_main/_user_new_dpr.html', context)
+                    
+                    if not request.FILES:
+                        messages.error(request,'No upload file selected')
+                        return redirect('/newdpr')
+                    files = request.FILES
+                    if not ('boq' in files.keys() and 'dpr' in files.keys() and 'a1' in files.keys() and 'boq'in files.keys()):
+                        messages.error(request,'All Files must be uploaded.')
+                        return redirect('/newdpr')
 
                     if(not isfloat(amount)):
                         messages.warning(request, 'Amount should be a decimal number')
@@ -163,14 +165,15 @@ def newdpr(request):
                                 if not isnum(boq.cell(row = i, column = 1).value):
                                     messages.error(request, "Error in Row no. "+str(i)+" ITEM NUMBER column of BOQ")
                                     return render(request, 'psdf_main/_user_new_dpr.html', context)
-                                if not isnum(boq.cell(row = i, column = 4).value):
+                                if not isfloat(boq.cell(row = i, column = 4).value):
                                     messages.error(request, "Error in Row no. "+str(i)+" QUANTITY column of BOQ")
                                     return render(request, 'psdf_main/_user_new_dpr.html', context)
-                                if not isfloat(boq.cell(row = i, column = 5).value):
+                                if not isnum(boq.cell(row = i, column = 5).value):
+                                    messages.error(request, "Unit price must be an Integer value.")
                                     messages.error(request, "Error in Row no. "+str(i)+" UNIT PRICE column of BOQ")
                                     return render(request, 'psdf_main/_user_new_dpr.html', context)
-                                total_cost = total_cost + float(float(boq.cell(row = i, column = 4).value)*int(boq.cell(row = i, column = 5).value))
-                    if not float(total_cost) == float(amount):
+                                total_cost = total_cost + float(float(boq.cell(row = i, column = 4).value)*float(boq.cell(row = i, column = 5).value))
+                    if not round(float(total_cost)) == round(float(amount)):
                         messages.error(request, "BOQ total amount should be equal to entered amount")
                         return render(request, 'psdf_main/_user_new_dpr.html', context)
                     boqlist = []
@@ -196,18 +199,14 @@ def newdpr(request):
                     boq = request.FILES['boq']
                     dpr = request.FILES['dpr']
                     a1 = request.FILES['a1']
-                    if 'otherdoc' in request.FILES:
-                        otherdoc = request.FILES['otherdoc']
+                    otherdoc = request.FILES['otherdoc']
                     newdprpath = os.path.join(os.path.join(BASE_DIR, 'Data_Bank'),os.path.join(request.session['user'],'temp/'+proname+'_'+amount+'_'+schedle))
                     if smkdir(newdprpath):
                         try:
-                            
-                            
-                            if 'otherdoc' in request.FILES:
-                                try:
-                                    otherdoc_filename = secure_filename("otherdocs."+otherdoc.name.split('.')[-1])
-                                except:
-                                    otherdoc_filename = secure_filename("otherdocs")
+                            try:
+                                otherdoc_filename = secure_filename("otherdocs."+otherdoc.name.split('.')[-1])
+                            except:
+                                otherdoc_filename = secure_filename("otherdocs")
                             try:
                                 dpr_filename = secure_filename("DPR."+dpr.name.split('.')[-1])
                             except:
@@ -221,23 +220,12 @@ def newdpr(request):
                             except:
                                 boq_filename = secure_filename("Submitted_BOQ")
                                 
-                            if 'otherdoc' in request.FILES:
-                                otherdoc_filename = secure_filename("otherdocs")
-                                if handle_uploaded_file(os.path.join(newdprpath,otherdoc_filename),otherdoc):
-                                    pass
-                                else:
-                                    return oops(request)
-                            if handle_uploaded_file(os.path.join(newdprpath,dpr_filename),dpr):
-                                pass
-                            else:
-                                return oops(request)
-                            if handle_uploaded_file(os.path.join(newdprpath,a1_filename),a1):
-                                pass
-                            else:
-                                return oops(request)
-                            if handle_uploaded_file(os.path.join(newdprpath,boq_filename),boq):
-                                pass
-                            else:
+                            try:
+                                handle_uploaded_file(os.path.join(newdprpath,otherdoc_filename),otherdoc)
+                                handle_uploaded_file(os.path.join(newdprpath,dpr_filename),dpr)
+                                handle_uploaded_file(os.path.join(newdprpath,a1_filename),a1)
+                                handle_uploaded_file(os.path.join(newdprpath,boq_filename),boq)
+                            except:
                                 return oops(request)
                         except :
                             return oops(request)
@@ -372,6 +360,7 @@ def user_view_all_projs(request):
         context['nappr'] = projects.objects.filter(status = '2', deny = False, userid = userobj).count()
         context['nmoni'] = projects.objects.filter(status = '3', deny = False, userid = userobj).count()
         context['nfinal'] = projects.objects.filter(status = '4', deny = False, userid = userobj).count()
+        context['npays'] = projects.objects.filter(status = '6', deny = False, userid = userobj).count()
         context['nreject'] = projects.objects.filter(deny = True, userid = userobj).count() + temp_projects.objects.filter(deny = True, userid = userobj).count()
         
         return render(request, 'psdf_main/_user_view_all_projects.html', context)

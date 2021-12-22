@@ -3,7 +3,9 @@ from .helpers import *
 
 def new_loa(request):
     # abc = projects.objects.get(id = '4')
-    
+    # proj = projects.objects.get(id = '7')
+    # proj.status = '6'
+    # proj.save(update_fields = ['status'])
     # abc.completed = False
     # abc.save(update_fields=['completed'])
     if useronline(request) and not adminonline(request):
@@ -17,6 +19,7 @@ def new_loa(request):
             context['approved_boq_total'] = boq_grandtotal(aboq)
             context['loa_project'] = thisproject
             return render(request, 'psdf_main/_user_new_loa.html', context)
+        
         userobj = users.objects.filter(username = request.session['user'])[:1].get()
         
         context['projectlist'] = projects.objects.filter(status = '6', userid = userobj, completed = False, deny=False)

@@ -12,8 +12,8 @@
         <div class="alert alert-primary alert-dismissible fade show col-md-8" role="alert" style="margin: auto;">
             {{message}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         {% endfor %}
     </div>
@@ -28,7 +28,8 @@
     <div class="col-lg-12">
         <div class="card shadow mb-4">
             <!-- Card Header - Accordion -->
-            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+            <a href="#format" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true"
+                aria-controls="collapseCardExample">
                 <h6 class="m-0 font-weight-bold text-info">View Instructions</h6>
             </a>
             <!-- Card Content - Collapse -->
@@ -43,6 +44,11 @@
     </div>
 
 </div>
+{% if not apr_projects and not thisproject %}
+<br>
+<br>
+<h3 class="font-weight-bold text-danger center">No payment pending for document signing.</h3>
+{% endif %}
 {% if apr_projects and not thisproject%}
 <div class="row">
 
@@ -61,15 +67,19 @@
                         <div class="input-group container" style="margin-top:20%">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label for="projectid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
+                                    <label for="projectid" class="font-weight-bold">Select project</label>
+                                    &nbsp;&nbsp;&nbsp;
+                                </div>
                                 <div class="col-md-2"></div>
                                 <div class="col-md-6">
-                                    <select name="projectid" id="projectid" class="form-control" onchange="autosubmit()">
-                            <option value="0"  class="form-control">-- Select Project from list --</option>
-                            {% for proj in apr_projects %}
-                            <option value="{{proj.id}}"  class="form-control">{{proj.newid}} -- {{proj.name}}</option>
-                            {% endfor %}
-                        </select>
+                                    <select name="projectid" id="projectid" class="form-control"
+                                        onchange="autosubmit()">
+                                        <option value="0" class="form-control">-- Select Project from list --</option>
+                                        {% for proj in apr_projects %}
+                                        <option value="{{proj.id}}" class="form-control">{{proj.newid}} -- {{proj.name}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -103,15 +113,19 @@
                         <div class="input-group container" style="margin-top:0%">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label for="projectid" class="font-weight-bold">Select project</label> &nbsp;&nbsp;&nbsp;</div>
+                                    <label for="projectid" class="font-weight-bold">Select project</label>
+                                    &nbsp;&nbsp;&nbsp;
+                                </div>
                                 <div class="col-md-2"></div>
                                 <div class="col-md-6">
-                                    <select name="projectid" id="projectid" class="form-control" onchange="autosubmit()">
-                            <option value="0"  class="form-control">-- Select Project from list --</option>
-                            {% for proj in apr_projects %}
-                            <option value="{{proj.id}}"  class="form-control">{{proj.newid}} -- {{proj.name}}</option>
-                            {% endfor %}
-                        </select>
+                                    <select name="projectid" id="projectid" class="form-control"
+                                        onchange="autosubmit()">
+                                        <option value="0" class="form-control">-- Select Project from list --</option>
+                                        {% for proj in apr_projects %}
+                                        <option value="{{proj.id}}" class="form-control">{{proj.newid}} -- {{proj.name}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -122,11 +136,20 @@
 
                 <p class="text-dark font-weight-bold">Project Selected:&nbsp;&nbsp;&nbsp; </p>
 
-
-                <h5>ID :</h5>
-                <h5 class="m-0 font-weight-bold text-dark"> {{thisproject.newid}}</h5><br>
+                <div class="row container-fluid">
+                    <div class="col-md-4">
+                        <div class="h6">ID :</div>
+                        <div class="m-0 h5 font-weight-bold text-dark"> {{thisproject.newid}}</div>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-7">
+                        <div class="h6">Approved Amount :</div>
+                        <div class="m-0 h5 font-weight-bold text-dark"> ₹{% roundoff thisproject.amt_approved %}</div>
+                    </div>
+                </div><br>
                 <h5>Project name :</h5>
-                <h5 class="m-0 font-weight-bold text-danger"> <a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{thisproject.name}}</a></h5>
+                <h5 class="m-0 font-weight-bold text-danger"> <a href="/admin_project_details/{{thisproject.id}}"
+                        class="font-weight-bold text-danger">{{thisproject.name}}</a></h5>
 
 
                 <br>
@@ -143,31 +166,38 @@
             <div class="card-body">
 
 
-                <form action="{% url 'init_record' %}" method="POST" class="row" name='initform' id='initform' enctype="multipart/form-data">
+                <form action="{% url 'init_record' %}" method="POST" class="row" name='initform' id='initform'
+                    enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" value="{{thisproject.id}}" name="projid" id="projid" required>
 
                     <div class="input-group container">
                         Enter payment Reference number: &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="text" class="form-control input-group-append bg-gray-200 border-0 small" placeholder="Unique transaction ID or reference number" name="refno" id="refno" required>
+                        <input type="text" class="form-control input-group-append bg-gray-200 border-0 small"
+                            placeholder="Unique transaction ID or reference number" name="refno" id="refno" required>
                     </div>
                     <div class="input-group container">
                         Enter amount (in ₹ ): &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="number" class="form-control input-group-append bg-gray-200 border-0 small" placeholder="Enter transaction amount (in ₹ )" name="amt" id="amt" required>
+                        <input type="number" class="form-control input-group-append bg-gray-200 border-0 small"
+                            placeholder="Enter transaction amount (in ₹ )" name="amt" id="amt" required>
                     </div>
                     <div class="input-group container">
                         Upload supporting file: &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="file" class="form-control-file btn btn-outline-info border-bottom-info col-md-6" name="reciept" id="reciept">
+                        <input type="file" class="form-control-file btn btn-outline-info border-bottom-info col-md-6"
+                            name="reciept" id="reciept">
                     </div>
 
                     <hr>
                     <div class="input-group container">
                         Enter Administrator password: &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="password" class="form-control input-group-append small" placeholder="Enter administrator password to proceed" name="adminpass" id="adminpass" required>
+                        <input type="password" class="form-control input-group-append small"
+                            placeholder="Enter administrator password to proceed" name="adminpass" id="adminpass"
+                            required>
                     </div>
                     <hr>
                     <div class="input-group container">
-                        <input type="submit" class="btn btn-outline-success btn-lg" value="Inform {{thisproject.userid.utilname}}">
+                        <input type="submit" class="btn btn-outline-success btn-lg"
+                            value="Inform {{thisproject.userid.utilname}}">
                     </div>
                 </form>
 

@@ -77,7 +77,7 @@
                             </tr>
                             {% else %} {% for proj in monitoring_projects %}
                             <tr>
-                                <td class="font-weight-bolder">{{proj.id}}</td>
+                                <td class="font-weight-bolder">{{proj.newid}}</td>
                                 <td><a href="/admin_project_details/{{proj.id}}" class="font-weight-bold text-danger">{{proj.name}}</a></td>
                                 <td><a href="/view_user/{{proj.userid.id}}" class="text-danger">{{proj.userid.username}}</a></td>
                                 
