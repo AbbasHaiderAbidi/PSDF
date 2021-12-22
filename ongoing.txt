@@ -1,26 +1,3 @@
 
 
 ₹
-
-
-
- 
-
-filoenames in upload DPRs
-walkthrough
-
-410964592.6
-410939503
-
-410939503
-
-
-make it workflow of appraisal
-
-Completed LOA not showing
-
-make a closing pahge for LOAs 
-make a new closing page with returned amount
-LOa cost must not exceed approved BOQ cost
-project extension not showing
-users projects may summary may payment wala

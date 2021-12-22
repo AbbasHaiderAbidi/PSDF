@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '4#08aej5$718l)3aa8sthj#ybt517ykq7vdndfzh556dypo%0_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['10.5.112.245','10.5.112.245:7000']
+ALLOWED_HOSTS = ['10.5.112.245','10.5.112.245:7000','psdf.posoco.in']
 
 
 # Application definition

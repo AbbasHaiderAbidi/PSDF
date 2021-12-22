@@ -265,8 +265,9 @@
                                             class="font-weight-bold text-danger">{{proj.newid}}</a></td>
                                         <td colspan="2">{{proj.name}}</td>
                                         <td>{{proj.dprsubdate}}</td>
-                                        <td>₹{{proj.amt_asked}}</td>
-                                        <td>₹{{proj.amt_approved}}</td>
+                                        <td>₹{% roundoff proj.amt_asked %}</td>
+                                        <td>₹{% roundoff proj.amt_approved %}</td>
+                                        {% if not proj.deny == True and not proj.completed == True %}
                                         <form action="/add_remark/view_all_projs" method="POST" name="add_remark" id="add_remark">
                                             {% csrf_token %}
                                             <td colspan = "2">
@@ -278,6 +279,9 @@
                                                 </button>
                                             </td>
                                         </form>
+                                        {% else %}
+                                        <td colspan="2">{{proj.remark}}</td>
+                                        {% endif %}
                                         <div class="modal fade" id="modalforRemark{{proj.id}}" tabindex="-1" role="dialog" aria-labelledby="modalforRemark{{proj.id}}" aria-hidden="true">
                                             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                                                 <div class="modal-content">

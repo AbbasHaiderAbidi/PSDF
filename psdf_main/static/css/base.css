@@ -1,0 +1,115 @@
+    .btn2:hover {
+        border: 1px solid #000;
+        background-color: #ffff;
+        border-radius: 4px;
+        color: #000;
+    }
+    
+    .btn2 {
+        border: 1px solid #000;
+        background-color: rgb(0, 170, 212);
+        color: #000;
+    }
+    
+    .btn-responsive {
+        white-space: normal !important;
+        word-wrap: break-word;
+    }
+    
+    .bg-img {
+        background-image: url("../images/nav-back.jpg");
+        min-height: 150px;
+        background-size: cover;
+        /* width: fit-content; */
+        object-fit: cover;
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        /* Needed to position the navbar */
+        position: relative;
+    }
+    
+    nav .navbar-nav .nav-link,
+    nav .navbar-brand {
+        color: #000;
+    }
+    /* Position the navbar container inside the image */
+    
+    .container {
+        position: absolute;
+        margin: 20px;
+        width: auto;
+    }
+    /* The navbar */
+    
+    .topnav {
+        overflow: hidden;
+        background-color: #333;
+    }
+    /* Navbar links */
+    
+    .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+    
+    .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+    
+    .navbar.transparent.navbar-inverse .navbar-inner {
+        border-width: 0px;
+        -webkit-box-shadow: 0px 0px;
+        box-shadow: 0px 0px;
+        background-color: rgba(0, 0, 0, 0.0);
+        opacity: 50%;
+        /* background-image: -webkit-gradient(linear, 50.00% 0.00%, 50.00% 100.00%, color-stop( 0% , rgba(0,0,0,0.00)),color-stop( 100% , rgba(0,0,0,0.00)));
+    background-image: -webkit-linear-gradient(270deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
+    background-image: linear-gradient(180deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%); */
+    }
+    
+    .hidden {
+        display: none;
+    }
+    
+    .table-responsive {
+        max-height: 80%;
+        /* max-width: 10dp; */
+    }
+    
+    .tableFixHead {
+        overflow-y: auto;
+        max-height: 80%;
+    }
+    
+    .tableFixHead thead th {
+        position: sticky;
+        top: 0;
+    }
+    
+    .chotainput {
+        max-width: 100px;
+    }
+    
+    .center {
+        margin: auto;
+        width: 50%;
+    }
+    
+    .center80 {
+        margin: auto;
+        width: 80%;
+    }
+    
+    .btn-wrap-text {
+        overflow: hidden;
+        white-space: nowrap;
+        display: inline-block;
+        text-overflow: ellipsis;
+    }

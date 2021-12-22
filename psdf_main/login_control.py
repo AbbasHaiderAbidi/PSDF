@@ -137,3 +137,16 @@ def newusername(request,username):
         return redirect('/')
     
 
+
+def newusername1(request,username):
+    if not(useronline(request) or auditoronline(request) or adminonline(request)):
+        username1 = str(username)[1:]
+        if username1 == '' or username1 == ' ' or len(username1)<5:
+            return "POP"
+        if users.objects.filter(username = username1):
+            return "ABCD"
+        else:
+            return "EFGH"
+    else:
+        return "COP"
+    

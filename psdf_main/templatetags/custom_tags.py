@@ -17,7 +17,9 @@ def roundoff(abc):
     if len(str(abc))>=8:
         return str(round(float(abc)/10000000,2))+' Cr' 
     if len(str(abc))>=6:
-        return str(round(float(abc)/100000,2))+' Lakhs'
+        return str(round(float(abc)/100000,2))+' Lacs'
+    if len(str(abc))>=4:
+        return str(round(float(abc)/1000,2))+' K'
     else:
         return str(abc)
     
